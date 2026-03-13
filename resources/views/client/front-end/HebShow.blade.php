@@ -1,4 +1,4 @@
-@include('invité.front-end.header')
+<x-app-layout>
 
 <div class="mt-12 max-w-6xl mx-auto p-5">
 
@@ -185,3 +185,5 @@ function initMap() {
 </div>  
 
 </div>
+
+</x-app-layout>

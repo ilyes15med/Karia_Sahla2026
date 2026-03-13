@@ -1,9 +1,20 @@
 <?php
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-//invité
+//invite
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        if(Auth::user()->role='client'){  
+          return redirect('/client/espace');
+        }
+        if(Auth::user()->role='admin'){  
+            return redirect('/admin/dashboard');
+        }
+          if(Auth::user()->role='hote'){  
+            return redirect('/hote/dashboard');;
+        }
+    }
     return view('invité.front-end.home');
 });
 Route::get('/Hebergement', function () {
@@ -14,9 +25,41 @@ Route::get('/Hebergements', function () {
 });
 
 
-Route::get('/pro/dashboard', function () {
-    return view('pro.dashboard');
-})->middleware(['auth','verified'])->name('pro.dashboard');
+//require __DIR__.'/invite.php';
+//client
+
+
+Route::get('/client/espace', function () {
+    return view('client.front-end.home');
+})->middleware(['auth'])->name('client.space');
+
+Route::get('/client/hebergements',function(){
+    return view('client.front-end.hébergements');
+});
+Route::get('/client/Hebergement',function(){
+    return view('client.front-end.HebShow');
+});
+Route::get('/client/message', function () {
+    return view('client.front-end.message');
+});
+Route::get('/client/notification', function () {
+    return view('client.front-end.Notification');
+});
+
+Route::get('/client/reservation', function () {
+    return view('client.front-end.reservation');
+});
+
+Route::get('/client/search', function () {
+    return view('client.front-end.search');
+});
+
+
+
+
+Route::get('/hote/dashboard', function () {
+    return view('hote.dashboard');
+})->middleware(['auth','verified'])->name('hote.dashboard');
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
@@ -31,9 +74,7 @@ Route::get('/agent/dashboard', function () {
 })->middleware(['auth'])->name('agent.dashboard');
 
 //client
-Route::get('/client/espace', function () {
-    return view('client.front-end.home');
-})->middleware(['auth'])->name('client.space');
+//require __DIR__.'/client.php';
 
 
 Route::middleware('auth')->group(function () {

@@ -1,12 +1,8 @@
 @php
-    if(Auth::user()->role == 'admin'){
-        $dashboard = route('admin.dashboard');
-    }elseif(Auth::user()->role == 'client'){
+    if(Auth::user()->role == 'client'){
         $dashboard = route('client.space');
     }
-    /*else{
-        $dashboard = route('dashboard');
-    }*/
+  
 @endphp
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">

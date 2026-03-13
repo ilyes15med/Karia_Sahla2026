@@ -8,11 +8,11 @@
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
-        <select name="role" id="role" class="border p-2 rounded mt-2 w-full">
+        <select name="role" id="role" class="border p-2 rounded mt-2 w-full" required>
             <option value="">-- Sélectionner --</option>
             <option value="client">client</option>
           <!--  <option value="agent">Agent</option>-->
-            <option value="agent">hote</option>
+            <option value="hote">hote</option>
         </select>
 
         <!-- Email Address -->

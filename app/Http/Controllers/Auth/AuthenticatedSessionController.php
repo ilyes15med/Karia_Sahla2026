@@ -43,8 +43,8 @@ class AuthenticatedSessionController extends Controller
     if ($user->role == 'agent') {
         return redirect()->route('agent.dashboard');
     }
-    if ($user->role == 'pro') {
-        return redirect()->route('pro.dashboard');
+    if ($user->role == 'hote') {
+        return redirect()->route('hote.dashboard');
     }
     return redirect()->route('dashboard');
 }
