@@ -3,6 +3,8 @@
         $dashboard = route('admin.dashboard');
     }elseif(Auth::user()->role == 'client'){
         $dashboard = route('client.space');
+    }elseif(Auth::user()->role == 'hote'){
+        $dashboard = route('hote.dashboard');
     }
     /*else{
         $dashboard = route('dashboard');
@@ -16,7 +18,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ $dashboard }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
@@ -27,12 +29,45 @@
                 @auth
                
                 
-                @if(auth()->user()->role == 'client')
+                @if(auth()->user()->role == 'hote')
                 
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                        
 
                             <x-nav-link :href="$dashboard">
+                                accueil
+                            </x-nav-link>
+                            
+                            <x-nav-link href="/hote/dashboard/showHeb">
+                                mon hébergement
+                            </x-nav-link>
+                            
+                            <x-nav-link href="/">
+                                A propos
+                            </x-nav-link>
+                           
+                            
+                            <x-nav-link href="">
+                                message
+                            </x-nav-link>
+                            
+                            <x-nav-link href="">
+                                Notification
+                            </x-nav-link>
+                            
+                         
+                            
+                          
+                    </div>
+    
+                    
+                @endif
+                @if(auth()->user()->role == 'client')
+                
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                       
+
+                            <x-nav-link href="$dashboard">
                                 accueil
                             </x-nav-link>
                             
@@ -117,7 +152,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="$dashboard" :active="request()->$dashboard">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>

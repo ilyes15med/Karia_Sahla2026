@@ -1,5 +1,7 @@
 <x-app-layout>
 
-    @include('partials.search-form')
+    @include('client.front-end.partials.search-form')
     
-    </x-app-layout>
+</x-app-layout>
+
+

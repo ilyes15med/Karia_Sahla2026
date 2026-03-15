@@ -54,20 +54,33 @@ Route::get('/client/search', function () {
     return view('client.front-end.search');
 });
 
+Route::get('/client/reservation/Heb', function () {
+    return view('client.front-end.Réservation.réserver');
+});
 
 
+//hote
 
 Route::get('/hote/dashboard', function () {
     return view('hote.dashboard');
 })->middleware(['auth','verified'])->name('hote.dashboard');
 
+Route::get('/hote/dashboard/showHeb', function () {
+    return view('hote.HebShow');
+});
+Route::get('/hote/dashboard/Demande', function () {
+    return view('hote.demande');
+});
+
+
+//admin
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth','verified'])->name('admin.dashboard');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+//agent
 
 Route::get('/agent/dashboard', function () {
     return view('agent.dashboard');
