@@ -4,7 +4,7 @@
         <h2 class="text-2xl font-bold mb-4">Liste des Hébergements</h2>
     
         <div class="overflow-x-auto">
-            <a href="/hote/dashboard/Demande" class="m-0.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+            <a href="/hote/dashboard/Heb" class="m-0.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
                 Demande l'ajoute
             </a>
             <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow">

@@ -1,6 +1,15 @@
+@php
+    if(Auth::user()->role == 'hote'){
+
+         $id_hote=Auth::user()->id;
+    }
+       
+    
+    
+@endphp
 <x-app-layout>
     <div class=" flex items-center justify-center min-h-screen">
-        <form action="" method="POST" class="space-y-4 w-full max-w-md">
+        <form action="{{route('hebergement.store')}}" method="POST" class="space-y-4 w-full max-w-md" enctype="multipart/form-data">
             @csrf
 
             <div class="bg-white p-8 rounded-2xl shadow-lg">
@@ -17,12 +26,12 @@
 
                     <div>
                         <label class="block mb-1">Nom hébergement</label>
-                        <input type="text" id="nom_Heb" name="nom_Heb" class="w-full border rounded-lg px-3 py-2"/>
+                        <input type="text" id="nom_Heb" name="nom_Heb" class="w-full border rounded-lg px-3 py-2" required/>
                     </div>
 
                     <div>
                         <label class="block mb-1">Type hébergement</label>
-                        <select id="type_Heb" name="type_Heb" class="w-full border rounded-lg px-3 py-2">
+                        <select id="type_Heb" name="type_Heb" class="w-full border rounded-lg px-3 py-2 " required>
                             <option value="">-- Sélectionnez le type --</option>
                             <option value="Hotel">Hôtel</option>
                             <option value="Appartement">Appartement</option>
@@ -35,16 +44,20 @@
 
                     <div>
                         <label class="block mb-1">Adresse hébergement</label>
+                        <div>
+                            <label class="block mb-1">addresse</label>
+                            <input type="text" id="addresee" name="addresee" class="w-full border rounded-lg px-3 py-2" />
+                        </div>
                       
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block mb-1">Latitude</label>
-                            <input type="text" id="Latitude" name="Latitude" class="w-full border rounded-lg px-3 py-2"/>
+                            <input type="text" id="Latitude" name="Latitude" class="w-full border rounded-lg px-3 py-2" required/>
                         </div>
                         <div>
                             <label class="block mb-1">Longitude</label>
-                            <input type="text" id="Longitude" name="Longitude" class="w-full border rounded-lg px-3 py-2"/>
+                            <input type="text" id="Longitude" name="Longitude" class="w-full border rounded-lg px-3 py-2" required/>
                         </div>
                     </div>
 
@@ -53,7 +66,7 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
             
                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                            <input type="checkbox" name="wifi" value="wifi" class="form-checkbox h-5 w-5 text-blue-500">
+                            <input type="checkbox" name="services[]" value="wifi" class="form-checkbox h-5 w-5 text-blue-500">
                             <i class="fa-solid fa-wifi text-blue-500"></i>
                             <span>Wi-Fi</span>
                         </label>
@@ -92,20 +105,29 @@
 
                     <div>
                         <label class="block mb-1">Description de l'hébergement</label>
-                        <textarea id="description" name="description" rows="4" class="w-full border rounded-lg px-3 py-2" ></textarea>
+                        <textarea id="description" name="description" rows="4" class="w-full border rounded-lg px-3 py-2" required></textarea>
                     </div>
 
                       <!-- Nombre de chambres -->
     <div>
         <label class="block mb-1">Nombre de chambres</label>
-        <input type="number" id="nb_chambres" name="nb_chambres" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 3"/>
+        <input type="number" id="nb_chambres" name="nb_chambres" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 3" required/>
     </div>
 
     <!-- Nombre de lits -->
     <div>
         <label class="block mb-1">Nombre de lits</label>
-        <input type="number" id="nb_lits" name="nb_lits" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 5"/>
+        <input type="number" id="nb_lits" name="nb_lits" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 5" required/>
     </div>
+                <div>
+                    <input type="text" id="id" name="id" class="hidden" value=" {{$id_hote}}"/>
+                
+                    
+                </div>
+                <div>
+                    <label class="block mb-1">Images de l'hébergement</label>
+                    <input type="file" name="images[]" multiple class="w-full border rounded-lg px-3 py-2">
+                </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="mt-6 w-full px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">

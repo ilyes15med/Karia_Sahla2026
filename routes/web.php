@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HebergController;
 //invite
 
 Route::get('/', function () {
@@ -68,9 +69,10 @@ Route::get('/hote/dashboard', function () {
 Route::get('/hote/dashboard/showHeb', function () {
     return view('hote.HebShow');
 });
-Route::get('/hote/dashboard/Demande', function () {
-    return view('hote.demande');
-});
+
+Route::get('/hote/dashboard/Heb',[HebergController::class,'create']);
+
+Route::post('/hote/dashboard/Heb',[HebergController::class,'store'])->name('hebergement.store');
 
 
 //admin
@@ -82,9 +84,8 @@ Route::get('/admin/dashboard', function () {
 
 //agent
 
-Route::get('/agent/dashboard', function () {
-    return view('agent.dashboard');
-})->middleware(['auth'])->name('agent.dashboard');
+Route::get('/agent/dashboard',[HebergController::class,'indexAgent'])->middleware(['auth'])->name('agent.dashboard');
+
 
 //client
 //require __DIR__.'/client.php';

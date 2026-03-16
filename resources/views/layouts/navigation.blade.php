@@ -5,10 +5,13 @@
         $dashboard = route('client.space');
     }elseif(Auth::user()->role == 'hote'){
         $dashboard = route('hote.dashboard');
+    }elseif(Auth::user()->role == 'agent'){
+        $dashboard = route('agent.dashboard');
     }
     /*else{
         $dashboard = route('dashboard');
     }*/
+    
 @endphp
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
@@ -62,6 +65,8 @@
     
                     
                 @endif
+                 
+              
                 @if(auth()->user()->role == 'client')
                 
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -102,7 +107,7 @@
                 @endauth
                 
             </div>
-
+         
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
