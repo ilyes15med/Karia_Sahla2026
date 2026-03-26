@@ -2,6 +2,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HebergController;
+use App\Http\Controllers\HebergHoteController;
 //invite
 
 Route::get('/', function () {
@@ -73,6 +74,8 @@ Route::post('/hote/dashboard/Heb',[HebergController::class,'store'])->name('hebe
 Route::get('/hote/Hebergement/{id}/edit',[HebergController::class,'edit_demande'])->name('hebergement.edit');
 Route::put('/hote/Hebergement/{id}',[HebergController::class,'update_demande'])->name('hebergement.update');
 Route::get('/hote/Hebergement/{id}/delete',[HebergController::class,'destroy_demande'])->name('hebergement.delete');
+Route::get('/hote/Hebs',[HebergHoteController::class,'index_Hebs']);
+Route::get('/hote/MonHebergement/{id}',[HebergHoteController::class,'index_Hebergement']);
 
 //admin
 Route::get('/admin/dashboard', function () {
@@ -98,8 +101,8 @@ Route::get('/agent/dashboard/Demandes/valide',
 //demande a valide
 
 Route::get('/agent/dashboard',[HebergController::class,'indexAgent'])->middleware(['auth'])->name('agent.dashboard');
-Route::get('/agent/dashboard/Hebergs/{id}/edit',[HebergController::class,'confirme'])->middleware(['auth'])->name('heberge.edit');
-Route::get('/agent/dashboard/Hebergs/{id}/edit',[HebergController::class,'refuse'])->middleware(['auth'])->name('heberge.edit');
+Route::get('/agent/dashboard/Hebergs/{id}/accept',[HebergController::class,'confirme'])->middleware(['auth'])->name('heberge.edit');
+Route::get('/agent/dashboard/Hebergs/{id}/refuse',[HebergController::class,'refuse'])->middleware(['auth'])->name('heberge.edit');
 //client
 //require __DIR__.'/client.php';
 

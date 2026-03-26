@@ -65,7 +65,7 @@ $icons=[
                         onclick="showImage(this.src)"
                         class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer"
                     >
-                @endforeach
+                    @endforeach
                     
                 </div>
                 
