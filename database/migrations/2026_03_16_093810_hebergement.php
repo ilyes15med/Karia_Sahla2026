@@ -16,14 +16,15 @@ return new class extends Migration
         $table->id();
         $table->string('nomHeberg');
         $table->string('typeHeberg');
+        $table->decimal('prix',20,2);
         $table->longText('Description');
         $table->string('service');
         $table->string('nombre_lit');
         $table->string('nombre_chambre');
         $table->string('status');
         $table->string('addresse');
-        $table->decimal('latitude',10,7);
-        $table->decimal('longitude',10,7);
+        $table->decimal('latitude',20,15);
+        $table->decimal('longitude',20,15);
         $table->string('images');
         $table->foreignId('users_id')->constrained();
         $table->timestamps();

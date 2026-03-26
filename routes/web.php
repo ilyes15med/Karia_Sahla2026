@@ -62,18 +62,17 @@ Route::get('/client/reservation/Heb', function () {
 
 //hote
 
-Route::get('/hote/dashboard', function () {
-    return view('hote.dashboard');
-})->middleware(['auth','verified'])->name('hote.dashboard');
+Route::get('/hote/dashboard',[HebergController::class,'indexHote'])->middleware(['auth','verified'])->name('hote.dashboard');
 
-Route::get('/hote/dashboard/showHeb', function () {
-    return view('hote.HebShow');
-});
+Route::get('/hote/Hebergement/{id}',[HebergController::class,'show_demande'])->name('hebergement.show');
 
 Route::get('/hote/dashboard/Heb',[HebergController::class,'create']);
 
 Route::post('/hote/dashboard/Heb',[HebergController::class,'store'])->name('hebergement.store');
 
+Route::get('/hote/Hebergement/{id}/edit',[HebergController::class,'edit_demande'])->name('hebergement.edit');
+Route::put('/hote/Hebergement/{id}',[HebergController::class,'update_demande'])->name('hebergement.update');
+Route::get('/hote/Hebergement/{id}/delete',[HebergController::class,'destroy_demande'])->name('hebergement.delete');
 
 //admin
 Route::get('/admin/dashboard', function () {
@@ -86,7 +85,21 @@ Route::get('/admin/dashboard', function () {
 
 Route::get('/agent/dashboard',[HebergController::class,'indexAgent'])->middleware(['auth'])->name('agent.dashboard');
 
+//Demande refuser:
+Route::get('/agent/dashboard/Demandes/refuse',
+[HebergController::class,'Demande_refuse']  
+)->middleware(['auth'])->name('demandes.refuse');
 
+//demande valide:
+Route::get('/agent/dashboard/Demandes/valide',
+  [HebergController::class,'Demande_valide']  
+)->middleware(['auth'])->name('demandes.valide');
+
+//demande a valide
+
+Route::get('/agent/dashboard',[HebergController::class,'indexAgent'])->middleware(['auth'])->name('agent.dashboard');
+Route::get('/agent/dashboard/Hebergs/{id}/edit',[HebergController::class,'confirme'])->middleware(['auth'])->name('heberge.edit');
+Route::get('/agent/dashboard/Hebergs/{id}/edit',[HebergController::class,'refuse'])->middleware(['auth'])->name('heberge.edit');
 //client
 //require __DIR__.'/client.php';
 

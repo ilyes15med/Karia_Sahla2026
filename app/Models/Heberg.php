@@ -12,6 +12,7 @@ class Heberg extends Model
         
         'nomHeberg',
         'typeHeberg',
+        'prix',
         'addresse',
         'latitude',
         'longitude',

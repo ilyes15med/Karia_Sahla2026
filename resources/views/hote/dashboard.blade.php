@@ -1,63 +1,144 @@
-<x-app-layout>
 
-    <div class="p-6">
-        <h2 class="text-2xl font-bold mb-4">Liste des Hébergements</h2>
+    <x-app-layout>
+
+        <div class="flex min-h-screen bg-gray-100">
     
-        <div class="overflow-x-auto">
-            <a href="/hote/dashboard/Heb" class="m-0.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
-                Demande l'ajoute
-            </a>
-            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow">
-                
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-4 py-2 border">Hébergement</th>
-                        <th class="px-4 py-2 border">Type</th>
-                        <th class="px-4 py-2 border">Description</th>
-                        <th class="px-4 py-2 border">Service</th>
-                        <th class="px-4 py-2 border">Nombre chambre</th>
-                        <th class="px-4 py-2 border">Nombre lit</th>
-                        <th class="px-4 py-2 border">Images</th>
-                        <th class="px-4 py-2 border text-center">Actions</th>
-                    </tr>
-                </thead>
-    
-                <tbody class="text-center">
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 border">Hotel El Andalus</td>
-                        <td class="px-4 py-2 border">Hotel</td>
-                        <td class="px-4 py-2 border">Hôtel confortable au centre</td>
-                        <td class="px-4 py-2 border">WiFi, Parking</td>
-                        <td class="px-4 py-2 border">20</td>
-                        <td class="px-4 py-2 border">40</td>
-    
-                        <!-- Images -->
-                        <td class="px-4 py-2 border">
-                            <div class="flex justify-center gap-2">
-                                <img src="/images/hotel1.jpg" class="w-14 h-14 object-cover rounded">
-                                <img src="/images/hotel2.jpg" class="w-14 h-14 object-cover rounded">
-                                <img src="/images/hotel3.jpg" class="w-14 h-14 object-cover rounded">
-                            </div>
-                        </td>
-    
-                        <td class="px-4 py-2 border space-x-2">
-                            <a href="/hote/dashboard/showHeb" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
-                                Afficher
-                            </a>
-    
-                            <a href="" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
-                                Modifier
-                            </a>
-    
-                            <a href="" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
-                                Supprimer
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-    
-            </table>
+            <!-- Sidebar -->
+             
+            @include('hote.aside.aside')
+            
+       
+           
+        
+            <!-- Main content -->
+            <main class="flex-1 p-4">
+        
+              
+        
+                <!-- Table -->
+                <div class="bg-white rounded-xl shadow p-4">
+                    <a href="/hote/dashboard/Heb" class="m-0.5 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+                        Demande l'ajoute
+                    </a>
+        
+                    <h3 class="text-xl font-bold mb-4">Demande</h3>
+        
+                    <table class="w-full text-left">
+                        <thead>
+                            
+                            <a href="">
+                                <tr class="border-b">
+                                
+                                <th class="px-4 py-2 border">Hébergement</th>
+                                <th class="px-4 py-2 border">hote</th>
+                                <th class="px-4 py-2 border">Type</th>
+                             
+                                <th class="px-4 py-2 border">Service</th>
+                                <th class="px-4 py-2 border">Nombre chambre</th>
+                                <th class="px-4 py-2 border">Nombre lit</th>
+                             
+                                <th class="px-4 py-2 border text-center">Actions</th>
+                                </tr>
+                            </a>    
+                        </thead>
+        
+                        <tbody>
+
+                        @foreach ($HebergCours as $Heberg )
+                                
+                          
+                       
+                            <tr class="border-b">
+                                
+                                <td class="p-2">{{$Heberg->nomHeberg}}</td>
+                                <td class="p-2">{{$Heberg->hote_name}}</td>
+                                <td class="p-2">{{$Heberg->typeHeberg}}</td>
+                                
+                                
+                                <td class="p-2">{{$Heberg->service}}</td>
+                                <td class="p-2">{{$Heberg->nombre_chambre}}</td>
+                                <td class="p-2">{{$Heberg->nombre_lit}}</td>
+                                <td class="px-4 py-2 border space-x-2">
+                                    <button onclick="afficherHeb({{ $Heberg->id }})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+                                        Afficher
+                                    </button>
+            
+                                    <button onclick="openModal({{ $Heberg->id }})" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
+                                        Modifier
+                                    </button>
+            
+                                    <button onclick="supprimerHeb({{ $Heberg->id }})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                                        Supprimer
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                       
+                   
+                        </tbody>
+                    </table>
+        
+                </div>
+        
+            </main>
+        
         </div>
-    </div>
-    
+        
+        
     </x-app-layout>
+
+    
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    
+        <div class="bg-white p-6 rounded-2xl shadow-lg w-80 text-center">
+            
+         
+            <p class="mb-6"> Êtes-vous sûr de vouloir continuer ?</p>
+    
+            <div class="flex justify-center gap-4">
+                <!-- Annuler -->
+                <button onclick="closeModal()" class="bg-gray-300 px-4 py-2 rounded">
+                    Annuler
+                </button>
+    
+                <!-- Confirmer -->
+                <a id="confirmBtn" href="#" class="bg-green-500 text-white px-4 py-2 rounded">
+                    Confirmer
+                </a>
+            </div>
+    
+        </div>
+    </div>   
+    
+    <script>
+        function openModal(id) {
+        document.getElementById('confirmModal').classList.remove('hidden');
+        
+        let url = "/hote/Hebergement/" + id + "/edit";
+        document.getElementById('confirmBtn').href = url;
+        }
+    
+        
+        function closeModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+        function supprimerHeb(id){
+            document.getElementById('confirmModal').classList.remove('hidden');
+        
+            let url = "/hote/Hebergement/"+id+"/delete";
+            document.getElementById('confirmBtn').href = url;
+
+      
+
+        }
+        function afficherHeb(id){
+
+            document.getElementById('confirmModal').classList.remove('hidden');
+            let url = "/hote/Hebergement/"+id;
+            document.getElementById('confirmBtn').href = url;
+
+        }
+        
+     
+    </script>
+    

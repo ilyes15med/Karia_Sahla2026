@@ -1,17 +1,19 @@
+@foreach ($HebergCours as $heb )
+    
 
 <div class="mt-12 max-w-6xl mx-auto p-5">
 
     <!-- Nom hébergement -->
     <div class="mb-4">
         <h1 class="text-2xl font-semibold text-gray-800">
-            Nom hébergement
+           {{$heb->nomHeberg}}
         </h1>
 
         <div class="flex items-center gap-2 text-gray-600 mt-1">
             <i class="fa-solid fa-star text-yellow-500"></i>
             <span>4.5</span>
             <span class="text-gray-400">•</span>
-            <span>Tlemcen</span>
+            <span>  {{$heb->addresse}}</span>
         </div>
     </div>
 
@@ -20,7 +22,7 @@
         <div class=" rounded-xl flex flex-wrap items-center justify-between gap-4">
 
             <span class="text-gray-700">
-                Hébergé par <span class="font-semibold">Nom hôte</span>
+                Hébergé par <span class="font-semibold"> {{$heb->hote_name}}</span>
             </span>
             @if(auth()->user()->role == 'client')   
                 <a href="#" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
@@ -28,69 +30,45 @@
                     Chat
                 </a>
     
-                <a href="/client/reservation/Heb" class="px-4 py-2 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
+                <a href="" class="px-4 py-2 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
                         Réserver
                 </a>
             @endif
     
         </div>
+        <!--Information sur le chambre-->
         <div class="mb-4 space-y-4 text-gray-700">
             <i class="fa-solid fa-person"></i> 
             <span> 8 voyageur </span> 
-            <span> 4 chambre </span> 
-            <span> 8 lits </span> 
+            <span> {{$heb->nombre_chambre}} chambre </span> 
+            <span> {{$heb->nombre_lit}} lits </span> 
 
         </div>   
 
 
     </div>
-    <!--A propos de ce logement -->
+    <!--A propos de ce logement (description) -->
     <div class="text-gray-700 bg-slate-100 rounded-xl p-4">
        <span class="font-bold">A propos de ce logement </span>
        <br>
-       <span class="p-4"> lorem 1231115656598989</span>
+       <span class="p-4"> {{$heb->Description}}</span>
      
 
  
     </div>  
     <!--les photos -->
     <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
-
+   
         <span>
-            <img src="{{asset('/assets/images/istockphoto-146765403-612x612.jpg')}}"
+            <img src="{{asset('/assets/images/'. $heb->images)}}"
                  onclick="showImage(this.src)"
                  class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer">
         </span>
     
-        <span>
-            <img src="{{asset('/assets/images/istockphoto-2176590755-1024x1024.jpg')}}"
-                 onclick="showImage(this.src)"
-                 class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer">
-        </span>
+      
+        
     
-        <span>
-            <img src="{{asset('/assets/images/valeriia-bugaiova-_pPHgeHz1uk-unsplash.jpg')}}"
-                 onclick="showImage(this.src)"
-                 class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer">
-        </span>
-    
-        <span>
-            <img src="{{asset('/assets/images/valeriia-bugaiova-_pPHgeHz1uk-unsplash.jpg')}}"
-                 onclick="showImage(this.src)"
-                 class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer">
-        </span>
-    
-        <span>
-            <img src="{{asset('/assets/images/valeriia-bugaiova-_pPHgeHz1uk-unsplash.jpg')}}"
-                 onclick="showImage(this.src)"
-                 class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer">
-        </span>
-    
-        <span>
-            <img src="{{asset('/assets/images/valeriia-bugaiova-_pPHgeHz1uk-unsplash.jpg')}}"
-                 onclick="showImage(this.src)"
-                 class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer">
-        </span>
+       
     
     </div>
     
@@ -120,7 +98,7 @@
 <script>
 function initMap() {
 
-    const location = { lat: 34.8783, lng: -1.3150 };
+    const location = { lat: {{$heb->latitude}}, lng: {{$heb->longitude}} };
 
     const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12,
@@ -152,7 +130,7 @@ function initMap() {
     }
  
     </script>
-
+<!--Evaluation -->
 <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
 
     <span class="font-bold text-lg">Avis</span>
@@ -185,3 +163,4 @@ function initMap() {
 </div>  
 
 </div>
+@endforeach

@@ -1,29 +1,23 @@
-@php
-    if(Auth::user()->role == 'agent'){
-
-         $id_agent=Auth::user()->id;
-    }
-       
-    
-    
-@endphp
 <x-app-layout>
 
     <div class="flex min-h-screen bg-gray-100">
 
         <!-- Sidebar -->
-        @include('agent.sideBar')
+
+        
+              
+    @include('agent.sideBar')
     
         <!-- Main content -->
         <main class="flex-1 p-6">
     
             <!-- Cards -->
-             @include('agent.inf');
+             @include('agent.inf')
     
             <!-- Table -->
             <div class="bg-white rounded-xl shadow p-4">
     
-                <h3 class="text-xl font-bold mb-4">Demandes à valider</h3>
+                <h3 class="text-xl font-bold mb-4">Demandes validées</h3>
     
                 <table class="w-full text-left">
                     <thead>
@@ -39,14 +33,13 @@
                             <th class="px-4 py-2 border">Nombre chambre</th>
                             <th class="px-4 py-2 border">Nombre lit</th>
                          
-                            <th class="px-4 py-2 border text-center">Actions</th>
                             </tr>
                         </a>    
                     </thead>
     
                     <tbody>
                    
-                    @foreach ($HebergCours as $Heberg )
+                    @foreach ($HebergValide as $Heberg )
                             
                       
                    
@@ -60,30 +53,13 @@
                             <td class="p-2">{{$Heberg->service}}</td>
                             <td class="p-2">{{$Heberg->nombre_chambre}}</td>
                             <td class="p-2">{{$Heberg->nombre_lit}}</td>
-                            <td class="p-2 space-x-2">
-                                <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="openModal({{ $Heberg->id }})">Valider</button>
-                                <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="refuser({{ $Heberg->id }})">Refuser</button>
-
-                            </td>
+                          
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
     
             </div>
-            
-
-            <script>
-
-                document.addEventListener('DOMContentLoaded', function () {
-                   
-               
-               /* window.Echo.channel('test').listen('HeberegRquest',(e) =>{
-                        console.log(e);
-                    });*/
-                });
-            </script>
-           
     
         </main>
     
@@ -95,12 +71,6 @@
 
 <script>
     function openModal(id) {
-    document.getElementById('confirmModal').classList.remove('hidden');
-    
-    let url = "/agent/dashboard/Hebergs/" + id + "/edit";
-    document.getElementById('confirmBtn').href = url;
-    }
-    function refuser(id) {
     document.getElementById('confirmModal').classList.remove('hidden');
     
     let url = "/agent/dashboard/Hebergs/" + id + "/edit";
@@ -135,7 +105,3 @@
 
     </div>
 </div>    
-
-
-
-

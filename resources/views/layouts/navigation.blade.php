@@ -32,40 +32,7 @@
                 @auth
                
                 
-                @if(auth()->user()->role == 'hote')
-                
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                       
-
-                            <x-nav-link :href="$dashboard">
-                                accueil
-                            </x-nav-link>
-                            
-                            <x-nav-link href="/hote/dashboard/showHeb">
-                                mon hébergement
-                            </x-nav-link>
-                            
-                            <x-nav-link href="/">
-                                A propos
-                            </x-nav-link>
-                           
-                            
-                            <x-nav-link href="">
-                                message
-                            </x-nav-link>
-                            
-                            <x-nav-link href="">
-                                Notification
-                            </x-nav-link>
-                            
-                         
-                            
-                          
-                    </div>
-    
-                    
-                @endif
-                 
+               
               
                 @if(auth()->user()->role == 'client')
                 
