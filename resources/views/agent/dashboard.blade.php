@@ -18,7 +18,7 @@
         <main class="flex-1 p-6">
     
             <!-- Cards -->
-             @include('agent.inf');
+             @include('agent.inf')
     
             <!-- Table -->
             <div class="bg-white rounded-xl shadow p-4">
@@ -61,6 +61,8 @@
                             <td class="p-2">{{$Heberg->nombre_chambre}}</td>
                             <td class="p-2">{{$Heberg->nombre_lit}}</td>
                             <td class="p-2 space-x-2">
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded" onclick="afficherHeb({{ $Heberg->id }})">afficher</button>
+                               
                                 <button class="bg-green-500 text-white px-3 p-1 rounded" onclick="openModal({{ $Heberg->id }})">Valider</button>
                                 <button class="bg-red-500 text-white px-3 p-1 rounded" onclick="refuser({{ $Heberg->id }})">Refuser</button>
 
@@ -110,7 +112,13 @@
     function closeModal() {
         document.getElementById('confirmModal').classList.add('hidden');
     }
-    
+    function afficherHeb(id){
+        document.getElementById('confirmModal').classList.remove('hidden');
+  
+        let url = "/agent/dashboard/Demandes/index/"+id;
+        document.getElementById('confirmBtn').href = url;
+
+    }
  
 </script>
 

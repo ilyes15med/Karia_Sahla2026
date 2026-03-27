@@ -25,7 +25,7 @@ return new class extends Migration
         $table->string('addresse');
         $table->decimal('latitude',20,15);
         $table->decimal('longitude',20,15);
-        $table->string('images');
+        $table->text('images');
         $table->foreignId('users_id')->constrained();
         $table->timestamps();
     }   ); 

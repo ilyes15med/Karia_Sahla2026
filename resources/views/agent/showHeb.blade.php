@@ -1,3 +1,6 @@
+
+    
+<x-app-layout>
 @php
 $icons=[
     'wifi' => 'fa-wifi',
@@ -10,11 +13,19 @@ $icons=[
 
 ];
 @endphp
-@foreach ($hebs as $heb )
+<div class="flex min-h-screen">
     
-
+    <!-- Sidebar -->
+    @include('agent.sideBar')
+   
+     
+  
+    <!-- Content -->
+<main class="flex-1 p-6 bg-gray-50">    
+   
+ 
 <div class="mt-12 max-w-6xl mx-auto p-5">
-
+    
     <!-- Nom hébergement -->
     <div class="mb-4">
         <h1 class="text-2xl font-semibold text-gray-800">
@@ -50,8 +61,8 @@ $icons=[
         </div>
         <!--Information sur le chambre-->
         <div class="mb-4 space-y-4 text-gray-700">
-           
-           
+            <i class="fa-solid fa-person"></i> 
+            
             <span> {{$heb->nombre_chambre}} chambre </span> 
             <span> {{$heb->nombre_lit}} lits </span> 
 
@@ -78,6 +89,7 @@ $icons=[
             class="w-64 h-40 object-cover rounded-lg shadow cursor-pointer"
         >
         @endforeach
+    
       
         
     
@@ -95,16 +107,15 @@ $icons=[
         <span class="font-bold">équipement :</span>
         <div class="space-x-4">
             @foreach (json_decode($heb->service) as $service)
-            <span class="mr-3">
-                <i class="fa-solid {{ $icons[$service] }}"></i>
-                {{ $service }}
-            </span>
-           
+                        <span class="mr-3">
+                            <i class="fa-solid {{ $icons[$service] }}"></i>
+                            {{ $service }}
+                        </span>
+                       
 
-                
+                            
             @endforeach
         
-         
 
          
            
@@ -112,10 +123,50 @@ $icons=[
 
         </div>    
     </div>
-
+   <!--map-->
     <div id="map" class="w-full h-96 mt-4 text-gray-700 bg-slate-100 rounded-xl p-4"></div>
+     <!--Avis-->
+
+    <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
+
+        <span class="font-bold text-lg">Avis</span>
+    
+        <div class="mt-3 flex items-start gap-3">
+    
+            <!-- photo profile -->
+            <img src="{{asset('/assets/images/images.jpeg')}}"
+                 class="w-10 h-10 rounded-full object-cover">
+    
+            <!-- nom + evaluation -->
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold">Nom user</span>
+    
+                    <div class="flex text-yellow-500 text-sm">
+                        <i class="fa-solid fa-star"></i> 4.5
+                        
+                    </div>
+                </div>
+    
+                <!-- commentaire -->
+                <p class="text-gray-600 text-sm mt-1">
+                    Best logement, très propre et confortable.
+                </p>
+            </div>
+    
+        </div>
+    
+    </div>  
+    
+
+
+
+
+</main>
+</div>
 
 <script>
+
 function initMap() {
 
     const location = { lat: {{$heb->latitude}}, lng: {{$heb->longitude}} };
@@ -152,36 +203,7 @@ function initMap() {
  
     </script>
 <!--Evaluation -->
-<div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
-
-    <span class="font-bold text-lg">Avis</span>
-
-    <div class="mt-3 flex items-start gap-3">
-
-        <!-- photo profile -->
-        <img src="{{asset('/assets/images/images.jpeg')}}"
-             class="w-10 h-10 rounded-full object-cover">
-
-        <!-- nom + evaluation -->
-        <div>
-            <div class="flex items-center gap-2">
-                <span class="font-semibold">Nom user</span>
-
-                <div class="flex text-yellow-500 text-sm">
-                    <i class="fa-solid fa-star"></i> 4.5
-                    
-                </div>
-            </div>
-
-            <!-- commentaire -->
-            <p class="text-gray-600 text-sm mt-1">
-                Best logement, très propre et confortable.
-            </p>
-        </div>
-
-    </div>
-
-</div>  
 
 </div>
-@endforeach
+
+</x-app-layout>

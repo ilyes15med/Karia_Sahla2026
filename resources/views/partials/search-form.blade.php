@@ -3,7 +3,7 @@
     <p class="text-2xl font-bold text-center">Trouver votre hébergement</p>
  
     <div class="mt-4 bg-white p-4 rounded-xl shadow-md">
-        <form action="" method="GET" class="flex flex-wrap items-end gap-4">
+        <form action="/client/search" method="GET" class="flex flex-wrap items-end gap-4">
             <!-- Destination -->
             <div class="flex flex-col">
                 <label for="destination" class="text-sm font-medium text-gray-700">Destination</label>

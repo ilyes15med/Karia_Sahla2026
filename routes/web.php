@@ -3,6 +3,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HebergController;
 use App\Http\Controllers\HebergHoteController;
+use App\Http\Controllers\HebergClientController;
 //invite
 
 Route::get('/', function () {
@@ -28,19 +29,15 @@ Route::get('/Hebergements', function () {
 
 
 //require __DIR__.'/invite.php';
+
 //client
 
 
-Route::get('/client/espace', function () {
-    return view('client.front-end.home');
-})->middleware(['auth'])->name('client.space');
+Route::get('/client/espace',[HebergClientController::class,'index_Hebs_home'])->middleware(['auth'])->name('client.space');
 
-Route::get('/client/hebergements',function(){
-    return view('client.front-end.hébergements');
-});
-Route::get('/client/Hebergement',function(){
-    return view('client.front-end.HebShow');
-});
+Route::get('/client/hebergements',[HebergClientController::class,'index_Hebs']);
+Route::get('/client/Hebergement/{id}',[HebergClientController::class,'index_Heb'])->middleware(['auth']);
+
 Route::get('/client/message', function () {
     return view('client.front-end.message');
 });
@@ -55,6 +52,9 @@ Route::get('/client/reservation', function () {
 Route::get('/client/search', function () {
     return view('client.front-end.search');
 });
+Route::get('/client/search',[HebergClientController::class,'search'])->middleware(['auth']);;
+
+
 
 Route::get('/client/reservation/Heb', function () {
     return view('client.front-end.Réservation.réserver');
@@ -63,17 +63,17 @@ Route::get('/client/reservation/Heb', function () {
 
 //hote
 
-Route::get('/hote/dashboard',[HebergController::class,'indexHote'])->middleware(['auth','verified'])->name('hote.dashboard');
+Route::get('/hote/dashboard',[HebergHoteController::class,'indexHote'])->middleware(['auth','verified'])->name('hote.dashboard');
 
-Route::get('/hote/Hebergement/{id}',[HebergController::class,'show_demande'])->name('hebergement.show');
+Route::get('/hote/Hebergement/{id}',[HebergHoteController::class,'show_demande'])->name('hebergement.show');
 
-Route::get('/hote/dashboard/Heb',[HebergController::class,'create']);
+Route::get('/hote/dashboard/Heb',[HebergHoteController::class,'create']);
 
-Route::post('/hote/dashboard/Heb',[HebergController::class,'store'])->name('hebergement.store');
+Route::post('/hote/dashboard/Heb',[HebergHoteController::class,'store'])->name('hebergement.store');
 
-Route::get('/hote/Hebergement/{id}/edit',[HebergController::class,'edit_demande'])->name('hebergement.edit');
-Route::put('/hote/Hebergement/{id}',[HebergController::class,'update_demande'])->name('hebergement.update');
-Route::get('/hote/Hebergement/{id}/delete',[HebergController::class,'destroy_demande'])->name('hebergement.delete');
+Route::get('/hote/Hebergement/{id}/edit',[HebergHoteController::class,'edit_demande'])->name('hebergement.edit');
+Route::put('/hote/Hebergement/{id}',[HebergHoteController::class,'update_demande'])->name('hebergement.update');
+Route::get('/hote/Hebergement/{id}/delete',[HebergHoteController::class,'destroy_demande'])->name('hebergement.delete');
 Route::get('/hote/Hebs',[HebergHoteController::class,'index_Hebs']);
 Route::get('/hote/MonHebergement/{id}',[HebergHoteController::class,'index_Hebergement']);
 
@@ -97,6 +97,10 @@ Route::get('/agent/dashboard/Demandes/refuse',
 Route::get('/agent/dashboard/Demandes/valide',
   [HebergController::class,'Demande_valide']  
 )->middleware(['auth'])->name('demandes.valide');
+Route::get('/agent/dashboard/Demandes/index/{id}',
+  [HebergController::class,'index_Heb']  
+)->middleware(['auth'])->name('demandes.affiche');
+
 
 //demande a valide
 

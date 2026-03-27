@@ -129,6 +129,7 @@
   
 
     }
+    
     function afficherHeb(id){
 
         document.getElementById('confirmModal').classList.remove('hidden');
