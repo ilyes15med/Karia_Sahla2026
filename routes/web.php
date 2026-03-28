@@ -52,10 +52,10 @@ Route::get('/client/reservation', function () {
 Route::get('/client/search', function () {
     return view('client.front-end.search');
 });
-Route::get('/client/search',[HebergClientController::class,'search'])->middleware(['auth']);;
+Route::get('/client/search',[HebergClientController::class,'search'])->middleware(['auth']);
 
 
-
+Route::get('/filter-heberg',[HebergClientController::class,'filter']);
 Route::get('/client/reservation/Heb', function () {
     return view('client.front-end.Réservation.réserver');
 });

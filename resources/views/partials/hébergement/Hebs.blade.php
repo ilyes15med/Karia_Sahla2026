@@ -6,7 +6,7 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="mt-4 p-5 flex ">
             <div>
-               
+               <!--
                 <div class="space-x-4 ">
                     type :
                     <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">tous</a>
@@ -17,6 +17,7 @@
                  
                  
                 </div>
+              -->
 
                 <div class="my-3 ">
                     <p class="text-2xl font-bold "> {{ $count_heb }} hébergements disponible</p>

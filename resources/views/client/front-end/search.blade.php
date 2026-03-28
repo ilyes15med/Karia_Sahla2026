@@ -1,85 +1,78 @@
 <x-app-layout>
 
-    @include('partials.search-form')
+  @include('partials.search-form')
 
-  
+  <!-- CONTAINER -->
+  <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="flex gap-8">
 
-<div class="py-4">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-          <div class="mt-4 p-5 flex ">
-            <div>
-                <div class="">
-                   <div class="space-x-4 ">
-                    type :
-                    <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">tous</a>
-                    <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">villa</a>
-                    <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">appartement</a>
-                    <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">dortoire</a>
-                    <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">hotel</a>
-                 
-                 
-                    </div>
-                </div>    
+          <!-- ASIDE -->
+          <aside class="w-1/4 bg-white p-5 rounded-2xl shadow h-fit">
+              @include('partials.hébergement.filter')
+          </aside>
 
-                <div class="my-3 ">
-                    <p class="text-2xl font-bold "> {{ $count_heb }} hébergements disponible</p>
-                    <p class="text-xl "> explorer notre sélection hébergement</p>
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      @foreach ($hebs as $heb)
-                          <a href="/client/Hebergement/{{$heb->id}}" class="bg-white rounded-2xl shadow-md overflow-hidden ">
-                                <div class="space-y-0.5">
-                                @php
-                                  $image= json_decode($heb->images)   
-                                @endphp      
-                                    <img src="{{asset('storage/'.$image[0])}}" alt="heb"  class="w-96 h-64 object-cover rounded-lg shadow">
-                                             
-                                               
-                                                        <p class="p-1 text-xl text-black line-clamp-3 font-bold">
-                                                          {{ $heb->nomHeberg }}
-                                                          
-                                                         
-                                                        </p> 
-                                                        <p class="p-1 text-sm text-black line-clamp-3 font-bold">
-                                                          {{ $heb->addresse }}
-                                                          
-                                                         
-                                                        </p> 
-                                                        <p class="p-1 text-xl text-black line-clamp-3 ">
-                                                          {{ $heb->typeHeberg }}  
-                                                           
-                                                        </p> 
-                                                        <p class="p-1 text-sm text-black line-clamp-3 text-bold">
-                                                            prix DZD par nuit   {{ $heb->prix }} <i class="fa-solid fa-star"></i> 0
-                                                         
-                                                        </p> 
-                                                   
-                                             
-                                                  
-        
-                                                        
-                                       
-                                                       
-                                                       
-                                            
-                                             
-                                  </div>
-        
-                          </a>  
-                          @endforeach           
-                   
-                    </div>     
-                
-                </div>    
-            </div>
-          
-          </div>
-        </div>
-    </div>
-</div>
-
-
+          <!-- MAIN -->
+          <main class="w-3/4">
+            <div id="results">
+                @include('client.front-end.result-filter',['hebs'=>$hebs])
     
+           
+
+            </div>
+          </main>
+
+      </div>
+  </div>
+
 </x-app-layout>
+<!--
+<script>
+  
+  document.getElementByName('type').addEventListener('change', fetchData);
+  document.etElementByName('price').addEventListener('change', fetchData);
+  document.etElementByName('wilaya').addEventListener('change', fetchData);
+  document.etElementByName('equipement').addEventListener('change', fetchData);
+  document.etElementByName('stars').addEventListener('change', fetchData);
+  
+  
+  
+  
+  
+  function fetchData() {
+     
+
+    let type=document.getElementByName('type').value;
+    let price=document.getElementByName('price').value;
+    let wilaya=document.etElementByName('wilaya').value;
+    let equipement=document.etElementByName('equipement').value;
+    let stars=document.etElementByName('stars').value
+  
+      fetch(`/filter-heberg?type=${type}&price=${price}&wilaya=${wilaya}&equipement=${equipement}&stars=${stars}`)
+          .then(res => res.text())
+          .then(data => {
+              document.getElementById('results').innerHTML = data;
+          });
+  }
+</script>
+
+-->
+
+<script>
+   document.getElementById('filterForm').addEventListener('change', function(){
+    let formData=new FormData(this);
+    
+    let url=new URLSearchParams(formData).toString();
+    
+    fetch("/filter-heberg?"+url).then(res => res.text())
+          .then(data => {
+              document.getElementById('results').innerHTML = data;
+          });
 
 
+
+   });
+
+
+
+
+</script>

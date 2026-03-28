@@ -56,6 +56,41 @@ class HebergClientController extends Controller
 
 
     }
-    
+    public function filter(Request $req){
+        $query=Heberg::query();
+        if($req->type){
+
+            $query->where('typeHeberg',$req->type);
+        }
+        if($req->price){
+
+            $query->where('prix','<=',$req->price);
+        }
+        if($req->wilaya){
+
+            $query->where('addresse','LIKE','%'.$req->wilaya.'%');
+        }
+        if($req->equipement){
+
+            $query->where(function($q) use ($req){
+                foreach($req->equipement as $eq){
+                    $q->WhereJsonContains('service',$eq);
+
+                    
+                }
+               
+
+            });
+         
+           
+        }
+        $hebs=$query->get();
+        $count_heb=count($hebs);
+
+        return view('client.front-end.result-filter',compact('hebs','count_heb'));
+
+
+
+    }
 
 }
