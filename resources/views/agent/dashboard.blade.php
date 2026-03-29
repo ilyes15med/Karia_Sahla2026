@@ -19,6 +19,7 @@
     
             <!-- Cards -->
              @include('agent.inf')
+             <div id="notifications"></div>
     
             <!-- Table -->
             <div class="bg-white rounded-xl shadow p-4">
@@ -75,16 +76,42 @@
             </div>
             
 
-            <script>
-
-                document.addEventListener('DOMContentLoaded', function () {
-                   
-               
-               /* window.Echo.channel('test').listen('HeberegRquest',(e) =>{
-                        console.log(e);
-                    });*/
+<script>
+               /*   document.addEventListener('DOMContentLoaded', function() {
+                if(window.Echo){
+                    console.log('Echo ready');
+                   window.Echo.private('reqHeb')
+                     .listen('.HebRequest', (e) => {
+                       
+                       console.log(e.message+'est demander par: '+e.hote_name+' at: '+e.date_create );
                 });
-            </script>
+            } else {
+
+                  console.log('Echo not found');
+            }
+    
+
+           });*/
+document.addEventListener('DOMContentLoaded', function() {
+window.Echo.private('reqHeb')
+.listen('.HebRequest', (e) => {
+    console.log(e.message+'est demander par: '+e.hote_name+' at: '+e.date_create+'hebergement' +e.nom_Heb);
+    let notif = document.createElement('div');
+    notif.className = "bg-blue-100 p-3 rounded mb-2 shadow";
+
+    notif.innerHTML = `
+        <strong>Nouvelle demande</strong><br>
+        ${e.message} <br>
+        Hôte: ${e.hote_name} <br>
+        Date: ${e.date_create} <br>
+        nome Heb :${e.nom_Heb}
+    `;
+
+    document.getElementById('notifications').prepend(notif);
+});
+});
+
+</script>
            
     
         </main>

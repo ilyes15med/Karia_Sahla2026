@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Heberg;
+use App\Events\HebRequest;
 
 
 class HebergHoteController extends Controller
@@ -45,13 +46,22 @@ class HebergHoteController extends Controller
             'users_id' =>$request->id,
             'images'=>json_encode($images)
         ]);
-
-       
-      //  broadcast(new HeberegRquest("Nouvelle hébergement"));
+          /*$hote_name=DB::table('users')
+          ->where('id',$request->id)
+          ->select('name');
+          */
+          $HebergCours=DB::table('Hebergs')
+          ->join('users','Hebergs.users_id','=','users.id')
+          ->where('Hebergs.nomHeberg',$request->nom_Heb)
+          ->where('Hebergs.status','en cours')
+          ->select('Hebergs.*','users.name as hote_name')
+          ->first();
+        broadcast(new HebRequest("un demande en cours ",$HebergCours->hote_name,$HebergCours->updated_at,$HebergCours->nomHeberg));
        
        
 
         return $this->indexHote();
+      // return back();
 
 
         

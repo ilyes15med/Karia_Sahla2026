@@ -60,7 +60,7 @@ class HebergController extends Controller
         ->get();
         $nombre_Heb_valide=$HebergValide->count();
         return view('agent.Demande_valide',compact('HebergValide','nombre_Heb_valide'));
-
+     
     }
     public function index_Heb($idHeb){
         $heb= DB::table('Hebergs')

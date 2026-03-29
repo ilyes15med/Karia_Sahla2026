@@ -83,6 +83,27 @@
             </main>
         
         </div>
+        <script>
+          
+    /*
+    document.addEventListener('DOMContentLoaded', function() {
+    if(window.Echo){
+        console.log('Echo ready');
+        window.Echo.channel('reqHeb')
+            .listen('.HebRequest', (e) => {
+                alert(e.message);
+                console.log(e.message);
+            });
+    } else {
+
+        console.log('Echo not found');
+    }
+    
+
+});
+
+*/
+        </script>   
         
         
     </x-app-layout>
