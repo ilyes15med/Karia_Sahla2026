@@ -19,8 +19,8 @@ return new class extends Migration
         $table->decimal('prix',20,2);
         $table->longText('Description');
         $table->string('service');
-        $table->string('nombre_lit');
-        $table->string('nombre_chambre');
+        $table->integer('nombre_lit')->default(0);
+        $table->integer('nombre_chambre')->default(0);
         $table->string('status');
         $table->string('addresse');
         $table->decimal('latitude',20,15);

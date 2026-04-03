@@ -71,6 +71,131 @@
     
                     
                 @endif
+                @if(auth()->user()->role=='agent')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex text-right">
+
+                    <x-nav-link >
+                        <div class="relative">
+
+    
+                            <!-- Icon -->
+                            <button id="notifBtn" class="relative">
+                               Notification <i class="fa-solid fa-bell"></i>
+                                <!-- Badge -->
+                                <span id="notifCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full hidden">
+                                    0
+                                </span>
+                            </button>
+                            
+                            <!-- Dropdown -->
+                            <div id="notifDropdown" class="hidden absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-xl p-3">
+                                <h4 class="font-bold mb-2">Notifications</h4>
+                                <ul id="notifList" class="space-y-2 text-sm">
+                                    @foreach(auth()->user()->notifications as $notif)
+                                    @php
+                                        if (is_null($notif->read_at)){
+
+                                         $notif->markAsRead();
+                                        }
+                                       
+                                    @endphp
+                                        
+
+                                        <li class="p-2 rounded mb-2 
+                                        {{ is_null($notif->read_at) ? 'bg-sky-300' : 'bg-sky-100' }}">
+                                        
+                                        {{ $notif->data['data'] }}
+                                    
+                                        <br>
+                                    
+                                        <small class="text-gray-500">
+                                            {{ $notif->created_at }}
+                                        </small>
+                                    
+                                    </li>
+                                    
+                                 
+                                        
+                                    
+                                    @endforeach
+                                  
+                                
+
+
+
+                                </ul>
+                            </div>
+                        
+                        </div>
+                    </x-nav-link>
+
+                </div>   
+
+                @endif
+
+
+                @if(auth()->user()->role=='hote')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex text-right">
+
+                    <x-nav-link >
+                        <div class="relative">
+
+    
+                            <!-- Icon -->
+                            <button id="notifBtn" class="relative">
+                               Notification <i class="fa-solid fa-bell"></i>
+                                <!-- Badge -->
+                                <span id="notifCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full hidden">
+                                    0
+                                </span>
+                            </button>
+                            
+                            <!-- Dropdown -->
+                            <div id="notifDropdown" class="hidden absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-xl p-3">
+                                <h4 class="font-bold mb-2">Notifications</h4>
+                                <ul id="notifList" class="space-y-2 text-sm">
+                                    @foreach(auth()->user()->notifications as $notif)
+                                    @php
+                                        if (is_null($notif->read_at)){
+
+                                         $notif->markAsRead();
+                                        }
+                                       
+                                    @endphp
+                                        
+
+                                    <li class="p-2 rounded mb-2 
+                                        {{ is_null($notif->read_at) ? 'bg-sky-300' : 'bg-sky-100' }}">
+                                        
+                                        {{ $notif->data['data'] }}
+                                    
+                                        <br>
+                                    
+                                        <small class="text-gray-500">
+                                            {{ $notif->created_at }}
+                                        </small>
+                                    
+                                    </li>
+                                    
+                                 
+                                        
+                                    
+                                    @endforeach
+                                  
+                                
+
+
+
+                                </ul>
+                            </div>
+                        
+                        </div>
+                    </x-nav-link>
+
+                </div>   
+
+                @endif
+
                 @endauth
                 
             </div>

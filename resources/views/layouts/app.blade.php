@@ -35,5 +35,87 @@
                 {{ $slot }}
             </main>
         </div>
+<script>
+            
+let count = 0;
+        
+const notifBtn = document.getElementById('notifBtn');
+const notifCount = document.getElementById('notifCount');
+const notifList = document.getElementById('notifList');
+const notifDropdown = document.getElementById('notifDropdown');
+        
+            // إضافة Notification
+function addNotificationAgent(message,hote_name,date_cree,nom_heb) {
+                count++;
+        
+                // تحديث الرقم
+                notifCount.innerText = count;
+                notifCount.classList.remove('hidden');
+        
+                // إضافة الرسالة
+                const li = document.createElement('li');
+        
+                li.className = "p-2 bg-gray-100 rounded";
+                li.innerText = "hote "+hote_name+message+" hebergement "+nom_heb+" at "+date_cree;
+        
+                notifList.prepend(li);
+}
+
+function addNotificationHote(name_agent,message) {
+    count++;
+
+    // تحديث الرقم
+    notifCount.innerText = count;
+    notifCount.classList.remove('hidden');
+
+    // إضافة الرسالة
+    const li = document.createElement('li');
+
+    li.className = "p-2 bg-gray-100 rounded";
+    li.innerText = name_agent+message;
+
+    notifList.prepend(li);
+}
+
+        
+           
+            // عند الضغط على الأيقونة
+          
+           
+            notifBtn.addEventListener('click', () => {
+                notifDropdown.classList.toggle('hidden');
+        
+                // تصفير العداد
+                count = 0;
+                notifCount.innerText = 0;
+                notifCount.classList.add('hidden');
+            });
+             //role
+             const role="{{ auth()->user()->role }}";
+            // Echo
+            document.addEventListener('DOMContentLoaded', () => {
+                if (window.Echo) {
+                    if(role==="agent"){
+                        window.Echo.private('reqHeb')
+                        .listen('.HebRequest', (e) => {
+                            addNotificationAgent(e.message,e.hote_name,e.date_create,e.nom_Heb);
+                        });
+
+
+                    }
+                    if(role==="hote"){
+                        window.Echo.private('ReponseAHote')
+                       .listen('.ReponseReqHote', (e) => {
+                   
+                        addNotificationHote(e.name_agent,e.message);
+                        });
+
+
+                    
+                  
+                    }
+                }
+            });
+        </script>
     </body>
 </html>

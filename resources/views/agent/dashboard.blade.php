@@ -2,6 +2,8 @@
     if(Auth::user()->role == 'agent'){
 
          $id_agent=Auth::user()->id;
+         $name_Agent=Auth::user()->name;
+        
     }
        
     
@@ -19,7 +21,7 @@
     
             <!-- Cards -->
              @include('agent.inf')
-             <div id="notifications"></div>
+          <!--   <div id="notifications"></div>  -->
     
             <!-- Table -->
             <div class="bg-white rounded-xl shadow p-4">
@@ -37,8 +39,7 @@
                             <th class="px-4 p-2 border">Type</th>
                             <th class="px-4 p-2 border">Description</th>
                             <th class="px-4 p-2 border">Service</th>
-                            <th class="px-4 p-2 border">Nombre chambre</th>
-                            <th class="px-4 p-2 border">Nombre lit</th>
+                          
                          
                             <th class="px-4 p-2 border text-center">Actions</th>
                             </tr>
@@ -59,13 +60,12 @@
                             <td class="p-2">{{$Heberg->Description}}</td>
                             
                             <td class="p-2">{{$Heberg->service}}</td>
-                            <td class="p-2">{{$Heberg->nombre_chambre}}</td>
-                            <td class="p-2">{{$Heberg->nombre_lit}}</td>
+                            
                             <td class="p-2 space-x-2">
                                 <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded" onclick="afficherHeb({{ $Heberg->id }})">afficher</button>
                                
-                                <button class="bg-green-500 text-white px-3 p-1 rounded" onclick="openModal({{ $Heberg->id }})">Valider</button>
-                                <button class="bg-red-500 text-white px-3 p-1 rounded" onclick="refuser({{ $Heberg->id }})">Refuser</button>
+                                <button class="bg-green-500 text-white px-3 p-1 rounded" onclick="openModal({{ $Heberg->id }},'{{$name_Agent}}')">Valider</button>
+                                <button class="bg-red-500 text-white px-3 p-1 rounded" onclick="refuser({{ $Heberg->id }},'{{$name_Agent}}')">Refuser</button>
 
                             </td>
                         </tr>
@@ -92,6 +92,7 @@
     
 
            });*/
+/*           
 document.addEventListener('DOMContentLoaded', function() {
 window.Echo.private('reqHeb')
 .listen('.HebRequest', (e) => {
@@ -110,7 +111,7 @@ window.Echo.private('reqHeb')
     document.getElementById('notifications').prepend(notif);
 });
 });
-
+*/
 </script>
            
     
@@ -123,16 +124,16 @@ window.Echo.private('reqHeb')
 
 
 <script>
-    function openModal(id) {
+    function openModal(id,Agent_name) {
     document.getElementById('confirmModal').classList.remove('hidden');
   
-    let url = "/agent/dashboard/Hebergs/" + id + "/accept";
+    let url = "/agent/"+Agent_name+"/dashboard/Hebergs/" + id + "/accept";
     document.getElementById('confirmBtn').href = url;
     }
-    function refuser(id) {
+    function refuser(id,Agent_name) {
     document.getElementById('confirmModal').classList.remove('hidden');
     
-    let url = "/agent/dashboard/Hebergs/" + id + "/refuse";
+    let url = "/agent/"+Agent_name+"/dashboard/Hebergs/" + id + "/refuse";
     document.getElementById('confirmBtn').href = url;
     }
     
@@ -148,6 +149,7 @@ window.Echo.private('reqHeb')
     }
  
 </script>
+
 
     <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     

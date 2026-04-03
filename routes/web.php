@@ -72,10 +72,20 @@ Route::get('/hote/dashboard/Heb',[HebergHoteController::class,'create']);
 Route::post('/hote/dashboard/Heb',[HebergHoteController::class,'store'])->name('hebergement.store');
 
 Route::get('/hote/Hebergement/{id}/edit',[HebergHoteController::class,'edit_demande'])->name('hebergement.edit');
+
 Route::put('/hote/Hebergement/{id}',[HebergHoteController::class,'update_demande'])->name('hebergement.update');
+
 Route::get('/hote/Hebergement/{id}/delete',[HebergHoteController::class,'destroy_demande'])->name('hebergement.delete');
+
 Route::get('/hote/Hebs',[HebergHoteController::class,'index_Hebs']);
+
 Route::get('/hote/MonHebergement/{id}',[HebergHoteController::class,'index_Hebergement']);
+
+Route::post('/hote/MonHebergement/{id}/chambre',[HebergHoteController::class,'chambre_added'])->name('chambre.added');
+Route::get('/hote/MonHebergement/{idHeb}/chambre/{idC}/edit',[HebergHoteController::class,'form_update_show'])->name('forme-update.show');
+Route::put('/hote/MonHebergement/{idHeb}/chambre/{idC}/edit',[HebergHoteController::class,'chambre_update'])->name('chambre.update');
+Route::get('/hote/MonHebergement/{idHeb}/chambre/{idC}/delete',[HebergHoteController::class,'delete_chambre'])->name('chambre.delete');
+
 
 //admin
 Route::get('/admin/dashboard', function () {
@@ -105,8 +115,8 @@ Route::get('/agent/dashboard/Demandes/index/{id}',
 //demande a valide
 
 Route::get('/agent/dashboard',[HebergController::class,'indexAgent'])->middleware(['auth'])->name('agent.dashboard');
-Route::get('/agent/dashboard/Hebergs/{id}/accept',[HebergController::class,'confirme'])->middleware(['auth'])->name('heberge.edit');
-Route::get('/agent/dashboard/Hebergs/{id}/refuse',[HebergController::class,'refuse'])->middleware(['auth'])->name('heberge.edit');
+Route::get('/agent/{name}/dashboard/Hebergs/{id}/accept',[HebergController::class,'confirme'])->middleware(['auth'])->name('heberge.edit');
+Route::get('/agent/{name}/dashboard/Hebergs/{id}/refuse',[HebergController::class,'refuse'])->middleware(['auth'])->name('heberge.edit');
 //client
 //require __DIR__.'/client.php';
 

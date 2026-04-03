@@ -8,7 +8,8 @@ $icons=[
     'climatisation' => 'fa-snowflake',
     'tv' => 'fa-tv',
     'restaurant' => 'fa-utensils',
-    'piscine' => 'fa-water-ladder'
+    'piscine' => 'fa-water-ladder',
+    'elevator'=>'fa-solid fa-elevator'
 
 
 ];

@@ -9,3 +9,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('reqHeb', function ($user) {
     return $user->role==='agent';
 });
+
+Broadcast::channel('ReponseAHote', function ($user) {
+    return $user->role==='hote';
+});

@@ -52,18 +52,32 @@
                     <div>
                         <label class="block mb-1">Adresse hébergement</label>
                         <div>
-                            <label class="block mb-1">addresse</label>
-                            <input type="text" id="addresee" name="addresee" class="w-full border rounded-lg px-3 py-2" />
-                        </div>
+
+<!-- Wilaya -->
+<div class="mb-3">
+    <label class="block mb-1">Wilaya</label>
+    <select id="wilaya" name="wilaya"  class="w-full border rounded-lg px-3 py-2">
+        <option value="">-- Choisir Wilaya --</option>
+    </select>
+</div>
+
+<!-- Commune -->
+<div>
+    <label class="block mb-1">Commune</label>
+    <select id="commune" name="commune" class="w-full border rounded-lg px-3 py-2">
+        <option value="">-- Choisir Commune --</option>
+    </select>
+</div>
+</div>                       
                       
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block mb-1">Latitude</label>
+                            <label class="block mb-1">Latitude de l'hébergement</label>
                             <input type="text" id="Latitude" name="Latitude" class="w-full border rounded-lg px-3 py-2" required/>
                         </div>
                         <div>
-                            <label class="block mb-1">Longitude</label>
+                            <label class="block mb-1">Longitude de l'hébergement</label>
                             <input type="text" id="Longitude" name="Longitude" class="w-full border rounded-lg px-3 py-2" required/>
                         </div>
                     </div>
@@ -107,6 +121,11 @@
                             <i class="fa-solid fa-water-ladder text-blue-500"></i>
                             <span>Piscine</span>
                         </label>
+                        <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
+                            <input type="checkbox" name="services[]" value="elevator" class="form-checkbox h-5 w-5 text-blue-500">
+                            <i class="fa-solid fa-elevator"></i>
+                            <span>acenseur</span>
+                        </label>
 
                     </div>
 
@@ -115,17 +134,7 @@
                         <textarea id="description" name="description" rows="4" class="w-full border rounded-lg px-3 py-2" required></textarea>
                     </div>
 
-                      <!-- Nombre de chambres -->
-    <div>
-        <label class="block mb-1">Nombre de chambres</label>
-        <input type="number" id="nb_chambres" name="nb_chambres" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 3" required/>
-    </div>
-
-    <!-- Nombre de lits -->
-    <div>
-        <label class="block mb-1">Nombre de lits</label>
-        <input type="number" id="nb_lits" name="nb_lits" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 5" required/>
-    </div>
+                      
                 <div>
                     <input type="text" id="id" name="id" class="hidden" value=" {{$id_hote}}"/>
                 
@@ -147,4 +156,46 @@
             </div>
         </form>
     </div>
+
+    <script>
+        let wilayas = [];
+        let communes = [];
+        
+        Promise.all([
+            fetch('/wilayas_commune/Wilaya_Of_Algeria.json').then(res => res.json()),
+            fetch('/wilayas_commune/Commune_Of_Algeria.json').then(res => res.json())
+        ]).then(([wilayaData, communeData]) => {
+        
+            wilayas = wilayaData;
+            communes = communeData;
+        
+            const wilayaSelect = document.getElementById('wilaya');
+            const communeSelect = document.getElementById('commune');
+        
+            // remplir wilayas
+            wilayas.forEach(w => {
+                let option = document.createElement('option');
+                option.value = w.name; 
+                option.textContent = w.name;
+                wilayaSelect.appendChild(option);
+            });
+        
+            // change communes
+            wilayaSelect.addEventListener('change', function () {
+                const selectedWilaya = this.value;
+        
+                communeSelect.innerHTML = '<option value="">-- Choisir Commune --</option>';
+        
+                const filtered = communes.filter(c => c.wilaya_id == wilayas.find(w => w.name === selectedWilaya).id);
+        
+                filtered.forEach(c => {
+                    let option = document.createElement('option');
+                    option.value = c.name;
+                    option.textContent = c.name;
+                    communeSelect.appendChild(option);
+                });
+            });
+        
+        });
+        </script>
 </x-app-layout>

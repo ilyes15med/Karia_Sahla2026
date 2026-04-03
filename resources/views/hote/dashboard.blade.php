@@ -1,5 +1,7 @@
 
     <x-app-layout>
+     
+       
 
         <div class="flex min-h-screen bg-gray-100">
     
@@ -33,9 +35,8 @@
                                 <th class="px-4 py-2 border">hote</th>
                                 <th class="px-4 py-2 border">Type</th>
                              
-                                <th class="px-4 py-2 border">Service</th>
-                                <th class="px-4 py-2 border">Nombre chambre</th>
-                                <th class="px-4 py-2 border">Nombre lit</th>
+                                <th class="px-4 py-2 border">Services</th>
+                               
                              
                                 <th class="px-4 py-2 border text-center">Actions</th>
                                 </tr>
@@ -56,8 +57,7 @@
                                 
                                 
                                 <td class="p-2">{{$Heberg->service}}</td>
-                                <td class="p-2">{{$Heberg->nombre_chambre}}</td>
-                                <td class="p-2">{{$Heberg->nombre_lit}}</td>
+                                
                                 <td class="px-4 py-2 border space-x-2">
                                     <button onclick="afficherHeb({{ $Heberg->id }})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                                         Afficher
@@ -83,27 +83,7 @@
             </main>
         
         </div>
-        <script>
-          
-    /*
-    document.addEventListener('DOMContentLoaded', function() {
-    if(window.Echo){
-        console.log('Echo ready');
-        window.Echo.channel('reqHeb')
-            .listen('.HebRequest', (e) => {
-                alert(e.message);
-                console.log(e.message);
-            });
-    } else {
-
-        console.log('Echo not found');
-    }
-    
-
-});
-
-*/
-        </script>   
+  
         
         
     </x-app-layout>
