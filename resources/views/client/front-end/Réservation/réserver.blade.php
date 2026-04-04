@@ -24,11 +24,9 @@
     class="w-full border rounded-lg px-3 py-2">
     </div>
     
-    <div>
-    <label>Adultes</label>
-    <input type="number" id="adultes" value="1"
-    class="w-full border rounded-lg px-3 py-2">
-    </div>
+    
+        
+        
     
     <button onclick="nextStep1()"
     class="w-full bg-blue-600 text-white p-2 rounded-lg">
@@ -112,6 +110,9 @@
     <p><b>Date fin :</b> <span id="show_date_depart"></span></p>
     
     <p><b>Adultes :</b> <span id="show_adultes"></span></p>
+    <p><b>Enfants :</b> <span id="show_enfants"></span></p>
+    <p><b>bibies :</b> <span id="show_bibies"></span></p>
+
     <p><b>prix total  :</b> <span id="prix"></span></p>
     
     </div>
@@ -141,11 +142,11 @@
     
     let date_arrivee = document.getElementById("date_arrivee").value
     let date_depart = document.getElementById("date_depart").value
-    let adultes = document.getElementById("adultes").value
+  
     
     localStorage.setItem("date_arrivee",date_arrivee)
     localStorage.setItem("date_depart",date_depart)
-    localStorage.setItem("adultes",adultes)
+  
     
     document.getElementById("etape1").classList.add("hidden")
     document.getElementById("etape2").classList.remove("hidden")
@@ -179,7 +180,9 @@
     
     document.getElementById("show_date_arrivee").innerText = localStorage.getItem("date_arrivee")
     document.getElementById("show_date_depart").innerText = localStorage.getItem("date_depart")
-    document.getElementById("show_adultes").innerText = localStorage.getItem("adultes")
+    //document.getElementById("show_adultes").innerText = localStorage.getItem("adultes")
+   // document.getElementById("show_enfants").innerText = localStorage.getItem("Enfants")
+   // document.getElementById("show_bibies").innerText = localStorage.getItem("bibies")
     
     }
     

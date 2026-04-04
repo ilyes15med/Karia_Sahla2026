@@ -87,32 +87,42 @@
      <div>
         <h3 class="font-semibold mb-2">Equipements</h3>
         <div class="space-y-2">
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="wifi">
+                <span>wifi <i class="fa-solid fa-wifi"></i></span>
+            </label>
+            
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="parking">
+                <span>parking <i class="fa-solid fa-car"></i></span>
+            </label>
+            
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="climatisation">
+                <span>climatisation <i class="fa-solid fa-snowflake"></i></span>
+            </label>
+            
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="tv">
+                <span>tv <i class="fa-solid fa-tv"></i></span>
+            </label>
+            
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="restaurant">
+                <span>restaurant <i class="fa-solid fa-utensils"></i></span>
+            </label>
+            
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="piscine">
+                <span>piscine <i class="fa-solid fa-person-swimming"></i></span>
+            </label>
+            
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="equipement[]" value="ascenseur">
+                <span>ascenseur <i class="fa-solid fa-elevator"></i></span>
+            </label>
            
-            <label class="flex items-center gap-2">
-                    <input type="checkbox" name="equipement[]" class="rounded" value="wifi">
-                    <span>wifi <i class="fa-wifi"></i> </span>
-            </label>
-                
-            <label class="flex items-center gap-2">
-                <input type="checkbox" name="equipement[]" class="rounded" value="parking">
-                <span>parking <i class="fa-car"></i> </span>
-            </label>
-            <label class="flex items-center gap-2">
-                <input type="checkbox" name="equipement[]" class="rounded" value="climatisation">
-                <span>climatisation <i class="fa-snowflake"></i> </span>
-            </label>
-            <label class="flex items-center gap-2">
-                <input type="checkbox" name="equipement[]" class="rounded" value="tv">
-                <span>tv <i class="fa-tv"></i> </span>
-            </label>
-            <label class="flex items-center gap-2">
-                <input type="checkbox" name="equipement[]" class="rounded" value="restaurant">
-                <span>restaurant <i class="fa-utensils"></i> </span>
-            </label>
-            <label class="flex items-center gap-2">
-                <input type="checkbox" name="equipement[]" class="rounded" value="piscine">
-                <span>piscine <i class="fa-water-ladder"></i> </span>
-            </label>
+           
          
            
         </div>

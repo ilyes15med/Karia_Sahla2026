@@ -35,6 +35,9 @@ class HebergHoteController extends Controller
               
             }
         }
+    //si un agent quelqoune existe 
+      $count_agent=User::where('role','agent')->count();   
+    if($count_agent>0){
      
         Heberg::create([
             'nomHeberg' => $request->nom_Heb,
@@ -85,6 +88,12 @@ class HebergHoteController extends Controller
 
         return $this->indexHote();
       // return back();
+    }else{
+      
+        return redirect()->with('succes',"votre demande est refuser car aucun agent maintent pour accepter");
+
+
+    }
 
 
         
@@ -258,6 +267,7 @@ class HebergHoteController extends Controller
     }
     public function chambre_update(Request $req ,$idHeb,$idchambre){
        $chambre=Chambre::findOrFail($idchambre);
+       $heb=Heberg::findOrFail($idHeb);
        
        $images=[];
        if($req->hasFile('images')){
@@ -270,25 +280,69 @@ class HebergHoteController extends Controller
            }
        }
 
-        $chambre->update([
+   
+        //nombre chambre dans DB hebergs
+        $NbrChHeb=$heb->nombre_chambre;
+        //nombre de chambre dans DB chambres
+        $N1=$chambre->nombre_chambre;
+
+        //nombre de chambre dans requete
+
+        $N2=$req->nombre_chambre;
+        //desagmauntation
+        
+        if($N1>$N2){
+           $nbrDesaugmenter=$N1-$N2;
+           $chambre->update([
+            
+
             'typeChambres'=>$req->type_chambre,
             'prix'=>$req->prix,
             'Description' =>$req->description,
             'services'=>json_encode($req->services),
             'nombre_lit'=>$req->nombre_lit,
-            'nombre_chambre'=>$req->nombre_chambre,
+            'nombre_chambre'=>$N1-$nbrDesaugmenter,
             'images_chambres'=>json_encode($images),
             'Hebergs_id'=>$idHeb
 
+           ]);
+           $heb->update([
+            'nombre_chambre'=>$NbrChHeb-$nbrDesaugmenter
 
-        ]);
+           ]);
+        }
+        //augmantaion
+         elseif($N1<$N2){
+            $nbrAugmenter=$N2-$N1;
+            $chambre->update([
+             
+             'typeChambres'=>$req->type_chambre,
+             'prix'=>$req->prix,
+             'Description' =>$req->description,
+             'services'=>json_encode($req->services),
+             'nombre_lit'=>$req->nombre_lit,
+             'nombre_chambre'=>$N1+$nbrAugmenter,
+             'images_chambres'=>json_encode($images),
+             'Hebergs_id'=>$idHeb
+ 
+            ]);
+            $heb->update([
+                'nombre_chambre'=>$NbrChHeb+$nbrAugmenter
+    
+               ]);
+         }
+
         $chambres=Chambre::where('Hebergs_id',$idHeb)->get();
-        $heb=Heberg::findOrFail($idHeb);
+        
   
 
-        return view('hote.Hebergements.showHeb',compact('heb','chambres'));
+      //  return view('hote.Hebergements.showHeb',compact('heb','chambres'))->with('succes',"la chambre a été modifier");;
 
-
+      // return redirect()->back()
+      return redirect()->route('Heb.index',$heb->id)
+      ->with('heb', $heb)
+      ->with('chambres', $chambres)
+      ->with('succes', 'Chambre mise à jour avec succès');
 
     }
     function delete_chambre($idHeb,$idchambre){
@@ -311,7 +365,7 @@ class HebergHoteController extends Controller
 
 
 
-         Chambre::findOrFail($idchambre)->delete();
+        Chambre::findOrFail($idchambre)->delete();
        
 
         

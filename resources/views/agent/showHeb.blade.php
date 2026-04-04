@@ -43,30 +43,34 @@ $icons=[
 
     <!-- Information hôte -->
     <div class="bg-slate-100 mb-4 p-4 ">
-        <div class=" rounded-xl flex flex-wrap items-center justify-between gap-4">
+        <div class=" rounded-xl flex  items-center justify-between gap-4">
 
             <span class="text-gray-700">
-                Hébergé par <span class="font-semibold"> {{$heb->hote_name}}</span>
-            </span>
-            @if(auth()->user()->role == 'client')   
-                <a href="#" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
-                    <i class="fa-solid fa-message"></i>
-                    Chat
-                </a>
-    
-                <a href="" class="px-4 py-2 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
-                        Réserver
-                </a>
-            @endif
-    
+                Hébergé par 
+                <span class="font-semibold">
+                     {{$heb->hote_name}}
+                </span>     
+
+            
+            <a href="#" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                <i class="fa-solid fa-message"></i>
+                Chat
+            </a>
+           </span>
         </div>
         <!--Information sur le chambre-->
         <div class="mb-4 space-y-4 text-gray-700">
-            <i class="fa-solid fa-person"></i> 
-            
+           
+            @if ($heb->nombre_chambre==0 && $heb->nombre_lit==0)
+            <span>aucun chambre</span>
+            <span>aucun lit</span>
+                
+            @else
+                
+           
             <span> {{$heb->nombre_chambre}} chambre </span> 
             <span> {{$heb->nombre_lit}} lits </span> 
-
+            @endif
         </div>   
 
 
@@ -126,38 +130,7 @@ $icons=[
     </div>
    <!--map-->
     <div id="map" class="w-full h-96 mt-4 text-gray-700 bg-slate-100 rounded-xl p-4"></div>
-     <!--Avis-->
-
-    <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
-
-        <span class="font-bold text-lg">Avis</span>
-    
-        <div class="mt-3 flex items-start gap-3">
-    
-            <!-- photo profile -->
-            <img src="{{asset('/assets/images/images.jpeg')}}"
-                 class="w-10 h-10 rounded-full object-cover">
-    
-            <!-- nom + evaluation -->
-            <div>
-                <div class="flex items-center gap-2">
-                    <span class="font-semibold">Nom user</span>
-    
-                    <div class="flex text-yellow-500 text-sm">
-                        <i class="fa-solid fa-star"></i> 4.5
-                        
-                    </div>
-                </div>
-    
-                <!-- commentaire -->
-                <p class="text-gray-600 text-sm mt-1">
-                    Best logement, très propre et confortable.
-                </p>
-            </div>
-    
-        </div>
-    
-    </div>  
+  
     
 
 

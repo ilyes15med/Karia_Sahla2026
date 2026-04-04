@@ -48,14 +48,19 @@ class HebergClientController extends Controller
     public function search(Request $req){
         $destination=$req->destination;
         $nombrePersonne =$req->adultes+$req->enfants;
+        
         $hebs=DB::table('Hebergs')
         ->join('chambres','Hebergs.id',"=",'chambres.Hebergs_id')
         ->where('Hebergs.status','valide')
         ->where('Hebergs.addresse','LIKE','%'.$destination.'%')
         ->where('chambres.nombre_lit','>=',$nombrePersonne)
+        ->where('chambres.nombre_chambre','>',0)
         ->select('Hebergs.*')
+        ->distinct()
         ->get();
+     
         $count_heb=count($hebs);
+        
         return view('client.front-end.search',compact('hebs','count_heb'));
 
 
@@ -95,6 +100,11 @@ class HebergClientController extends Controller
 
 
 
+    }
+    //reservation
+    public function added_reservation_show(){
+
+        return view('client.front-end.Réservation.réserver');
     }
 
 }

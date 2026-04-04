@@ -88,9 +88,10 @@
                         <thead class="bg-gray-100 text-gray-700">
                             <tr>
                                 <th class="px-4 py-3">Type de chambre</th>
-                                <th class="px-4 py-3">Quantité</th>
                                 <th class="px-4 py-3">Prix (DA)</th>
-                                <th class="px-4 py-3 text-center">Actions</th>
+                                <th class="px-4 py-3">Quantité</th>
+                                
+                                <th class="px-4 py-3 text-center"></th>
                             </tr>
                         </thead>
             
@@ -98,6 +99,9 @@
                     <tbody class="divide-y">
                             
                        @foreach ($chambres as $chambre)
+                       
+                            
+                   
                            
                       
                             <tr class="hover:bg-gray-50">
@@ -127,8 +131,10 @@
                                     </div>
                                     
                                 </td>
+                                <td class="px-4 py-3">{{$chambre->prix}}</td>
+                                @if ($chambre->nombre_chambre!=0)
                                 <td class="px-4 py-3">
-                                    <input 
+                                    <input id="quantity"
                                     type="number"
                                     name="Quantite"
                                     min="1"
@@ -137,7 +143,7 @@
                                     class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                                 </td>
-                                <td class="px-4 py-3">{{$chambre->prix}}</td>
+                               
                                 <td class="px-4 py-3 text-center flex justify-center gap-3">
                                     @if(auth()->user()->role == 'hote')   
                              
@@ -151,16 +157,33 @@
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                     @endif
+
                                     @if(auth()->user()->role == 'client')  
-                                    <a href="" class="p-1 bg-green-500 hover:bg-green-700 text-white rounded-lg shadow-md">
-                                        Réserver
+                                
+                                    <a class="p-1 bg-green-700 text-white m-1 rounded-lg shadow-sm " href="/client/reservation/chambre/{{$chambre->id}}">
+                                        réserver
                                     </a>
+                                 
+                                  
 
                                     @endif
 
+
             
                                 </td>
+                                @else 
+                                <td > 
+                                    <span class="p-1 bg-green-700 text-white m-1">
+                                    tous les chambres sont complet
+                                    </span>
+                                </td>
+                                @endif
                             </tr>
+                            
+                                
+                           
+                                
+                           
                         @endforeach
             
                           
@@ -537,6 +560,8 @@
         });
     
     }
+   
+
     </script>
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUqMturwFCGYIXu0AY0Fnb9ovtjcr-5KM&callback=initMap" async defer></script>

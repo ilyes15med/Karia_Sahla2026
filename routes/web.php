@@ -45,9 +45,7 @@ Route::get('/client/notification', function () {
     return view('client.front-end.Notification');
 });
 
-Route::get('/client/reservation', function () {
-    return view('client.front-end.reservation');
-});
+Route::get('/client/reservation/chambre/{idch}',[HebergClientController::class,'added_reservation_show']);
 
 Route::get('/client/search', function () {
     return view('client.front-end.search');
@@ -79,7 +77,7 @@ Route::get('/hote/Hebergement/{id}/delete',[HebergHoteController::class,'destroy
 
 Route::get('/hote/Hebs',[HebergHoteController::class,'index_Hebs']);
 
-Route::get('/hote/MonHebergement/{id}',[HebergHoteController::class,'index_Hebergement']);
+Route::get('/hote/MonHebergement/{id}',[HebergHoteController::class,'index_Hebergement'])->name('Heb.index');
 
 Route::post('/hote/MonHebergement/{id}/chambre',[HebergHoteController::class,'chambre_added'])->name('chambre.added');
 Route::get('/hote/MonHebergement/{idHeb}/chambre/{idC}/edit',[HebergHoteController::class,'form_update_show'])->name('forme-update.show');

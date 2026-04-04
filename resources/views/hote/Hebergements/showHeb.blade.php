@@ -24,7 +24,7 @@ $icons=[
 <main class="flex-1 p-6 bg-gray-50">    
    
         @if(session('succes'))
-         <div id="message" class="bg-green-100 text-green-700 p-3 rounded-lg shadow-sm mb-4">
+        <div id="message" class="bg-green-100 text-green-700 p-3 rounded-lg shadow-sm mb-4">
           <span>
             {{ session('succes')}}
           </span>
@@ -35,7 +35,7 @@ $icons=[
 
 
 
-         </div>
+        </div>
 
 
         
@@ -151,21 +151,29 @@ $icons=[
 
                                             </div>
                                             <div class=" space-x-4">
+                                            @php
+                                                $services=json_decode($chambre->services) ;
+                                            @endphp
 
 
-                                                @foreach (json_decode($chambre->services) as $service )
+           
+                                                @if (!empty($services))
+                                                
+                                            
+                                                @foreach ($services as $service )
                                                 
                                                 <span class="mr-3">
                                                     <i class="fa-solid {{ $icons[$service] }}"></i>
                                                     {{ $service }}
                                                 </span>
-                                               
+                                             
                         
                                                     
                                  
                                                   
                                                     
                                                 @endforeach
+                                            @endif     
                                             </div>
                                                 
                                             
@@ -342,19 +350,41 @@ $icons=[
                  <!-- Type de chambre -->
                  <div>
                     <label class="block mb-1">Type de chambre</label>
-                    <select name="type_chambre" class="w-full border rounded-lg px-3 py-2" required>
+                    <select id="typeSelect" name="type_chambre" class="w-full border rounded-lg px-3 py-2" required>
                         <option value="">-- Sélectionner --</option>
                         <option value="Simple">Simple</option>
                         <option value="Double">Double</option>
+                        <option value="Triple">Triple </option>
                         <option value="Suite">Suite</option>
                         <option value="familiale">familiale</option>
                         <option value="Delux">Delux</option>
+                        <option value="studio">Studio</option>
+                        <option value="autre">Autre...</option>
+
 
                     </select>
+                    <input type="text" id="autreType" name="type_custom"
+                    placeholder="Entrer un nouveau type"
+                    class="border rounded-lg px-3 py-2 hidden">
+
+                    <script>
+                        const select = document.getElementById('typeSelect');
+                        const input = document.getElementById('autreType');
+                    
+                        select.addEventListener('change', function () {
+                            if (this.value === 'autre') {
+                                input.classList.remove('hidden');
+                            } else {
+                                input.classList.add('hidden');
+                                input.value = '';
+                            }
+                        });
+                    </script>
+
                 </div>
                   <!-- Prix -->
                   <div>
-                    <label class="block mb-1">Prix</label>
+                    <label class="block mb-1">Prix par nuit</label>
                     <input type="number" name="prix" class="w-full border rounded-lg px-3 py-2" min="0" required/>
                 </div>
         
@@ -432,7 +462,7 @@ $icons=[
                     <!-- Images -->
                     <div>
                         <label class="block mb-1">Images</label>
-                        <input type="file" name="images[]" multiple class="w-full" accept="image/*"/>
+                        <input type="file" name="images[]" multiple class="w-full" accept="image/*" required/>
                     </div>
                 </div>
         

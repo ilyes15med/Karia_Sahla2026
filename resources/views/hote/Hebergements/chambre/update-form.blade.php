@@ -107,7 +107,7 @@
                 <!-- Images -->
                 <div>
                     <label class="block mb-1">Images</label>
-                    <input type="file" name="images[]" multiple class="w-full" accept="image/*"/>
+                    <input type="file" name="images[]" multiple class="w-full" accept="image/*" required/>
                 </div>
             </div>
     
