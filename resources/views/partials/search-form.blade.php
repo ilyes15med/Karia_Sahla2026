@@ -13,13 +13,13 @@
             <!-- Date arrivée -->
             <div class="flex flex-col">
                 <label for="date_arrivee" class="text-sm font-medium text-gray-700">Date d'arrivée</label>
-                <input type="date" id="date_arrivee" name="date_arrivee" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="date_arrivee" name="date_arrivee" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
             </div>
  
             <!-- Date départ -->
             <div class="flex flex-col">
                 <label for="date_depart" class="text-sm font-medium text-gray-700">Date de départ</label>
-                <input type="date" id="date_depart" name="date_depart" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="date_depart" name="date_depart" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required/>
             </div>
  
             <!-- Voyageurs -->
@@ -47,3 +47,17 @@
         </form>
     </div>
 </div>
+<!--
+<script>
+    document.querySelector("form").addEventListener("submit", function(){
+    
+        let date_arrive = document.getElementById("date_arrivee").value;
+        let date_depart = document.getElementById("date_depart").value;
+    
+        localStorage.setItem("date_debut", date_arrive);
+        localStorage.setItem("date_fin", date_depart);
+    
+    });
+</script>
+
+-->

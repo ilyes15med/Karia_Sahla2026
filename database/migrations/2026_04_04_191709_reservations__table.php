@@ -20,8 +20,10 @@ return new class extends Migration
             $table->string('nom_complet');
             $table->string('idCarteNational');
             $table->string('addresse');
-          
+            $table->string('NumTelephone');
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->foreignId('chambres_id')->constrained()->onDelete('cascade');
+         //   $table->foreignId('paiment_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         }   ); 
     }

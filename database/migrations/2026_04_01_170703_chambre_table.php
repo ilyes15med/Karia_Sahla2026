@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('prix',20,2);
             $table->longText('Description');
             $table->string('services');
+            $table->string('code_promo')->nullable();
             $table->integer('nombre_lit')->default(0);
             $table->integer('nombre_chambre')->default(0);
          

@@ -47,6 +47,8 @@ Route::get('/client/notification', function () {
 
 Route::get('/client/reservation/chambre/{idch}',[HebergClientController::class,'added_reservation_show']);
 
+Route::post('/client/reservation/chambre/{idch}',[HebergClientController::class,'store_reservation'])->name("Reservation.store");
+
 Route::get('/client/search', function () {
     return view('client.front-end.search');
 });

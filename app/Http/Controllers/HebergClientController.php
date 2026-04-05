@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Heberg;
 use App\Models\Chambre;
+use App\Models\Reservation;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class HebergClientController extends Controller
@@ -48,6 +50,10 @@ class HebergClientController extends Controller
     public function search(Request $req){
         $destination=$req->destination;
         $nombrePersonne =$req->adultes+$req->enfants;
+        session([
+            'date_arrivee' => $req->date_arrivee,
+            'date_depart' => $req->date_depart,
+        ]);
         
         $hebs=DB::table('Hebergs')
         ->join('chambres','Hebergs.id',"=",'chambres.Hebergs_id')
@@ -102,9 +108,26 @@ class HebergClientController extends Controller
 
     }
     //reservation
-    public function added_reservation_show(){
+    public function added_reservation_show($idChambre){
+        $chambre=Chambre::findOrFail($idChambre);
 
-        return view('client.front-end.Réservation.réserver');
+        return view('client.front-end.Réservation.réserver',compact('chambre'));
+    }
+    public function store_reservation(Request $request,$idchambre){
+        $idclient=Auth()->user()->id;
+        dd($idclient);
+
+
+        Reservation::create([
+            'date_debut' => $request->date_arrivee,
+            'date_fin' => $request->date_depart,
+            'nom_complet' => $request->name,
+            'idCarteNational' => $request->idCarteNationel,
+            'addresse' => $request->adresse,
+            'NumTelephone' => $request->numTel,
+            'users_id' => $idclient, // utilisateur connecté
+            'chambres_id' => $idchambre,
+        ]);
     }
 
 }

@@ -7,4 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Reservation extends Model
 {
     //
+    protected $fillable=[
+        'date_debut' ,
+        'date_fin' ,
+        'nom_complet' ,
+        'idCarteNational',
+        'addresse',
+        'NumTelephone',
+        'users_id' ,
+        'chambres_id'
+    ];
 }
