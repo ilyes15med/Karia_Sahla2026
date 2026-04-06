@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HebergController;
 use App\Http\Controllers\HebergHoteController;
 use App\Http\Controllers\HebergClientController;
+use App\Http\Controllers\ChargilyPayController;
+
+
 //invite
 
 Route::get('/', function () {
@@ -48,6 +51,10 @@ Route::get('/client/notification', function () {
 Route::get('/client/reservation/chambre/{idch}',[HebergClientController::class,'added_reservation_show']);
 
 Route::post('/client/reservation/chambre/{idch}',[HebergClientController::class,'store_reservation'])->name("Reservation.store");
+//paiment
+Route::post('chargilypay/redirect/{chambre}', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
+Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
+Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
 
 Route::get('/client/search', function () {
     return view('client.front-end.search');

@@ -1,6 +1,6 @@
 <x-app-layout>
-   
-<form method="post" action="{{ route("Reservation.store",$chambre->id) }}" >   
+  <!-- route("Reservation.store",$chambre->id)-->
+<form method="post" action="{{ route("chargilypay.redirect",$chambre->id) }}" >   
 @csrf   
     <!-- ETAPE 1 -->
     <div id="etape1" class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -18,24 +18,24 @@
     <div>
 @if( session('date_arrivee') && session('date_depart'))
     <label>Date d'arrivée</label>
-    <input type="date" id="date_arrivee" value="{{ session('date_arrivee')  }}"
+    <input type="date" id="date_arrivee" name="date_arrivee" value="{{ session('date_arrivee')  }}"
     class="w-full border rounded-lg px-3 py-2">
     </div>
     
     <div>
     <label>Date de départ</label>
-    <input type="date" id="date_depart" value="{{ session('date_depart') }}"
+    <input type="date" id="date_depart" name="date_depart" value="{{ session('date_depart') }}"
     class="w-full border rounded-lg px-3 py-2">
     </div>
 @else 
 <label>Date d'arrivée</label>
-<input type="date" id="date_arrivee" 
+<input type="date" id="date_arrivee"  name="date_arrivee" 
 class="w-full border rounded-lg px-3 py-2">
 </div>
 
 <div>
 <label>Date de départ</label>
-<input type="date" id="date_depart" 
+<input type="date" id="date_depart" name="date_depart"
 class="w-full border rounded-lg px-3 py-2">
 </div>
 @endif  
@@ -43,7 +43,7 @@ class="w-full border rounded-lg px-3 py-2">
         
         
     
-    <button type="button" onclick="nextStep1({{ $chambre->prix }})"
+    <button type="button" onclick="nextStep1({{ $chambre->prix }},{{ $chambre->nombre_lit }})"
     class="w-full bg-blue-600 text-white p-2 rounded-lg">
     Suivant
     </button>
@@ -139,7 +139,7 @@ class="w-full border rounded-lg px-3 py-2">
     Précédent
     </button>
 
-    <button type="button" class="w-full bg-green-600 text-white p-2 rounded-lg">
+    <button type="submit" class="w-full bg-green-600 text-white p-2 rounded-lg">
     Payer
     </button>
     
@@ -165,7 +165,7 @@ class="w-full border rounded-lg px-3 py-2">
        }
     
    */
-    function nextStep1(prix_chambre){
+    function nextStep1(prix_chambre,nombreP){
         event.preventDefault();
   
 
@@ -176,7 +176,10 @@ class="w-full border rounded-lg px-3 py-2">
     
     localStorage.setItem("date_arrivee",date_arrivee)
     localStorage.setItem("date_depart",date_depart)
+    //stocker le prix de chambre et nombre personne == nombre de lit
     localStorage.setItem("prix_chambre",prix_chambre)
+    ///mais le nombre de personne la yahom car le chambre double je connue 2 lit donc == 2 personnes et connue meme leprix
+    localStorage.setItem("nombre_persoone",nombreP)
 
      
  
@@ -237,6 +240,7 @@ class="w-full border rounded-lg px-3 py-2">
     document.getElementById("show_date_depart").innerText = localStorage.getItem("date_depart")
     document.getElementById("nuit").innerText= localStorage.getItem("nuit")
     document.getElementById("prix_totale").innerText= localStorage.getItem("prix_totale")
+    document.getElementById("prix_totale").value= localStorage.getItem("prix_totale")
     
     //document.getElementById("show_adultes").innerText = localStorage.getItem("adultes")
    // document.getElementById("show_enfants").innerText = localStorage.getItem("Enfants")
