@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use \App\Models\ChargilyPayment;
-
+use \App\Models\Chambre;
+use App\Models\Heberg;
+use App\Models\User;
+use App\Events\faitreservation;
+use App\Notifications\ReqHebNotification;
 
 class ChargilyPayController extends Controller
 {
@@ -17,25 +21,32 @@ class ChargilyPayController extends Controller
     {
         $user = auth()->user();
         $currency = "dzd";
-     $amount = "25000";
+       $amount =$request->prix_total;
+    
         //   $amount=$request->prix_totale;
         
-        Reservation::create([
+        $reservation=Reservation::create([
             'date_debut' => $request->date_arrivee,
             'date_fin' => $request->date_depart,
             'nom_complet' => $request->name,
             'idCarteNational' => $request->idCarteNationel,
             'addresse' => $request->adresse,
             'NumTelephone' => $request->numTel,
-            'users_id' => $user->id, // utilisateur connecté
+            'users_id' => $user->id, // utilisateur connecté/client
             'chambres_id' => $idchambre ,
         ]);
+    if($reservation){
+
+       
+
         $payment = ChargilyPayment::create([
             "users_id"  => $user->id,
+            "reservations_id"=>$reservation->id,
             "status"   => "pending",
             "currency" => $currency,
             "amount"   => $amount,
         ]);
+    }
         if ($payment) {
             $checkout = $this->chargilyPayInstance()->checkouts()->create([
                 "metadata" => [
@@ -83,6 +94,7 @@ class ChargilyPayController extends Controller
     {
         $webhook = $this->chargilyPayInstance()->webhook()->get();
         if ($webhook) {
+            $user = auth()->user();
             //
             $checkout = $webhook->getData();
             //check webhook data is set
@@ -100,6 +112,32 @@ class ChargilyPayController extends Controller
                             /////
                             ///// Confirm your order
                             /////
+                            //event
+$user = auth()->user();
+
+// جيب reservation الصحيح (مثلاً من payment)
+$res = Reservation::findOrFail($payment->reservations_id);
+
+// chambre
+$chambre = Chambre::findOrFail($res->chambres_id);
+
+// hebergement
+$heb = Heberg::findOrFail($chambre->Hebergs_id);
+
+// hote
+$hote = User::findOrFail($heb->users_id);
+
+// الاسماء
+$hote_name = $hote->name;
+$clientname = $user->name;
+
+// broadcast event
+broadcast(new faitreservation(" a été réserver maintenant ", $clientname, $payment));
+$message="$clientname a été réserver maintenant ";
+
+// notification
+$hote->notify(new ReqHebNotification($message));
+          
                             return response()->json(["status" => true, "message" => "Payment has been completed"]);
                         } else if ($checkout->getStatus() === "failed" or $checkout->getStatus() === "canceled") {
                             //update payment status in database

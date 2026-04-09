@@ -62,7 +62,7 @@
                                 Notification
                             </x-nav-link>
                             
-                            <x-nav-link href="/client/reservation">
+                            <x-nav-link href="/client/mesReservations">
                                 mes réservations
                             </x-nav-link>
                             
@@ -158,7 +158,7 @@
                                     @php
                                         if (is_null($notif->read_at)){
 
-                                         $notif->markAsRead();
+                                          $notif->markAsRead();
                                         }
                                        
                                     @endphp

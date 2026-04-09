@@ -13,3 +13,7 @@ Broadcast::channel('reqHeb', function ($user) {
 Broadcast::channel('ReponseAHote', function ($user) {
     return $user->role==='hote';
 });
+
+Broadcast::channel('receiveReservation', function ($user) {
+    return $user->role==='hote';
+});

@@ -7,23 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReqHebNotification extends Notification
+class Reservations extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public $message;
-    
-   
-    
-
-    public function __construct($message)
+    public $mess;
+    public function __construct($mess)
     {
         //
-        $this->message = $message;
-     
+        $this->mess=$mess;
+
     }
 
     /**
@@ -56,9 +52,7 @@ class ReqHebNotification extends Notification
     {
         return [
             //
-            
-           
-            'data'=> $this->message 
+            'data'=> $this->mess 
         ];
     }
 }

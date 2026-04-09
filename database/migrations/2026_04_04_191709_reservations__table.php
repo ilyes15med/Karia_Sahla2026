@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('canEval')->default(0);
             $table->string('nom_complet');
             $table->string('idCarteNational');
+            $table->boolean('CanCancel')->default(1);
             $table->string('addresse');
             $table->string('NumTelephone');
             $table->foreignId('users_id')->constrained()->onDelete('cascade');

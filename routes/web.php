@@ -1,10 +1,13 @@
 <?php
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HebergController;
 use App\Http\Controllers\HebergHoteController;
 use App\Http\Controllers\HebergClientController;
 use App\Http\Controllers\ChargilyPayController;
+use App\Http\Controllers\ReservationController;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 //invite
@@ -47,26 +50,32 @@ Route::get('/client/message', function () {
 Route::get('/client/notification', function () {
     return view('client.front-end.Notification');
 });
+///client/reservation/Heb/{{ $heb->id }}/chambre->id}}
+Route::get('/client/reservation/Heb/{idheb}/chambre/{idch}',[ReservationController::class,'added_reservation_show']);
+Route::post('/client/reservation/Heb/{idheb}/chambre/{idch}',[ReservationController::class,'store_reservation'])->name("Reservation.update");
+//modifier la réservation
+Route::get('/client/reservation/{idreservation}/edit',[ReservationController::class,'edit_reservation_show']);
+Route::post('/client/reservation/{idreservation}/edit',[ReservationController::class,'store_edit_reservation'])->name("Reservation.update");
+//anuller la réservation
+Route::get('/client/reservation/{idreservation}/delete',[ReservationController::class,'delete_reservation'])->name('Reservation.delete');
 
-Route::get('/client/reservation/chambre/{idch}',[HebergClientController::class,'added_reservation_show']);
-
-Route::post('/client/reservation/chambre/{idch}',[HebergClientController::class,'store_reservation'])->name("Reservation.store");
 //paiment
 Route::post('chargilypay/redirect/{chambre}', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
 Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
 Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
-
 Route::get('/client/search', function () {
     return view('client.front-end.search');
 });
 Route::get('/client/search',[HebergClientController::class,'search'])->middleware(['auth']);
-
-
 Route::get('/filter-heberg',[HebergClientController::class,'filter']);
 Route::get('/client/reservation/Heb', function () {
     return view('client.front-end.Réservation.réserver');
 });
-
+//Reservation
+Route::get('/client/mesReservations',[ReservationController::class,'Reservations_index'])->name('reservations.index');
+Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])
+    ->name('reservation.ticket');
+Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
 
 //hote
 

@@ -10,8 +10,6 @@ class ChargilyPayment extends Model
     //
     use HasFactory;
     protected $fillable = 
-    ["users_id","status","currency","amount",
-   // "reservations_id"
-];
+    ["users_id","status","currency","amount","reservations_id"];
 }
 

@@ -160,7 +160,7 @@
 
                                     @if(auth()->user()->role == 'client')  
                                 
-                                    <a class="p-1 bg-green-700 text-white m-1 rounded-lg shadow-sm " href="/client/reservation/chambre/{{$chambre->id}}">
+                                    <a class="p-1 bg-green-700 text-white m-1 rounded-lg shadow-sm " href="/client/reservation/Heb/{{ $heb->id }}/chambre/{{$chambre->id}}">
                                         réserver
                                     </a>
                                  

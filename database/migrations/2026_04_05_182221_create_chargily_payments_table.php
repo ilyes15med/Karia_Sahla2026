@@ -15,7 +15,7 @@ return new class extends Migration
             Schema::create('chargily_payments', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger("users_id");
-              //  $table->unsignedBigInteger("reservations_id");
+                $table->unsignedBigInteger("reservations_id");
                 $table->enum("status", ["pending", "paid", "failed"])->default("pending");
                 $table->string("currency");
                 $table->string("amount");

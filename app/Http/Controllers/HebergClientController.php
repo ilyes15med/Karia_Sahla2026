@@ -8,6 +8,11 @@ use App\Models\Chambre;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use \App\Models\ChargilyPayment;
+use App\Events\faitreservation;
+use App\Notifications\Reservations;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class HebergClientController extends Controller
 {
@@ -107,27 +112,8 @@ class HebergClientController extends Controller
 
 
     }
-    //reservation
-    public function added_reservation_show($idChambre){
-        $chambre=Chambre::findOrFail($idChambre);
-
-        return view('client.front-end.Réservation.réserver',compact('chambre'));
-    }
-    public function store_reservation(Request $request,$idchambre){
-        $idclient=Auth()->user()->id;
-        dd($idclient);
-
-
-        Reservation::create([
-            'date_debut' => $request->date_arrivee,
-            'date_fin' => $request->date_depart,
-            'nom_complet' => $request->name,
-            'idCarteNational' => $request->idCarteNationel,
-            'addresse' => $request->adresse,
-            'NumTelephone' => $request->numTel,
-            'users_id' => $idclient, // utilisateur connecté
-            'chambres_id' => $idchambre,
-        ]);
-    }
-
 }
+
+
+
+

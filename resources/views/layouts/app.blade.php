@@ -60,6 +60,27 @@ function addNotificationAgent(message,hote_name,date_cree,nom_heb) {
         
                 notifList.prepend(li);
 }
+//reservation
+
+function receiveNotificationReservation(name_client,message,type){
+count++;
+
+// تحديث الرقم
+notifCount.innerText = count;
+notifCount.classList.remove('hidden');
+
+// إضافة الرسالة
+const li = document.createElement('li');
+
+li.className = "p-2 bg-gray-100 rounded";
+li.innerText = name_client+message+type;
+
+notifList.prepend(li);
+
+
+
+
+}
 
 function addNotificationHote(name_agent,message) {
     count++;
@@ -110,10 +131,18 @@ function addNotificationHote(name_agent,message) {
                         addNotificationHote(e.name_agent,e.message);
                         });
 
+                        window.Echo.private('receiveReservation')
+                       .listen('.receive_Reservation', (e) => {
+                   
+                        receiveNotificationReservation(e.clientname,e.message,e.chambre_type);
+                        });
+
+
 
                     
                   
                     }
+                 
                 }
             });
         </script>

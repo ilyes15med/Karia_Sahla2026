@@ -1,6 +1,25 @@
 <x-app-layout>
   <!-- route("Reservation.store",$chambre->id)-->
-<form method="post" action="{{ route("chargilypay.redirect",$chambre->id) }}" >   
+@if(session('succes'))
+  <div id="message" class="bg-green-100 text-green-700 p-3 rounded-lg shadow-sm mb-4">
+   <span>
+     {{ session('succes')}}
+   </span>
+   <button onclick="document.getElementById('message').remove()" 
+   class="pl-1 text-green-700 font-bold hover:text-red-500">
+     <i class="fa-solid fa-trash"></i>
+   </button> 
+
+
+
+  </div>
+
+
+ 
+
+
+@endif
+<form method="post" action="/client/reservation/Heb/{{ $heb->id }}/chambre/{{$chambre->id}}" >   
 @csrf   
     <!-- ETAPE 1 -->
     <div id="etape1" class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -18,25 +37,25 @@
     <div>
 @if( session('date_arrivee') && session('date_depart'))
     <label>Date d'arrivée</label>
-    <input type="date" id="date_arrivee" name="date_arrivee" value="{{ session('date_arrivee')  }}"
+    <input type="datetime-local" id="date_arrivee" name="date_arrivee" value="{{ session('date_arrivee')  }}" required
     class="w-full border rounded-lg px-3 py-2">
     </div>
     
     <div>
     <label>Date de départ</label>
-    <input type="date" id="date_depart" name="date_depart" value="{{ session('date_depart') }}"
-    class="w-full border rounded-lg px-3 py-2">
+    <input type="datetime-local" id="date_depart" name="date_depart" value="{{ session('date_depart') }}"
+    class="w-full border rounded-lg px-3 py-2" required>
     </div>
 @else 
 <label>Date d'arrivée</label>
-<input type="date" id="date_arrivee"  name="date_arrivee" 
-class="w-full border rounded-lg px-3 py-2">
+<input type="datetime-local" id="date_arrivee"  name="date_arrivee" 
+class="w-full border rounded-lg px-3 py-2" required>
 </div>
 
 <div>
 <label>Date de départ</label>
-<input type="date" id="date_depart" name="date_depart"
-class="w-full border rounded-lg px-3 py-2">
+<input type="datetime-local" id="date_depart" name="date_depart"
+class="w-full border rounded-lg px-3 py-2" required>
 </div>
 @endif  
     
@@ -68,24 +87,24 @@ class="w-full border rounded-lg px-3 py-2">
     <div>
     <label>Nom complet</label>
     <input type="text" id="name" name="name"
-    class="w-full border rounded-lg px-3 py-2">
+    class="w-full border rounded-lg px-3 py-2" required>
     </div>
     <div>
         <label>Numéro de téléphone</label>
         <input type="text" id="numTel" name="numTel"
-        class="w-full border rounded-lg px-3 py-2">
+        class="w-full border rounded-lg px-3 py-2" required>
         </div>
     
     <div>
     <label>Identifiant carte nationale</label>
     <input type="text" id="idCarteNationel" name="idCarteNationel"
-    class="w-full border rounded-lg px-3 py-2">
+    class="w-full border rounded-lg px-3 py-2" required>
     </div>
     
     <div>
     <label>Adresse</label>
     <input type="text" id="adresse" name="adresse"
-    class="w-full border rounded-lg px-3 py-2">
+    class="w-full border rounded-lg px-3 py-2" required >
     </div>
     
     <div class="flex gap-2">
@@ -129,6 +148,7 @@ class="w-full border rounded-lg px-3 py-2">
     <p><b>Date fin :</b> <span id="show_date_depart"></span></p>
     <p><b>Nuit</b> <span id="nuit"></span></p>
     <p><b>prix total  :</b> <span id="prix_totale"></span> DZD</p>
+    <input type="text" id="prix_total" name="prix_total" value="" class="hidden"/>
     
     </div>
     
@@ -219,6 +239,7 @@ class="w-full border rounded-lg px-3 py-2">
     localStorage.setItem("prix_totale",prix_totale)
 
 
+
     
     document.getElementById("etape2").classList.add("hidden")
     document.getElementById("etape3").classList.remove("hidden")
@@ -240,7 +261,7 @@ class="w-full border rounded-lg px-3 py-2">
     document.getElementById("show_date_depart").innerText = localStorage.getItem("date_depart")
     document.getElementById("nuit").innerText= localStorage.getItem("nuit")
     document.getElementById("prix_totale").innerText= localStorage.getItem("prix_totale")
-    document.getElementById("prix_totale").value= localStorage.getItem("prix_totale")
+    document.getElementById("prix_total").value= localStorage.getItem("prix_totale")
     
     //document.getElementById("show_adultes").innerText = localStorage.getItem("adultes")
    // document.getElementById("show_enfants").innerText = localStorage.getItem("Enfants")
