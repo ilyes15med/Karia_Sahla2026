@@ -5,8 +5,8 @@
         <li><a href="/hote/dashboard" class="hover:text-blue-400">Dashboard</a></li>
         <li><a href="/hote/dashboard" class="hover:text-blue-400">Demandes</a></li>
         <li><a href="/hote/Hebs" class="hover:text-blue-400">mon hébergement</a></li>
-        <li><a href="" class="hover:text-blue-400">réservations</a></li>
+        <li><a href="/hote/mesReservations" class="hover:text-blue-400">réservations</a></li>
         <li><a href="" class="hover:text-blue-400"> message</a></li>
-        <li><a href="" class="hover:text-blue-400"> Notification</a></li>
+      
     </ul>
 </aside>

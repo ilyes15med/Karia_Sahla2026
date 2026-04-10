@@ -38,6 +38,7 @@ class HebergClientController extends Controller
         
     }
     public function index_Heb($idHeb){
+        $client_id=Auth()->user()->id;
         $heb=DB::table('Hebergs')
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','valide')
@@ -47,10 +48,15 @@ class HebergClientController extends Controller
         $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
         ->select('chambres.*')
         ->get();
+        $reservations=DB::table('reservations')
+        ->where('users_id',$client_id)
+        ->select('reservations.canEval as canEvalue')
+        ->first();
+  
 
       
 
-        return view('client.front-end.HebShow',compact('heb','chambres'));
+        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client_id'));
     }
     public function search(Request $req){
         $destination=$req->destination;

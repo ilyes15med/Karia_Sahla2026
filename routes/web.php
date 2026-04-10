@@ -7,6 +7,7 @@ use App\Http\Controllers\HebergHoteController;
 use App\Http\Controllers\HebergClientController;
 use App\Http\Controllers\ChargilyPayController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ratingController;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
@@ -76,6 +77,10 @@ Route::get('/client/mesReservations',[ReservationController::class,'Reservations
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])
     ->name('reservation.ticket');
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
+//evaluation
+Route::post('/client/rating/heb/{id}',[ratingController::class,'store_rating'])->middleware(['auth'])->name('rating.added');
+
+
 
 //hote
 
@@ -101,6 +106,10 @@ Route::post('/hote/MonHebergement/{id}/chambre',[HebergHoteController::class,'ch
 Route::get('/hote/MonHebergement/{idHeb}/chambre/{idC}/edit',[HebergHoteController::class,'form_update_show'])->name('forme-update.show');
 Route::put('/hote/MonHebergement/{idHeb}/chambre/{idC}/edit',[HebergHoteController::class,'chambre_update'])->name('chambre.update');
 Route::get('/hote/MonHebergement/{idHeb}/chambre/{idC}/delete',[HebergHoteController::class,'delete_chambre'])->name('chambre.delete');
+//Reservations:
+Route::get('/hote/mesReservations',[ReservationController::class,'hote_Reservations_index'])->name('reservations.index');
+Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
+
 
 
 //admin

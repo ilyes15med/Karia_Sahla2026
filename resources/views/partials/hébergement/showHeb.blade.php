@@ -1,7 +1,7 @@
 
     
 
-    @php
+@php
     $icons=[
         'wifi' => 'fa-wifi',
         'parking' => 'fa-car',
@@ -13,7 +13,7 @@
     
     
     ];
-    @endphp
+@endphp
     <div class="flex min-h-screen">
         
       
@@ -275,6 +275,8 @@
        <!--map-->
         <div id="map" class="w-full h-96 mt-4 text-gray-700 bg-slate-100 rounded-xl p-4"></div>
          <!--Avis-->
+
+   
     
         <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
     
@@ -304,6 +306,58 @@
                 </div>
         
             </div>
+@if( optional($reservations)->canEvalue==1)
+   
+
+<div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
+
+  
+
+    <form action="{{ route('rating.added',$heb->id) }}" method="post" class="mt-3">
+        @csrf
+
+        <input type="hidden" name="client_id" value="{{ $client_id }}" >
+       
+
+        <!-- Rating -->
+        <div class="flex flex-row-reverse justify-end gap-1 text-2xl">
+
+        @for($i = 5; $i >= 1; $i--)
+        <input type="radio" name="nombre_starts" id="star{{ $i }}" value="{{ $i }}" class="hidden peer" required>
+
+        <label for="star{{ $i }}"
+               class="cursor-pointer text-gray-300 peer-checked:text-yellow-500 hover:text-yellow-400">
+            ★
+        </label>
+        @endfor
+
+        </div>
+        
+
+        <!-- Commentaire -->
+        <textarea name="commentaire"
+                  class="w-full mt-3 p-2 border rounded-lg"
+                  placeholder="Votre avis..."
+                  ></textarea>
+
+        <button class="mt-3 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+            Envoyer
+        </button>
+    </form>
+
+</div>
+
+@else
+
+<div class="mt-4 text-gray-500">
+    Vous ne pouvez pas évaluer pour le moment.
+</div>
+
+
+
+
+@endif
+          
             <div id="addchambreform" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                 <form action="{{route('chambre.added',$heb->id)}} " method="post" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto" enctype="multipart/form-data">
                     @csrf
@@ -439,8 +493,10 @@
                             class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold">
                         ✖
                     </button>
-                        <label class="block mb-1">chambre {{$chambre->typeChambres}}</label>
+                     
                     @foreach ($chambres as $chambre)
+
+                    <label class="block mb-1">chambre {{$chambre->typeChambres}}</label>
                         
                    
             

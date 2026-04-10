@@ -16,6 +16,7 @@ class Reservation extends Model
         'NumTelephone',
         'users_id' ,
         'chambres_id',
-        'canEval'
+        'canEval',
+        'status'
     ];
 }

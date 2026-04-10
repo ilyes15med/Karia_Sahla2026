@@ -33,6 +33,7 @@ class ReservationController extends Controller
         ->where('Hebergs.id',$idheb)
         ->select('users.id as hote_id')
         ->first();
+
         // elequent
       //  $heb=Hebergs::findOrFail($idheb);
        // $chambre=Chambres::findOrfail($idchambre);
@@ -79,6 +80,8 @@ class ReservationController extends Controller
 //chambre
 $chambre=Chambre::findOrFail($idchambre);
 $chambre_type=$chambre->typeChambres;
+Chambre::where('id',$idchambre)->decrement('nombre_chambre',1);
+Heberg::where('id',$idheb)->decrement('nombre_chambre',1);
 // broadcast event
 broadcast(new faitreservation($clientname," a été réserver chambre ",$chambre_type));
 //notification
@@ -94,6 +97,7 @@ public function Reservations_index(){
     ->join('chargily_payments','reservations.id','=','chargily_payments.reservations_id')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
     ->where('chargily_payments.status','paid')
+    ->where('reservations.status','active')
     ->where('reservations.users_id',$client->id)
     ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
     ->get();
@@ -225,6 +229,8 @@ public function delete_reservation($idR){
     ->select('Hebergs.id as heberg_id', 'Hebergs.users_id')
     ->first();
     $hote = User::findOrFail($heberg->users_id);
+    Chambre::where('id',$reservation->idCh)->increment('nombre_chambre',1);
+    Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
 
    
 
@@ -238,7 +244,22 @@ public function delete_reservation($idR){
     $hote->notify(new Reservations($message));
     return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant"); 
 }
+public function hote_Reservations_index(){
 
+    $hote=Auth()->user();
+    $reservations=DB::table('reservations')
+    ->join('chargily_payments','reservations.id','=','chargily_payments.reservations_id')
+    ->join('chambres','reservations.chambres_id','=','chambres.id')
+    ->where('chargily_payments.status','paid')
+    ->where('reservations.status','active')
+    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
+    ->get();
+
+
+    return view('hote.Reservations.showReservations',compact('reservations'));
+
+
+}
 
 
 }
