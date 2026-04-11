@@ -81,6 +81,27 @@ notifList.prepend(li);
 
 
 }
+//evaluation
+
+function receiveNotificationEvaluation(name_client,message,nomheb){
+count++;
+
+// تحديث الرقم
+notifCount.innerText = count;
+notifCount.classList.remove('hidden');
+
+// إضافة الرسالة
+const li = document.createElement('li');
+
+li.className = "p-2 bg-gray-100 rounded";
+li.innerText = `${name_client} ${message} ${nomheb}`;
+
+notifList.prepend(li);
+
+
+
+
+}
 
 function addNotificationHote(name_agent,message) {
     count++;
@@ -136,6 +157,13 @@ function addNotificationHote(name_agent,message) {
                    
                         receiveNotificationReservation(e.clientname,e.message,e.chambre_type);
                         });
+
+                        window.Echo.private('Rating')
+                       .listen('.receive_evaluation', (e) => {
+                   
+                        receiveNotificationEvaluation(e.client_name,e.message,e.nom_heb);
+                        });
+
 
 
 

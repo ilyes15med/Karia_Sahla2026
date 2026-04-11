@@ -281,31 +281,67 @@
         <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
     
             <span class="font-bold text-lg">Avis</span>
+        @if($evaluations->isEmpty())  
+           <div> 
+           <span class="p-1 text-gray-500">aucun avis </span>
+           </div> 
+        @else
+        @foreach ($evaluations as $evaluation )
+        <div class="mt-3 flex items-start gap-3">
         
-            <div class="mt-3 flex items-start gap-3">
-        
-                <!-- photo profile -->
-                <img src="{{asset('/assets/images/images.jpeg')}}"
-                     class="w-10 h-10 rounded-full object-cover">
-        
-                <!-- nom + evaluation -->
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-semibold">Nom user</span>
-        
-                        <div class="flex text-yellow-500 text-sm">
-                            <i class="fa-solid fa-star"></i> 4.5
+            <!-- photo profile -->
+            <img src="{{asset('/assets/images/images.jpeg')}}"
+                 class="w-10 h-10 rounded-full object-cover">
+    
+            <!-- nom + evaluation -->
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-semibold"> {{$client->name}}</span>
+    
+                    <div class="flex text-yellow-500 text-sm">
+                        <i class="fa-solid fa-star"></i> {{$evaluation->nombre_etoile}}
+                        
+                    </div>
+                    <div class="relative inline-block text-left">
+
+                        <!-- زر 3 نقاط -->
+                        <button onclick="toggleMenu(this)" 
+                                class="p-2 rounded-full hover:bg-gray-200">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                    
+                        <!-- Menu -->
+                        <div class="hidden absolute right-0 mt-2 w-40 bg-white border rounded-xl shadow-lg z-50">
                             
+                            <!-- Modifier -->
+                            <a href="{{ route('update_rating.show',[$heb->id,$evaluation->id]) }}" 
+                                    class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                                <i class="fa-solid fa-pen text-blue-500"></i>
+                                Modifier
+                            </a>
+                    
+                            <!-- Supprimer -->
+                            <a href="{{route('rating.delete',[$heb->id,$evaluation->id])}}" 
+                                    class="w-full text-left px-4 py-2 hover:bg-red-100 flex items-center gap-2 text-red-600">
+                                <i class="fa-solid fa-trash"></i>
+                                Supprimer
+                            </a>
+                    
                         </div>
                     </div>
-        
-                    <!-- commentaire -->
-                    <p class="text-gray-600 text-sm mt-1">
-                        Best logement, très propre et confortable.
-                    </p>
                 </div>
-        
+    
+                <!-- commentaire -->
+                <p class="text-gray-600 text-sm mt-1">
+                    {{$evaluation->commentaire}}
+                </p>
             </div>
+    
+        </div>
+            
+        @endforeach
+        @endif
+           
 @if( optional($reservations)->canEvalue==1)
    
 
@@ -316,7 +352,7 @@
     <form action="{{ route('rating.added',$heb->id) }}" method="post" class="mt-3">
         @csrf
 
-        <input type="hidden" name="client_id" value="{{ $client_id }}" >
+        <input type="hidden" name="client_id" value="{{ $client->id }}" >
        
 
         <!-- Rating -->
@@ -338,7 +374,7 @@
         <textarea name="commentaire"
                   class="w-full mt-3 p-2 border rounded-lg"
                   placeholder="Votre avis..."
-                  ></textarea>
+                  required></textarea>
 
         <button class="mt-3 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
             Envoyer
@@ -346,6 +382,8 @@
     </form>
 
 </div>
+
+
 
 @else
 
@@ -616,6 +654,21 @@
         });
     
     }
+   
+function toggleMenu(button){
+    let menu = button.nextElementSibling;
+    menu.classList.toggle('hidden');
+}
+
+
+document.addEventListener('click', function(e){
+    document.querySelectorAll('.relative .absolute').forEach(menu => {
+        if(!menu.previousElementSibling.contains(e.target)){
+            menu.classList.add('hidden');
+        }
+    });
+});
+
    
 
     </script>

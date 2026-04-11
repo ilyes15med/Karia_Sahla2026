@@ -17,3 +17,7 @@ Broadcast::channel('ReponseAHote', function ($user) {
 Broadcast::channel('receiveReservation', function ($user) {
     return $user->role==='hote';
 });
+
+Broadcast::channel('Rating', function ($user) {
+    return $user->role==='hote';
+});

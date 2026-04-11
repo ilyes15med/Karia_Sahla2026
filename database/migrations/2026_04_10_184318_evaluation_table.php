@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('evaluations', function (Blueprint $table) {    
             $table->id();
             $table->integer('nombre_etoile');
-            $table->string('commentaire');  
+            $table->string('commentaire')->nullable();  
             $table->foreignId('Hebergs_id')->constrained()->onDelete('cascade');
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
             $table->timestamps();

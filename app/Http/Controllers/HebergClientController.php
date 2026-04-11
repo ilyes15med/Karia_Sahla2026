@@ -7,6 +7,7 @@ use App\Models\Heberg;
 use App\Models\Chambre;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Models\evaluation;
 use Illuminate\Support\Facades\DB;
 use \App\Models\ChargilyPayment;
 use App\Events\faitreservation;
@@ -38,7 +39,7 @@ class HebergClientController extends Controller
         
     }
     public function index_Heb($idHeb){
-        $client_id=Auth()->user()->id;
+        $client=Auth()->user();
         $heb=DB::table('Hebergs')
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','valide')
@@ -49,14 +50,15 @@ class HebergClientController extends Controller
         ->select('chambres.*')
         ->get();
         $reservations=DB::table('reservations')
-        ->where('users_id',$client_id)
+        ->where('users_id',$client->id)
         ->select('reservations.canEval as canEvalue')
         ->first();
-  
+        $evaluations=evaluation::where('Hebergs_id',$idHeb)->get();
+      
 
       
 
-        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client_id'));
+        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client','evaluations'));
     }
     public function search(Request $req){
         $destination=$req->destination;

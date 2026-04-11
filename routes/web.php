@@ -79,8 +79,13 @@ Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTi
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
 //evaluation
 Route::post('/client/rating/heb/{id}',[ratingController::class,'store_rating'])->middleware(['auth'])->name('rating.added');
+  //edit
+Route::get('/client/rating/heb/{idh}/rating/{ideval}/edit',[ratingController::class,'show_edit_rating'])->name('update_rating.show');
+Route::put('/client/rating/heb/{idh}/rating/{ideval}/edit',[ratingController::class,'store_edit_rating'])->name('update.rating');
 
-
+  //delete evaluation
+Route::get('/client/rating/heb/{idh}/rating/{ideval}/delete',[ratingController::class,'destroy_rating'])->name('rating.delete');
+ 
 
 //hote
 
