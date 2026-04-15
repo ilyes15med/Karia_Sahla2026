@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Reservation;
+use App\Models\chat;
 
 class User extends Authenticatable
 {
@@ -18,12 +20,17 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
         'role'
     ];
+    public function reservations(){
 
+        return $this->hasOne(Reservation::class,'id');
+    }
+    
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -45,5 +52,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function chat(){
+        return $this->hasMany(chat::class,'user_id_one')->orwhere('user_id_two',$this->id);
     }
 }

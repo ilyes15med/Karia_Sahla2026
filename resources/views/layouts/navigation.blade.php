@@ -54,7 +54,7 @@
                                 search
                             </x-nav-link>
                             
-                            <x-nav-link href="/client/message">
+                            <x-nav-link href="/chat">
                                 message
                             </x-nav-link>
                             

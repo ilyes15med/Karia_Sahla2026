@@ -53,9 +53,16 @@
     
             <div class="flex items-center gap-2 text-gray-600 mt-1">
                 <i class="fa-solid fa-star text-yellow-500"></i>
+                @if($EvalTotale==null || $EvalTotale == 0)
+
                 <span>0</span>
                 <span class="text-gray-400">•</span>
                 <span>  {{$heb->addresse}}</span>
+                @else
+                <span>{{ (int) $EvalTotale }}</span>
+                <span class="text-gray-400">•</span>
+                <span>  {{$heb->addresse}}</span>
+                @endif
             </div>
         </div>
     
@@ -296,12 +303,14 @@
             <!-- nom + evaluation -->
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="font-semibold"> {{$client->name}}</span>
+                    <span class="font-semibold"> {{$evaluation->nomclient}}</span>
     
                     <div class="flex text-yellow-500 text-sm">
                         <i class="fa-solid fa-star"></i> {{$evaluation->nombre_etoile}}
                         
                     </div>
+                    @if(Auth()->user()->id==$evaluation->id_client)
+                    
                     <div class="relative inline-block text-left">
 
                         <!-- زر 3 نقاط -->
@@ -314,14 +323,14 @@
                         <div class="hidden absolute right-0 mt-2 w-40 bg-white border rounded-xl shadow-lg z-50">
                             
                             <!-- Modifier -->
-                            <a href="{{ route('update_rating.show',[$heb->id,$evaluation->id]) }}" 
+                            <a href="{{ route('update_rating.show',[$heb->id,$evaluation->Evaluation_id]) }}" 
                                     class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
                                 <i class="fa-solid fa-pen text-blue-500"></i>
                                 Modifier
                             </a>
                     
                             <!-- Supprimer -->
-                            <a href="{{route('rating.delete',[$heb->id,$evaluation->id])}}" 
+                            <a href="{{route('rating.delete',[$heb->id,$evaluation->Evaluation_id])}}" 
                                     class="w-full text-left px-4 py-2 hover:bg-red-100 flex items-center gap-2 text-red-600">
                                 <i class="fa-solid fa-trash"></i>
                                 Supprimer
@@ -329,6 +338,8 @@
                     
                         </div>
                     </div>
+                    @endif
+                  
                 </div>
     
                 <!-- commentaire -->

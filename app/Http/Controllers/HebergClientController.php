@@ -53,12 +53,19 @@ class HebergClientController extends Controller
         ->where('users_id',$client->id)
         ->select('reservations.canEval as canEvalue')
         ->first();
-        $evaluations=evaluation::where('Hebergs_id',$idHeb)->get();
+        $evaluations=DB::table('evaluations')
+        ->join('users','evaluations.users_id','=','users.id')
+        ->where('Hebergs_id',$idHeb)
+        ->select('nombre_etoile','commentaire','users.name as nomclient','evaluations.id as Evaluation_id','users.id as id_client')
+       ->get();
+        $EvalTotale = evaluation::where('Hebergs_id', $idHeb)
+        ->avg('nombre_etoile');
+    
       
 
       
 
-        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client','evaluations'));
+        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client','evaluations','EvalTotale'));
     }
     public function search(Request $req){
         $destination=$req->destination;

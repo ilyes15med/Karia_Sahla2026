@@ -21,3 +21,7 @@ Broadcast::channel('receiveReservation', function ($user) {
 Broadcast::channel('Rating', function ($user) {
     return $user->role==='hote';
 });
+
+Broadcast::channel('chat.{user_id}', function ($user,$user_id) {
+    return (int)$user->id===(int) $user_id;
+});

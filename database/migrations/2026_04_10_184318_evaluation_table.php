@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('nombre_etoile');
             $table->string('commentaire')->nullable();  
             $table->foreignId('Hebergs_id')->constrained()->onDelete('cascade');
-            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->foreignId('users_id')->constrained()->onDelete('cascade');//c
             $table->timestamps();
         } 
       ); 

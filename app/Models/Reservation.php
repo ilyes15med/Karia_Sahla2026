@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+
 
 class Reservation extends Model
 {
@@ -19,4 +21,9 @@ class Reservation extends Model
         'canEval',
         'status'
     ];
+    public function user(){
+
+        return $this->belongsTo(User::class,'users_id');
+        
+    }
 }
