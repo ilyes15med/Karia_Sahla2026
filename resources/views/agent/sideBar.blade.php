@@ -6,5 +6,7 @@
         <li><a href="/agent/dashboard" class="hover:text-blue-400">Demandes à valider</a></li>
         <li><a href="/agent/dashboard/Demandes/valide" class="hover:text-blue-400">Demandes validées</a></li>
         <li><a href="/agent/dashboard/Demandes/refuse" class="hover:text-blue-400">Demandes refusées</a></li>
+        <li><a href="/chat" class="hover:text-blue-400">messages</a></li>
+        
     </ul>
 </aside>

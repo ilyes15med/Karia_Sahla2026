@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Reservation;
-use App\Models\chat;
+use App\Models\Chat;
 
 class User extends Authenticatable
 {
@@ -53,7 +53,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function chat(){
-        return $this->hasMany(chat::class,'user_id_one')->orwhere('user_id_two',$this->id);
+   public function initials(): string
+    {
+        return Str::of($this->name)
+            ->explode(' ')
+            ->take(2)
+            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->implode('');
+    }
+
+    public function chats(){
+        return $this->hasMany(Chat::class, 'user_one_id')->orWhere('user_two_id', $this->id);
     }
 }

@@ -14,6 +14,7 @@
         <p class="text-gray-500">Refusées</p>
         <p class="text-2xl font-bold">{{$nombre_Heb_refuse }}</p>
     </div>
+ 
 
 
 </div>

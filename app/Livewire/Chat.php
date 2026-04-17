@@ -2,75 +2,159 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use App\Models\User; 
-use App\Models\message; 
-use App\Models\chat as chatModel;
+use App\Events\MessageSent;
+use App\Events\MessagesRead;
+use App\Models\Chat as ChatModel;
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Events\messageSent;
-
+use Livewire\Component;
 
 class Chat extends Component
-{   
-    
-    public $users,$chats,$selectChat=null,$selectUser=null,$message=null;
-    public $viewMode="chats";
-    public function toggleViewMode(){
+{
+    public $users, $chats, $selectedChat = null, $selectedUser = null, $message = "", $messages = null;
+    public $limit = 10, $height;
+    public $viewMode = "chats"; // chats or users
 
-        $this->viewMode=$this->viewMode ==="chats"? "users":"chats";
-    }
-  
-    public function selectedUser($userId){
-        if(!User::find($userId)) return ;
-        $chats=chatModel::getChatBetweenUsers($userId,Auth()->user()->id);
-        $this->viewMode="chats";
-        $this->loadChat();
-    }
-
-    public function loadChat(){
-        $this->chats=auth()->user()->chat()->with(['userOne','userTwo','messages'])->get();
-    }
-    public function loadUsers(){
-        $this->users= User::whereHas('reservations')->get();
-    }
-    public function selectedChat($idchat){
-        $chat=chatModel::find($idchat);
-        if(!$chat) return ;
-        $this->selectChat=$chat;
-        $this->selectUser=$chat->getOtherUser();
-       
-    }
-    public function send_message(){
-        if(!$this->selectChat || !$this->message) return ;
-        $msg=message::create([
-            'chat_id'=>$this->selectChat->id,
-            'sender_id' =>Auth()->user()->id,
-            'content'=>$this->message,
-
-        ]);
-        //maintenant empty l'input
-        $this->message=null;
-        $this->selectChat->load('messages');
-        //broadcast(new messageSent($msg->id,$this->selectUser->id));
-        broadcast(new messageSent($msg->id, $this->selectUser->id))->toOthers();
-    }
-  
     public function getListeners()
     {
-    return [
-        "echo-private:chat." . auth()->id() . ",Message_sent" => 'receiveMessage',
-    ];
+        return [
+            "echo-private:chat.".Auth::id().",MessageSent" => 'messageReceived',
+            "echo-private:chat.".Auth::id().",MessagesRead" => 'messagesRead',
+            'loadMoreMessages',
+            'resetLoadMoreTrigger'
+        ];
     }
-    public function receiveMessage(){
-        $this->selectChat->load('messages');
+
+    public function toggleViewMode()
+    {
+        if($this->viewMode === 'chats') {
+            $this->viewMode = 'users';
+            $this->selectedChat = null;
+            $this->selectedUser = null;
+            $this->loadUsers();
+        } else {
+            $this->viewMode = 'chats';
+            $this->loadChats();
+        }
     }
-    public function mount(){
-     
-       $this->loadChat();
-       $this->loadUsers();
-    
-    
+
+    public function loadUsers()
+    {
+        $this->users = User::whereNot('id', Auth::id())->orderBy('created_at', 'desc')->get();
     }
+
+    public function loadChats()
+    {
+        $this->chats = Auth::user()->chats()->with(['userOne', 'userTwo', 'messages'])->orderBy('last_message_at', 'desc')->get();
+    }
+
+    public function loadMessages()
+    {
+        if(!$this->selectedChat) return;
+
+        $this->messages = $this->selectedChat->loadMessages($this->limit);
+
+        $unreadedMessagesCount = $this->selectedChat->unreadedMessages()->count();
+
+        if($unreadedMessagesCount > 0){
+            $this->selectedChat->markMessagesAsRead();
+            broadcast(
+                new MessagesRead($this->selectedChat->id, $this->selectedUser->id)
+            );
+        }
+    }
+
+    public function loadMoreMessages()
+    {
+        $messagesCount = $this->selectedChat->messages()->count();
+        $this->dispatch("messagesLoaded", height: $this->height);
+
+        if($this->limit >= $messagesCount) return;
+
+        $this->limit += 10;
+        $this->loadMessages();
+    }
+
+    public function resetLoadMoreTrigger(int $height)
+    {
+        $this->height = $height;
+    }
+
+    public function selectUser($userId)
+    {
+        $user = User::find($userId);
+        if(!$user) return;
+
+        $chat = ChatModel::getOrCreateChatBetweenUsers(Auth::id(), $userId);
+
+        $this->selectChat($chat->id);
+        $this->toggleViewMode();
+    }
+
+    public function selectChat($chatId)
+    {
+        $this->limit = 10;
+        
+        $chat = ChatModel::find($chatId);
+        if(!$chat || !$chat->isChatContainsUser(auth()->id()))return;
+
+        $this->selectedUser = $chat->getOtherUser();
+        $this->selectedChat = $chat;
+
+        $this->loadMessages();
+
+        $this->dispatch('chatSelected');
+    }
+
+    public function sendMessage()
+    {
+        if(!$this->selectedChat || !$this->selectedUser || trim($this->message) === '') return;
+
+        $message = Message::create([
+            'chat_id' => $this->selectedChat->id,
+            'sender_id' => Auth::id(),
+            'content' => $this->message,
+        ]);
+
+        $this->message = "";
+        $this->messages->push($message);
+        $this->selectedChat->update(['last_message_at' => now()]);
+        $this->loadChats();
+        $this->dispatch('messageSent');
+
+        broadcast(
+            new MessageSent($message->id, $this->selectedUser->id)
+        );
+    }
+
+    public function messageReceived($data)
+    {
+        $message = Message::find($data['messageId']);
+        if(!$message) return;
+
+        $this->loadChats();
+        if($this->selectedChat && $message->chat_id === $this->selectedChat->id) {
+            $this->loadMessages();
+
+            $this->dispatch('messageSent');
+        }
+    }
+
+    public function messagesRead($data)
+    {
+        if(!$this->selectedChat) return;
+
+        if($data['chatId'] === $this->selectedChat->id) {
+            $this->loadMessages();
+        }
+    }   
+
+    public function mount()
+    {
+        $this->loadChats();
+    }
+
     public function render()
     {
         return view('livewire.chat');
