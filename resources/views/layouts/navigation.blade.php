@@ -65,6 +65,14 @@
                             <x-nav-link href="/client/mesReservations">
                                 mes réservations
                             </x-nav-link>
+
+                            <x-nav-link href="/Ai/assistant">
+                               Ai assistant
+                            </x-nav-link>
+
+                          
+
+                           
                             
                           
                     </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Chambre;
 
 
 class Reservation extends Model
@@ -26,4 +27,8 @@ class Reservation extends Model
         return $this->belongsTo(User::class,'users_id');
         
     }
+    public function chambre(){
+        return $this->belongsTo(Chambre::class);
+    }
 }
+

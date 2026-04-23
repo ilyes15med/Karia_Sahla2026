@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Reservation;
+use App\Models\Heberg;
+
 
 class Chambre extends Model
 {
@@ -16,7 +19,13 @@ class Chambre extends Model
         'nombre_chambre',
         'images_chambres',
         'Hebergs_id'
+   ];
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
+    }
+    public function Heb(){
+        return $this->belongsTo(Heberg::class);
 
 
-    ];
+    }
 }

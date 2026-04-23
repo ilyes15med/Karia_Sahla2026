@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Chambre;
 
 class Heberg extends Model
 {
@@ -24,4 +26,7 @@ class Heberg extends Model
         'users_id',
         'images'
     ];
+    public function chambres(){
+        return $this->hasMany(Chambre::class);
+    }
 }

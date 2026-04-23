@@ -28,7 +28,7 @@ class User extends Authenticatable
     ];
     public function reservations(){
 
-        return $this->hasOne(Reservation::class,'id');
+        return $this->hasOne(Reservation::class,'users_id');
     }
     
     /**

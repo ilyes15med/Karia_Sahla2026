@@ -8,8 +8,10 @@ use App\Http\Controllers\HebergClientController;
 use App\Http\Controllers\ChargilyPayController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ratingController;
+use App\Http\Controllers\AiAgentAssistant;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Livewire\Chat;
+use App\Livewire\Chatbot;
 
 
 //invite
@@ -86,7 +88,17 @@ Route::put('/client/rating/heb/{idh}/rating/{ideval}/edit',[ratingController::cl
 
   //delete evaluation
 Route::get('/client/rating/heb/{idh}/rating/{ideval}/delete',[ratingController::class,'destroy_rating'])->name('rating.delete');
- 
+ //Ai assistant
+/*
+Route::get('/Ai-assistant', function(){
+return view('client.front-end.Ai-agent.Assistant');
+});
+
+Route::post('/invoke-agent',[AiAgentAssistant::class,'invoke_agent']);
+*/
+
+Route::livewire('/Ai/assistant','ai-assistant.chat-ai');
+
 
 //hote
 
