@@ -3,81 +3,107 @@
 use Livewire\Component;
 use App\Ai\Agents\AssistantKariasahla;
 use App\Models\User;
+use App\Models\conversation_ia;
+use Livewire\Attributes\On;
+
 new class extends Component
 {
     public string $message = '';
     public array $messages=[];
- 
-
- 
-    public function save()
-    {
-        $this->validate([
-            'message' => 'required|max:255',
-            
-        ]);
-         $this->messages[]=[
-            'Mess'=>$this->message,
-            'type'=>'send'
-        ];
-        if($this->message){
-            $agent = new AssistantKariasahla(auth()->user());
-            $reponse = $agent->prompt($this->message);
-             $reponseString= data_get($reponse, 'text')
-            ?? data_get($reponse, 'toolResults.0.result')
-            ?? data_get($reponse, 'output')
-            ?? 'aucun réponse';
-            if (is_array($reponseString)) {
-                    $reponseString = json_encode($result, JSON_PRETTY_PRINT);
-            }
-        }
-      
-   
-        
-       
-      
-      
-        $this->messages[]=[
-
-            'Mess' =>$reponseString,
-            'type'=>'received'
-        ];
-
-      
-        //empty input 
-        $this->message='';
-
     
-     
-
-       
  
-      
-       
+
+    // si le client have une conversetion agent ia
+
  
-       
+    public function receive_message()
+{
+    $this->validate([
+        'message' => 'required|max:255',
+    ]);
 
+    $msg = $this->message;
 
+    $this->messages[] = [
+        'Mess' => $msg,
+        'type' => 'send'
+    ];
+
+    $this->messages[] = [
+        'Mess' => '...',
+        'type' => 'loading'
+    ];
+
+    $this->message = '';
+
+    $this->dispatch('Ai-process', message: $msg);
+}
+#[On('Ai-process')]
+public function Aiprocess($message)
+{
+    $user = auth()->user();
+
+    $Conversation_client = $user->conversation_ia()->first();
+
+    if (!$Conversation_client) {
+        $Conversation_client = $user->conversation_ia()->create([
+            'user_id' => $user->id,
+            'title' => $message,
+        ]);
     }
+
+    $Conversation_client->messages()->create([
+        'conversation_id' => $Conversation_client->id,
+        'content' => $message,
+        'user_id' => $user->id
+    ]);
+
+    $agent = new AssistantKariasahla($user);
+    $reponse = $agent->prompt($message);
+
+    $reponseString = data_get($reponse, 'text')
+        ?? data_get($reponse, 'output')
+        ?? 'aucune réponse';
+
+    if (is_array($reponseString)) {
+        $reponseString = json_encode($reponseString);
+    }
+
+    array_pop($this->messages);
+
+    $this->messages[] = [
+        'Mess' => $reponseString,
+        'type' => 'received'
+    ];
+}
+
 };
 
 ?>
 
 <div class="chat-container">
     <!--messages-->
-    <div class="chat-container p-4 space-y-3">
+    <div class="p-4 space-y-3">
     
         @foreach ($messages as $msg)
             <div class="flex {{ $msg['type'] === 'send' ? 'justify-start' : 'justify-end' }}">
                 
-                <div class="
-                    max-w-xs px-4 py-2 rounded-2xl shadow
+                <div class="max-w-xs px-4 py-2 rounded-2xl shadow
                     {{ $msg['type'] === 'send' 
                         ? 'bg-blue-500 text-white rounded-bl-none' 
-                        : 'bg-gray-500 text-white rounded-br-none' 
+                        : 'bg-gray-700 text-white rounded-br-none' 
                     }}
                 ">
+                @if($msg['type'] === 'loading')
+                <span class="flex gap-1">
+                    <span class="animate-bounce">.</span>
+                    <span class="animate-bounce delay-100">.</span>
+                    <span class="animate-bounce delay-200">.</span>
+                </span>
+                @else
                     {{ $msg['Mess'] }}
+                @endif
+                   
                 </div>
     
             </div>
@@ -88,8 +114,7 @@ new class extends Component
   
 
     <!-- Form -->
-    <form wire:submit.prevent
-    ="save" class="chat-input">
+    <form wire:submit.prevent ="receive_message" class="chat-input">
         
         <input 
             type="text" 
