@@ -1,4 +1,5 @@
 @php
+
     if(Auth::user()->role == 'admin'){
         $dashboard = route('admin.dashboard');
     }elseif(Auth::user()->role == 'client'){
@@ -8,9 +9,9 @@
     }elseif(Auth::user()->role == 'agent'){
         $dashboard = route('agent.dashboard');
     }
-    /*else{
-        $dashboard = route('dashboard');
-    }*/
+    else{
+        $dashboard = route('invite');
+    }
     
 @endphp
 
@@ -84,8 +85,7 @@
 
                     <x-nav-link >
                         <div class="relative">
-
-    
+                          
                             <!-- Icon -->
                             <button id="notifBtn" class="relative">
                                Notification <i class="fa-solid fa-bell"></i>

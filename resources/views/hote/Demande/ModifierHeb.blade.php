@@ -126,11 +126,12 @@
         <input type="number" id="nb_chambres" name="nb_chambres" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 3" value="{{ $Heb->nombre_chambre }}" required/>
     </div>
 
-    <!-- Nombre de lits -->
+    <!-- Nombre de lits 
     <div>
         <label class="block mb-1">Nombre de lits</label>
-        <input type="number" id="nb_lits" name="nb_lits" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 5" value="{{ $Heb->nombre_lit }}"  required/>
+        <input type="number" id="nb_lits" name="nb_lits" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 5" value="{{ $Heb->nombre_lit }}"  disable required/>
     </div>
+    -->
                 <div>
                     <input type="text" id="id" name="id" class="hidden" value=" {{$id_hote}}"/>
                 

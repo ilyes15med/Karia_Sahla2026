@@ -70,4 +70,8 @@ class User extends Authenticatable
         return $this->hasMany(conversation_ia::class);
    
     }
+    //obliger utiliser return sinon null
+    public function heb(){
+        return $this->hasMany(Heberg::class,'users_id');
+    }
 }

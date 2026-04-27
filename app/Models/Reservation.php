@@ -28,7 +28,11 @@ class Reservation extends Model
         
     }
     public function chambre(){
-        return $this->belongsTo(Chambre::class);
+        return $this->belongsTo(Chambre::class,'chambres_id');
+    }
+    public function payment(){
+
+        return $this->hasOne(ChargilyPayment::class);
     }
 }
 

@@ -12,7 +12,11 @@ new class extends Component
     public array $messages=[];
     
  
+  public function selected_sugggestion($suggestion){
+    $this->message=$suggestion;
+    $this->receive_message();
 
+  }
     // si le client have une conversetion agent ia
 
  
@@ -39,8 +43,7 @@ new class extends Component
     $this->dispatch('Ai-process', message: $msg);
 }
 #[On('Ai-process')]
-public function Aiprocess($message)
-{
+public function Aiprocess($message){
     $user = auth()->user();
 
     $Conversation_client = $user->conversation_ia()->first();
@@ -82,53 +85,105 @@ public function Aiprocess($message)
 ?>
 
 <div class="chat-container">
-    <!--messages-->
-    <div class="p-4 space-y-3">
-    
-        @foreach ($messages as $msg)
-            <div class="flex {{ $msg['type'] === 'send' ? 'justify-start' : 'justify-end' }}">
-                
-                <div class="max-w-xs px-4 py-2 rounded-2xl shadow
-                    {{ $msg['type'] === 'send' 
-                        ? 'bg-blue-500 text-white rounded-bl-none' 
-                        : 'bg-gray-700 text-white rounded-br-none' 
-                    }}
-                ">
-                @if($msg['type'] === 'loading')
-                <span class="flex gap-1">
-                    <span class="animate-bounce">.</span>
-                    <span class="animate-bounce delay-100">.</span>
-                    <span class="animate-bounce delay-200">.</span>
-                </span>
-                @else
-                    {{ $msg['Mess'] }}
-                @endif
-                   
+      {{-- Header --}}
+      <div class="bg-zinc-900 border-b border-zinc-800 px-6 py-4 flex-shrink-0">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                {{-- AI Avatar --}}
+                <div
+                    class="w-9 h-9 rounded-full bg-zinc-700 border border-zinc-600 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                    </svg>
                 </div>
-    
+                <div>
+                    <h1 class="text-zinc-100 font-semibold text-base leading-tight">kariaSahla Assistant</h1>
+                    
+                </div>
             </div>
-        @endforeach
+            
+        </div>
+    </div>
+
+    {{-- Messages --}}
+    <div
+        class="flex-1 overflow-y-auto px-4 py-6">
+
+    @if(empty($messages))
+            {{-- Empty State --}}
+            <div class="flex flex-col items-center justify-center h-full gap-4 text-center px-4">
+                <div class="w-14 h-14 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center">
+                    <svg class="w-7 h-7 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-black font-medium text-lg">kariaSahla Assistant</h2>
+                    <p class="text-zinc-500 text-sm mt-1 max-w-xs">
+                        posez-moi n'importe quelle question sur kariaSahla !
+                    </p>
+                </div>
+                {{-- Suggestion chips --}}
+                <div class="flex flex-wrap gap-2 justify-center mt-2">
+                    @foreach([
+                        'quel est votre service ?',
+                        'donner les hotels de wilaya ',
+                        'cest qoui karaiSahla ?',
+                      
+                    ] as $suggestion)
+                        <button
+                            wire:click="selected_sugggestion('{{ addslashes($suggestion) }}')"
+                            class="text-xs text-zinc-400 bg-zinc-800 border border-zinc-700 hover:border-zinc-600 hover:text-zinc-200 rounded-full px-3 py-1.5 transition-colors"
+                        >
+                            {{ $suggestion }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+    @else
+    <!--messages-->
+    <div class="w-full max-w-3xl h-screen mx-auto flex flex-col bg-zinc-900">
+
+        <!-- Messages -->
+        <div class="flex-1 overflow-y-auto px-4 py-6 space-y-3">
+            @foreach ($messages as $msg)
+                <div class="flex {{ $msg['type'] === 'send' ? 'justify-start' : 'justify-end' }}">
+                    <div class="max-w-xs px-4 py-2 rounded-2xl
+                        {{ $msg['type'] === 'send' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-white' }}">
+                        
+                        @if($msg['type'] === 'loading')
+                            <span class="flex gap-1">
+                                <span class="animate-bounce">.</span>
+                                <span class="animate-bounce delay-100">.</span>
+                                <span class="animate-bounce delay-200">.</span>
+                            </span>
+                        @else
+                            {{ $msg['Mess'] }}
+                        @endif
+    
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+        <!-- Input (ثابت) -->
+        <div class="p-4 border-t border-zinc-800 bg-zinc-900">
+            <form wire:submit.prevent="receive_message" class="flex gap-2">
+                <input 
+                    type="text"
+                    wire:model.defer="message"
+                    class="flex-1 px-4 py-2 rounded-xl bg-zinc-800 text-white outline-none"
+                    placeholder="Type your message..."
+                >
+                <button class="bg-blue-600 px-4 py-2 rounded-xl text-white">
+                    Send
+                </button>
+            </form>
+        </div>
     
     </div>
-    
-  
-
-    <!-- Form -->
-    <form wire:submit.prevent ="receive_message" class="chat-input">
-        
-        <input 
-            type="text" 
-            wire:model="message"
-            placeholder="Type your message..."
-        >
-
-        @error('title') 
-            <span class="error">{{ $message }}</span> 
-        @enderror
-
-        <button type="submit">Send</button>
-    </form>
-
 </div>
 
 <style>

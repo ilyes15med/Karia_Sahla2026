@@ -21,10 +21,10 @@
     
                 <h3 class="text-xl font-bold mb-4">mes hébergements</h3>
     
-                <table class="w-full text-left">
+                <table class="p-1 w-full text-center">
                     <thead>
                         
-                        <a href="">
+                      
                             <tr class="border-b">
                             
                             <th class="px-4 py-2 border">Hébergement</th>
@@ -35,9 +35,9 @@
                             <th class="px-4 py-2 border">Nombre chambre</th>
                             <th class="px-4 py-2 border">Nombre lit</th>
                          
-                            <th class="px-4 py-2 border text-center">Actions</th>
+                            <th class="px-4 py-2 border text-center"></th>
                             </tr>
-                        </a>    
+                        
                     </thead>
     
                     <tbody>
@@ -47,8 +47,14 @@
                       
                    
                         <tr class="border-b">
+                       
                             
-                            <td class="p-2">{{$Heberg->nomHeberg}}</td>
+                            <td class="p-2 text-red">
+                                <a href="/hote/MonHebergement/{{$Heberg->id}}" > 
+                                    {{$Heberg->nomHeberg}}
+                                </a>
+                            </td>
+                         
                             <td class="p-2">{{$Heberg->hote_name}}</td>
                             <td class="p-2">{{$Heberg->typeHeberg}}</td>
                             
@@ -56,20 +62,35 @@
                             <td class="p-2">{{$Heberg->service}}</td>
                             <td class="p-2">{{$Heberg->nombre_chambre}}</td>
                             <td class="p-2">{{$Heberg->nombre_lit}}</td>
-                            <td class="px-4 py-2 border space-x-2">
-                                <button onclick="afficherHeb({{ $Heberg->id }})" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
-                                    Afficher
-                                </button>
-        
-                                <button onclick="openModal({{ $Heberg->id }})" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded">
-                                    Modifier
-                                </button>
-        
-                                <button onclick="supprimerHeb({{ $Heberg->id }})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
-                                    Supprimer
-                                </button>
+                            <td class="">
+                                <!-- Statistique -->
+    <button 
+        onclick="statistique({{ $Heberg->id }})"
+        class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition duration-200">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Statistique</span>
+    </button>
+
+    <!-- Modifier -->
+    <button 
+        onclick="openModal({{ $Heberg->id }})"
+        class="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg transition duration-200">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span>Modifier</span>
+    </button>
+
+    <!-- Supprimer -->
+    <button 
+        onclick="supprimerHeb({{ $Heberg->id }})"
+        class="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition duration-200">
+        <i class="fa-solid fa-trash"></i>
+        <span>Supprimer</span>
+    </button>
+                           
                             </td>
+                        
                         </tr>
+          
                         @endforeach
                    
                
@@ -130,11 +151,11 @@
 
     }
     
-    function afficherHeb(id){
+    function statistique(id){
 
         document.getElementById('confirmModal').classList.remove('hidden');
         
-        let url = "/hote/MonHebergement/"+id;
+        let url = "/hote/heb/"+id+"/statistique";
         document.getElementById('confirmBtn').href = url;
 
     }

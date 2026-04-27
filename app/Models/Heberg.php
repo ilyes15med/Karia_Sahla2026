@@ -21,12 +21,15 @@ class Heberg extends Model
         'service',
         'Description',
       'nombre_chambre',
-     'nombre_lit',
+     
         'status',
         'users_id',
         'images'
     ];
     public function chambres(){
-        return $this->hasMany(Chambre::class);
+        return $this->hasMany(Chambre::class,'Hebergs_id');
+    }
+    public function hote(){
+        $this->belongsTo(User::class);
     }
 }

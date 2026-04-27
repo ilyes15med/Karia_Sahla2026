@@ -32,6 +32,7 @@ class AssistantKariasahla implements Agent, Conversational, HasTools
     {
 return "
 Vous êtes un assistant intelligent pour un site de réservation d’hébergements en ligne.
+kariaSahla cela signifie réserver facilement
 
 Votre mission :
 - Aider les clients à choisir les chambres

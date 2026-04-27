@@ -9,6 +9,7 @@ use App\Http\Controllers\ChargilyPayController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\AiAgentAssistant;
+use App\Http\Controllers\StatistiqueController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Livewire\Chat;
 use App\Livewire\Chatbot;
@@ -29,7 +30,7 @@ Route::get('/', function () {
         }
     }
     return view('invité.front-end.home');
-});
+})->name('invite');
 Route::get('/Hebergement', function () {
     return view('invité.front-end.HebShow');
 });
@@ -128,7 +129,9 @@ Route::get('/hote/MonHebergement/{idHeb}/chambre/{idC}/delete',[HebergHoteContro
 Route::get('/hote/mesReservations',[ReservationController::class,'hote_Reservations_index'])->name('reservations.index');
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
 
+//statistique
 
+Route::get('/hote/heb/{id}/statistique',[StatistiqueController::class,'statistique_heb']);
 
 //admin
 Route::get('/admin/dashboard', function () {
@@ -160,6 +163,9 @@ Route::get('/agent/dashboard/Demandes/index/{id}',
 Route::get('/agent/dashboard',[HebergController::class,'indexAgent'])->middleware(['auth'])->name('agent.dashboard');
 Route::get('/agent/{name}/dashboard/Hebergs/{id}/accept',[HebergController::class,'confirme'])->middleware(['auth'])->name('heberge.edit');
 Route::get('/agent/{name}/dashboard/Hebergs/{id}/refuse',[HebergController::class,'refuse'])->middleware(['auth'])->name('heberge.edit');
+//show demande valider
+Route::get('/agent/dashboard/Hebergs/{id}/show',[HebergController::class,'index_Heb_Valide'])->middleware(['auth']);
+
 //client
 //require __DIR__.'/client.php';
 

@@ -128,6 +128,16 @@ class HebergController extends Controller
         return view('agent.showHeb',compact('heb'));
 
     }
+    public function index_Heb_Valide($idheb){
+        $heb= DB::table('Hebergs')
+        ->join('users','Hebergs.users_id','=','users.id')
+        ->where('Hebergs.status','valide')
+        ->where('Hebergs.id',$idheb)
+        ->select('Hebergs.*','users.name as hote_name')
+        ->first();
+        return view('agent.showHeb',compact('heb'));
+
+    }
   
 
     

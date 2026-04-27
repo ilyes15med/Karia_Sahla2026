@@ -46,7 +46,11 @@
                    
                         <tr class="border-b">
                             
-                            <td class="p-2">{{$Heberg->nomHeberg}}</td>
+                            <td class="p-2 text-red-600">
+                                <a href="/agent/dashboard/Demandes/index/{{ $Heberg->id }}"> 
+                                    {{$Heberg->nomHeberg}} 
+                                </a>
+                            </td>
                             <td class="p-2">{{$Heberg->hote_name}}</td>
                             <td class="p-2">{{$Heberg->typeHeberg}}</td>
                             <td class="p-2">{{$Heberg->Description}}</td>

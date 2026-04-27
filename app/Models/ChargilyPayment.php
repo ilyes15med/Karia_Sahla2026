@@ -11,5 +11,10 @@ class ChargilyPayment extends Model
     use HasFactory;
     protected $fillable = 
     ["users_id","status","currency","amount","reservations_id"];
+
+    public function reservation(){
+
+        return $this->belongsTo(Reservation::class,'reservations_id');
+    }
 }
 
