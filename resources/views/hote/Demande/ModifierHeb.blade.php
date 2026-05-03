@@ -10,7 +10,7 @@
 @endphp
 <x-app-layout>
     <div class=" flex items-center justify-center min-h-screen">
-        @foreach ($HebergCours as $Heb)
+      
         <form action="{{route('hebergement.update',$Heb->id)}}" method="post" class="space-y-4 w-full max-w-md" enctype="multipart/form-data">
             @csrf
             @method('put')
@@ -22,7 +22,7 @@
                     <img src="{{ asset('/assets/images/logo.png') }}" class="w-40 h-40 object-contain">
                 </div>
 
-                <p class="text-xl mb-6 text-center">Saisir les informations de votre hébergement</p>
+                <p class="text-xl mb-6 text-center">modifier les informations de votre hébergement</p>
         
                 
            
@@ -36,13 +36,13 @@
 
                     <div>
                         <label class="block mb-1">Type hébergement</label>
-                        <select id="type_Heb" name="type_Heb" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->typeHeberg }} required>
-                            <option value="">-- Sélectionnez le type --</option>
+                        <select id="type_Heb" name="type_Heb" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->typeHeberg }}" required>
+                           
                             <option value="Hotel">Hôtel</option>
                             <option value="Appartement">Appartement</option>
                             <option value="Maison">Maison</option>
                             <option value="Villa">Villa</option>
-                            <option value="Chambre d'hôtes">Chambre d'hôtes</option>
+                            <option value="Chambre_hotes">Chambre d'hôtes</option>
                             <option value="Auberge">Auberge</option>
                         </select>
                     </div>
@@ -52,14 +52,37 @@
                        
 
                     </div>
+                <!--
+
+                    <div id="chambre_lit_block" class="hidden grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-1">Nombre des chambres</label>
+                            <input type="text" id="Nmbr_chambres" name="Nmbr_chambres" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->nombre_chambre }}" required/>
+                        </div>
+                        <div>
+                            <label class="block mb-1">Nombre des lits</label>
+                            <input type="text" id="Nmbr_lits" name="Nmbr_lits" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->nombre_lit }}" required/>
+                        </div>
+                    </div>
+                -->
 
 
                     <div>
-                        <label class="block mb-1">Adresse hébergement</label>
-                        <div>
-                            <label class="block mb-1">addresse</label>
-                            <input type="text" id="addresee" name="addresee" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->addresse }}"/>
-                        </div>
+                       <!-- Wilaya -->
+<div class="mb-3">
+    <label class="block mb-1">Wilaya</label>
+    <select id="wilaya" name="wilaya"  class="w-full border rounded-lg px-3 py-2">
+        <option value="">-- Choisir Wilaya --</option>
+    </select>
+</div>
+
+<!-- Commune -->
+<div>
+    <label class="block mb-1">Commune</label>
+    <select id="commune" name="commune" class="w-full border rounded-lg px-3 py-2">
+        <option value="">-- Choisir Commune --</option>
+    </select>
+</div>
                       
 
                     <div class="grid grid-cols-2 gap-4">
@@ -120,18 +143,7 @@
                         <textarea id="description" name="description" rows="4" class="w-full border rounded-lg px-3 py-2" required>{{$Heb->Description}}</textarea>
                     </div>
 
-                      <!-- Nombre de chambres -->
-    <div>
-        <label class="block mb-1">Nombre de chambres</label>
-        <input type="number" id="nb_chambres" name="nb_chambres" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 3" value="{{ $Heb->nombre_chambre }}" required/>
-    </div>
-
-    <!-- Nombre de lits 
-    <div>
-        <label class="block mb-1">Nombre de lits</label>
-        <input type="number" id="nb_lits" name="nb_lits" min="1" class="w-full border rounded-lg px-3 py-2" placeholder="Ex: 5" value="{{ $Heb->nombre_lit }}"  disable required/>
-    </div>
-    -->
+            
                 <div>
                     <input type="text" id="id" name="id" class="hidden" value=" {{$id_hote}}"/>
                 
@@ -152,6 +164,60 @@
                 </div>
             </div>
         </form>
-        @endforeach
+    
     </div>
+
+    <script>
+        let wilayas = [];
+        let communes = [];
+        
+        Promise.all([
+            fetch('/wilayas_commune/Wilaya_Of_Algeria.json').then(res => res.json()),
+            fetch('/wilayas_commune/Commune_Of_Algeria.json').then(res => res.json())
+        ]).then(([wilayaData, communeData]) => {
+        
+            wilayas = wilayaData;
+            communes = communeData;
+        
+            const wilayaSelect = document.getElementById('wilaya');
+            const communeSelect = document.getElementById('commune');
+        
+            // remplir wilayas
+            wilayas.forEach(w => {
+                let option = document.createElement('option');
+                option.value = w.name; 
+                option.textContent = w.name;
+                wilayaSelect.appendChild(option);
+            });
+        
+            // change communes
+            wilayaSelect.addEventListener('change', function () {
+                const selectedWilaya = this.value;
+        
+                communeSelect.innerHTML = '<option value="">-- Choisir Commune --</option>';
+        
+                const filtered = communes.filter(c => c.wilaya_id == wilayas.find(w => w.name === selectedWilaya).id);
+        
+                filtered.forEach(c => {
+                    let option = document.createElement('option');
+                    option.value = c.name;
+                    option.textContent = c.name;
+                    communeSelect.appendChild(option);
+                });
+            });
+        
+        });
+/*
+        document.getElementById("type_Heb").addEventListener('change',function(){
+
+            let block= document.getElementById("chambre_lit_block");
+            
+            if (this.value === 'Appartement' || this.value === 'Maison' || this.value === 'Villa' || this.value === 'Chambre_hotes') {
+                block.classList.remove('hidden');
+            } else {
+                block.classList.add('hidden');
+            }
+        });
+*/
+        </script>
 </x-app-layout>

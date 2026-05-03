@@ -122,7 +122,7 @@ class HebergController extends Controller
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','en cours')
         ->where('Hebergs.id',$idHeb)
-        ->select('Hebergs.*','users.name as hote_name')
+        ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
 
         return view('agent.showHeb',compact('heb'));
@@ -133,7 +133,7 @@ class HebergController extends Controller
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','valide')
         ->where('Hebergs.id',$idheb)
-        ->select('Hebergs.*','users.name as hote_name')
+        ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
         return view('agent.showHeb',compact('heb'));
 

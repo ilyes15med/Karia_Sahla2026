@@ -74,7 +74,7 @@
                     Hébergé par <span class="font-semibold"> {{$heb->hote_name}}</span>
                 </span>
                 @if(auth()->user()->role == 'client')   
-                    <a href="#" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                    <a href="/chat/user/{{$heb->hote_id}}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
                         <i class="fa-solid fa-message"></i>
                         Chat
                     </a>

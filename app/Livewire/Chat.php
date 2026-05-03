@@ -15,6 +15,15 @@ class Chat extends Component
     public $users, $chats, $selectedChat = null, $selectedUser = null, $message = "", $messages = null;
     public $limit = 10, $height;
     public $viewMode = "chats"; // chats or users
+    public $idUser;
+
+    public function chatparbutton($userId){
+        $userconnecter=auth()->user();
+        $chat=chat->getOrCreateChatBetweenUsers($userconnecter,$userId);
+
+
+
+    }
 
     public function getListeners()
     {
@@ -85,8 +94,10 @@ class Chat extends Component
     {
         $user = User::find($userId);
         if(!$user) return;
+       
 
-        $chat = ChatModel::getOrCreateChatBetweenUsers(Auth::id(), $userId);
+        $chat = ChatModel::getOrCreateChatBetweenUsers(Auth::id(), $userId); 
+    
 
         $this->selectChat($chat->id);
         $this->toggleViewMode();
@@ -98,13 +109,14 @@ class Chat extends Component
         
         $chat = ChatModel::find($chatId);
         if(!$chat || !$chat->isChatContainsUser(auth()->id()))return;
-
+        
         $this->selectedUser = $chat->getOtherUser();
         $this->selectedChat = $chat;
 
         $this->loadMessages();
 
         $this->dispatch('chatSelected');
+    
     }
 
     public function sendMessage()
@@ -152,7 +164,18 @@ class Chat extends Component
 
     public function mount()
     {
+        $user=$this->idUser;
+        
+        if($user){
+
+            $this->selectUser($user);
+
+        }
+       
+       
         $this->loadChats();
+
+
     }
 
     public function render()

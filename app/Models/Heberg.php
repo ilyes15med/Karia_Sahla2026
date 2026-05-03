@@ -20,8 +20,8 @@ class Heberg extends Model
         'longitude',
         'service',
         'Description',
-      'nombre_chambre',
-     
+      // 'nombre_chambre',
+       //'nombre_lit',
         'status',
         'users_id',
         'images'

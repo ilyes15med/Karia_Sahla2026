@@ -19,7 +19,7 @@
 
 
 @endif
-<form method="post" action="/client/reservation/Heb/{{ $heb->id }}/chambre/{{$chambre->id}}" >   
+<form method="post" action="{{route("chargilypay.redirect",$chambre->id)}}" >   
 @csrf   
     <!-- ETAPE 1 -->
     <div id="etape1" class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -64,7 +64,7 @@ class="w-full border rounded-lg px-3 py-2" required>
     
     <button type="button" onclick="nextStep1({{ $chambre->prix }},{{ $chambre->nombre_lit }})"
     class="w-full bg-blue-600 text-white p-2 rounded-lg">
-    Suivant
+        Suivant
     </button>
     
     </div>

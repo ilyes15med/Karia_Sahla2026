@@ -33,12 +33,13 @@
                         <label class="block mb-1">Type hébergement</label>
                         <select id="type_Heb" name="type_Heb" class="w-full border rounded-lg px-3 py-2 " required>
                             <option value="">-- Sélectionnez le type --</option>
-                            <option value="Hotel">Hôtel</option>
+                            <option value="Hotel">Hôtel</option> 
+                            <option value="Auberge">Auberge</option>
                             <option value="Appartement">Appartement</option>
                             <option value="Maison">Maison</option>
                             <option value="Villa">Villa</option>
-                            <option value="Chambre d'hôtes">Chambre d'hôtes</option>
-                            <option value="Auberge">Auberge</option>
+                            <option value="Chambre_hotes">Chambre d'hôtes</option>
+                           
                         </select>
                     </div>
                     <div>
@@ -47,7 +48,20 @@
                        
 
                     </div>
+<!--
+                    <div id="chambre_lit_block" class="hidden grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-1">Nombre des chambres</label>
+                            <input type="text" id="Nmbr_chambres" name="Nmbr_chambres" class="w-full border rounded-lg px-3 py-2" required/>
+                        </div>
+                        <div>
+                            <label class="block mb-1">Nombre des lits</label>
+                            <input type="text" id="Nmbr_lits" name="Nmbr_lits" class="w-full border rounded-lg px-3 py-2" required/>
+                        </div>
+                    </div>
 
+
+                -->
 
                     <div>
                         <label class="block mb-1">Adresse hébergement</label>
@@ -179,7 +193,7 @@
                 option.textContent = w.name;
                 wilayaSelect.appendChild(option);
             });
-        
+
             // change communes
             wilayaSelect.addEventListener('change', function () {
                 const selectedWilaya = this.value;
@@ -197,5 +211,16 @@
             });
         
         });
+
+  /*      document.getElementById("type_Heb").addEventListener('change',function(){
+
+            let block= document.getElementById("chambre_lit_block");
+            if (this.value === 'Appartement' || this.value === 'Maison' || this.value === 'Villa' || this.value === 'Chambre_hotes') {
+                block.classList.remove('hidden');
+            } else {
+                block.classList.add('hidden');
+            }
+        });
+        */
         </script>
 </x-app-layout>

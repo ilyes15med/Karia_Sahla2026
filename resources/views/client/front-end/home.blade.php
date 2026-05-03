@@ -2,7 +2,8 @@
 
     @include('partials.search-form')
     @include('partials.hébergement.Hebs')
-    <div class="Ai-assisant"></div>
+    @include('partials.about-us')
+    
 
     
 </x-app-layout>

@@ -8,6 +8,7 @@
 <div id="chat-container"
     class="w-full max-w-7xl bg-zinc-900 sm:rounded-3xl shadow-2xl overflow-hidden flex animate-fade-in">
     <!-- Left Sidebar -->
+
     <div id="left-sidebar"
         class="w-full md:w-80 lg:w-96 bg-zinc-800 border-r border-zinc-700 {{ $selectedChat ? 'hidden md:flex' : 'flex' }} flex-col">
         <!-- Header -->
@@ -76,7 +77,7 @@
                         </div>
                 @empty
                     <div class="p-4 text-center text-zinc-400">
-                        No conversations found.
+                        aucun  conversations trouvé.
                     </div>
                 @endforelse
             @else
@@ -104,7 +105,7 @@
             @endif
         </div>
     </div>
-
+   
     <!-- Right Chat Area -->
     <div id="chat-area" class="{{ $selectedChat ? "" : "hidden" }} md:flex flex-1 flex-col">
         @if ($selectedChat && $selectedUser)

@@ -18,8 +18,8 @@
    
   
   
-  @endif
-  <form method="post" action="/client/reservation/{{$reservation->id}}/edit" >   
+  @endif  
+  <form method="post" action="/chargilypay/edit/{{$reservation->id}}" >   
   @csrf   
       <!-- ETAPE 1 -->
       <div id="etape1" class="bg-gray-100 flex items-center justify-center min-h-screen">

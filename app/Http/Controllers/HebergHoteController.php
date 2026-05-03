@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Heberg;
 use App\Models\Chambre;
-
+use App\Models\evaluation;
 use App\Models\User;
 use App\Events\HebRequest;
 use App\Notifications\ReqHebNotification;
@@ -48,8 +48,8 @@ class HebergHoteController extends Controller
             'longitude' => $request->Longitude,
             'service' => json_encode($request->services),
             'Description' => $request->description,
-            //'nombre_chambre' => $request->nb_chambres,
-           // 'nombre_lit' => $NombreLtTotale,
+            'nombre_chambre' => $request->Nmbr_chambres,
+            'nombre_lit' => $request->Nmbr_lits,
             'status' => 'en cours',
             'users_id' =>$request->id,
             'images'=>json_encode($images)
@@ -124,14 +124,14 @@ class HebergHoteController extends Controller
     }
     public function edit_demande($idHeb){
 
-        $HebergCours=DB::table('Hebergs')
+        $Heb=DB::table('Hebergs')
         ->join('users','Hebergs.users_id','=','users.id')
       //  ->where('Hebergs.status','en cours')
         ->where('Hebergs.id',$idHeb)
         ->select('Hebergs.*','users.name as hote_name')
-        ->get();
+        ->first();
 
-        return view ('hote.Demande.ModifierHeb',compact('HebergCours'));
+        return view ('hote.Demande.ModifierHeb',compact('Heb'));
     }
    
     public function update_demande(Request $request,$idHeb){
@@ -148,18 +148,19 @@ class HebergHoteController extends Controller
             }
         }
         $hebergement=Heberg::findOrFail($idHeb);
+        $adresseheb=$request->commune.", ".$request->wilaya;
      
         $hebergement->update([
             'nomHeberg' => $request->nom_Heb,
             'typeHeberg' => $request->type_Heb,
-            'addresse' => $request->addresee,
+            'addresse' => $adresseheb,
             'prix' => $request->prix,
             'latitude' => $request->Latitude,
             'longitude' => $request->Longitude,
             'service' => json_encode($request->services),
             'Description' => $request->description,
-            'nombre_chambre' => $request->nb_chambres,
-            'nombre_lit' => $request->nb_lits,
+         //   'nombre_chambre' => $request->nb_chambres,
+          //  'nombre_lit' => $request->nb_lits,
             'status' => 'en cours',
             'users_id' =>$request->id,
             'images'=>json_encode($images)
@@ -198,20 +199,33 @@ class HebergHoteController extends Controller
     }
     public function index_Hebergement($idHeb){
 
-        $heb= DB::table('Hebergs')
+        $hote=Auth()->user();
+        $heb=DB::table('Hebergs')
         ->join('users','Hebergs.users_id','=','users.id')
-        //->join('chambres','Hebergs.id','=','chambres.Hebergs_id')
         ->where('Hebergs.status','valide')
         ->where('Hebergs.id',$idHeb)
-        ->select('Hebergs.*','users.name as hote_name')
+        ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
-
-        $chambres = DB::table('chambres')
-       ->where('Hebergs_id', $idHeb)
+        $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
+        ->select('chambres.*')
         ->get();
+       
+        $evaluations=DB::table('evaluations')
+        ->join('users','evaluations.users_id','=','users.id')
+        ->where('Hebergs_id',$idHeb)
+        ->select('nombre_etoile','commentaire','users.name as nomclient','evaluations.id as Evaluation_id','users.id as id_client')
+       ->get();
+        $EvalTotale = evaluation::where('Hebergs_id', $idHeb)
+        ->avg('nombre_etoile');
+    
       
 
-        return view('hote.Hebergements.showHeb',compact('heb','chambres'));
+      
+
+        return view('hote.Hebergements.showHeb',compact('heb','chambres','evaluations','EvalTotale'));
+      
+
+      
 
 
     }

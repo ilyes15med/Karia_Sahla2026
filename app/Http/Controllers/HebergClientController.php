@@ -44,7 +44,7 @@ class HebergClientController extends Controller
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','valide')
         ->where('Hebergs.id',$idHeb)
-        ->select('Hebergs.*','users.name as hote_name')
+        ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
         $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
         ->select('chambres.*')

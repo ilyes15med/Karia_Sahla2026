@@ -34,6 +34,9 @@ $icons=[
                     <div class="flex items-center gap-2 text-gray-600 mt-1">
                         <span>{{$heb->addresse}}</span>
                     </div>
+                    <div class="flex items-center gap-2 text-gray-600 mt-1">
+                        <span>{{$heb->typeHeberg}}</span>
+                    </div>
                 </div>
     
                 <!-- Information hôte -->

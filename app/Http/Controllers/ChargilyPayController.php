@@ -10,18 +10,136 @@ use App\Models\Heberg;
 use App\Models\User;
 use App\Events\faitreservation;
 use App\Notifications\ReqHebNotification;
+use App\Notifications\Reservations;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ChargilyPayController extends Controller
-{
+{ 
     /**
      * The client will be redirected to the ChargilyPay payment page
      *
      */
+    public function store_edit_reservation(Request $request,$idR){
+      
+        $user = auth()->user();
+        $clientname = $user->name;
+        $reservation=Reservation::findOrFail($idR);
+        $chambre=Chambre::findOrFail($reservation->chambres_id);
+        
+        $heberg = DB::table('chambres')
+        ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
+        ->where('chambres.id', $chambre->id)
+        ->select('Hebergs.id as heberg_id', 'Hebergs.users_id')
+        ->first();
+        
+        
+        $hote = User::findOrFail($heberg->users_id);
+        $payment=ChargilyPayment::where('reservations_id',$reservation->id)->first();
+        
+        //verifier le temps 
+        $start = Carbon::parse($reservation->date_debut);
+        $now = Carbon::now();
+        
+        
+        if($start<=$now){// 24h
+                
+            return redirect()->route('reservations.index')->with("succes","impossible modifier maintenant"); 
+        
+        }   
+                $newprix=(int)$request->prix_total;
+                $oldprix=(int)$payment->amount;
+             
+                if($newprix>$oldprix){
+                    $prixcaurant=$newprix-$oldprix;
+                  //  dd($newprix,$oldprix,$prixcaurant);
+
+                    if ($payment) {
+                       
+                        $checkout = $this->chargilyPayInstance()->checkouts()->create([
+                            "metadata" => [
+                                "payment_id" => $payment->id,
+                                "type"=>"update",
+                                'date_debut' => $request->date_arrivee,
+                                'date_fin' => $request->date_depart,
+                                'nom_complet' => $request->name,
+                                'idCarteNational' => $request->idCarteNationel,
+                                'addresse' => $request->adresse,
+                                'NumTelephone' => $request->numTel,
+                                'prixactuelle'=>$newprix
+                               
+                            ],
+                            "locale" => "ar",
+                            "amount" => $prixcaurant,
+                            "currency" => $payment->currency,
+                            "description" => "Payment ID={$payment->id}",
+                            "success_url" => route("chargilypay.back"),
+                            "failure_url" => route("chargilypay.back"),
+                            "webhook_endpoint" => route("chargilypay.webhook_endpoint"),
+                        ]);
+                        if ($checkout) {
+                            return redirect($checkout->getUrl());
+                        }
+                    }
+                    return dd("Redirection failed");
+                   
+                   
+        
+                }elseif($newprix==$oldprix){
+                   
+                   
+                 
+                        $reservation->update([
+                            'date_debut' => $request->date_arrivee,
+                            'date_fin' => $request->date_depart,
+                            'nom_complet' => $request->name,
+                            'idCarteNational' => $request->idCarteNationel,
+                            'addresse' => $request->adresse,
+                            'NumTelephone' => $request->numTel,
+                            
+                        ]);
+            
+            
+                
+                  
+        
+                }elseif($newprix<$oldprix){
+                    $refund=$oldprix-$newprix;
+                    dd("refund");
+                   
+                }
+                /*
+                $payment->update([
+                  
+                    "amount"   => $prixcaurant,
+                ]);
+                */
+              
+              
+          
+        
+        
+        
+        //chambre
+        
+            $chambre_type=$chambre->typeChambres;
+        
+        // broadcast event
+        
+            broadcast(new faitreservation($clientname," a été modifier la  réservation de chambre ",$chambre_type));
+        //notification
+        
+            $message="$clientname est modifier la  réservation de chambre $chambre_type ";
+            $hote->notify(new Reservations($message));
+           
+            return redirect()->route('reservations.index')->with("succes","la réservation a été modifier maintenant"); 
+        }
+        //redirect
     public function redirect(Request $request,$idchambre )
     {
         $user = auth()->user();
         $currency = "dzd";
-       $amount =$request->prix_total;
+        $amount =$request->prix_total;
     
         //   $amount=$request->prix_totale;
         
@@ -29,6 +147,7 @@ class ChargilyPayController extends Controller
             'date_debut' => $request->date_arrivee,
             'date_fin' => $request->date_depart,
             'nom_complet' => $request->name,
+            'canEval'=>"1",
             'idCarteNational' => $request->idCarteNationel,
             'addresse' => $request->adresse,
             'NumTelephone' => $request->numTel,
@@ -103,6 +222,26 @@ class ChargilyPayController extends Controller
                 if ($checkout) {
                     $metadata = $checkout->getMetadata();
                     $payment = ChargilyPayment::find($metadata['payment_id']);
+                    $reservation = Reservation::find($payment->reservations_id);
+           
+
+                    if (($metadata['type'] ?? '') === "update") {
+
+                     
+                        $reservation->update([
+                            'date_debut' => $metadata['date_debut'],
+                            'date_fin'   => $metadata['date_fin'],
+                            'nom_complet' =>$metadata['nom_complet'],
+                            'idCarteNational' =>$metadata['idCarteNational'],
+                            'addresse' =>$metadata['addresse'],
+                            'NumTelephone' =>$metadata['NumTelephone'],
+
+
+                        ]);
+                        $payment->update([
+                            'amount'=>$metadata['prixactuelle']
+                        ]);
+                    }
 
                     if ($payment) {
                         if ($checkout->getStatus() === "paid") {
@@ -113,30 +252,31 @@ class ChargilyPayController extends Controller
                             ///// Confirm your order
                             /////
                             //event
-$user = auth()->user();
+                            $payment->status = "paid";
+                            $payment->update();
+                        
+                            $res = Reservation::findOrFail($payment->reservations_id);
+                        
+                            $chambre = Chambre::findOrFail($res->chambres_id);
+                            $chambre->decrement('nombre_chambre', 1);
+                        
+                            $heberg = Heberg::findOrFail($chambre->Hebergs_id);
+                            $heberg->decrement('nombre_chambre', 1);
+                            
 
-// جيب reservation الصحيح (مثلاً من payment)
-$res = Reservation::findOrFail($payment->reservations_id);
+                            $clientname = $user->name;
 
-// chambre
-$chambre = Chambre::findOrFail($res->chambres_id);
-
-// hebergement
-$heb = Heberg::findOrFail($chambre->Hebergs_id);
-
-// hote
-$hote = User::findOrFail($heb->users_id);
-
-// الاسماء
-$hote_name = $hote->name;
-$clientname = $user->name;
 
 // broadcast event
-broadcast(new faitreservation(" a été réserver maintenant ", $clientname, $payment));
-$message="$clientname a été réserver maintenant ";
+broadcast(new faitreservation($clientname," a été réserver chambre ",$chambre->typeChambres));
+//notification
+$message="$clientname est réserver une chambre $chambre->typeChambres ";
+$hote->notify(new Reservations($message));
+   
+return redirect()->back()->with("succes","la réservation a été fait maintenant"); 
 
-// notification
-$hote->notify(new ReqHebNotification($message));
+
+
           
                             return response()->json(["status" => true, "message" => "Payment has been completed"]);
                         } else if ($checkout->getStatus() === "failed" or $checkout->getStatus() === "canceled") {

@@ -60,11 +60,15 @@ Route::get('/client/reservation/Heb/{idheb}/chambre/{idch}',[ReservationControll
 Route::post('/client/reservation/Heb/{idheb}/chambre/{idch}',[ReservationController::class,'store_reservation'])->name("Reservation.update");
 //modifier la réservation
 Route::get('/client/reservation/{idreservation}/edit',[ReservationController::class,'edit_reservation_show']);
-Route::post('/client/reservation/{idreservation}/edit',[ReservationController::class,'store_edit_reservation'])->name("Reservation.update");
+
+Route::post('chargilypay/edit/{reservation}',[ChargilyPayController::class,'store_edit_reservation'])->name("Reservation.update");
+
+//Route::post('/client/reservation/{idreservation}/edit',[ReservationController::class,'store_edit_reservation'])->name("Reservation.update");
 //anuller la réservation
 Route::get('/client/reservation/{idreservation}/delete',[ReservationController::class,'delete_reservation'])->name('Reservation.delete');
 
 //paiment
+//Route::post('chargilypay/redirect/{chambre}',[ChargilyPayController::class, "store_edit_reservation"])->name("chargilypay.redirect");
 Route::post('chargilypay/redirect/{chambre}', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
 Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
 Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
@@ -174,7 +178,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('chat', Chat::class)->name('chat');
+    Route::get('chat/user/{idUser}', Chat::class)->name('chat');
 });
 
 require __DIR__.'/auth.php';

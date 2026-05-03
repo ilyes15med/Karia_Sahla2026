@@ -52,7 +52,7 @@ $icons=[
                 </span>     
 
             
-            <a href="#" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+            <a href="/chat/autreuser/{{$heb->hote_id}}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
                 <i class="fa-solid fa-message"></i>
                 Chat
             </a>
