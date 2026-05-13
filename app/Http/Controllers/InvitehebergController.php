@@ -15,7 +15,7 @@ use App\Notifications\Reservations;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
-class HebergClientController extends Controller
+class InvitehebergController extends Controller
 {
     //
     public function index_Hebs(){
@@ -28,7 +28,7 @@ class HebergClientController extends Controller
         
       
         
-        return view('client.front-end.hébergements',compact('hebs','count_heb'));
+        return view('invité.front-end.hébergements',compact('hebs','count_heb'));
         
     }
     public function index_Hebs_home(){
@@ -38,11 +38,11 @@ class HebergClientController extends Controller
 
         $count_heb=count($hebs);
        // dd($count_heb,$hebs);
-        return view('client.front-end.home',compact('hebs','count_heb'));
+        return view('invité.front-end.home',compact('hebs','count_heb'));
         
     }
     public function index_Heb($idHeb){
-        $client=Auth()->user();
+      
         $heb=DB::table('Hebergs')
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','valide')
@@ -52,10 +52,7 @@ class HebergClientController extends Controller
         $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
         ->select('chambres.*')
         ->get();
-        $reservations=DB::table('reservations')
-        ->where('users_id',$client->id)
-        ->select('reservations.canEval as canEvalue')
-        ->first();
+        $reservations=null;
         $evaluations=DB::table('evaluations')
         ->join('users','evaluations.users_id','=','users.id')
         ->where('Hebergs_id',$idHeb)
@@ -68,12 +65,16 @@ class HebergClientController extends Controller
 
       
 
-        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client','evaluations','EvalTotale'));
+        return view('invité.front-end.HebShow',compact('heb','chambres','reservations','evaluations','EvalTotale'));
     }
     public function search(Request $req){
         $destination=$req->destination;
         $nombrePersonne =$req->adultes+$req->enfants;
-       
+        session([
+            'date_arrivee' => $req->date_arrivee,
+            'date_depart' => $req->date_depart,
+        ]);
+        
         $hebs=DB::table('Hebergs')
         ->join('chambres','Hebergs.id',"=",'chambres.Hebergs_id')
         ->where('Hebergs.status','valide')
@@ -86,14 +87,13 @@ class HebergClientController extends Controller
      
         $count_heb=count($hebs);
         
-        return view('client.front-end.search',compact('hebs','count_heb'));
+        return view('invité.front-end.search',compact('hebs','count_heb'));
 
 
     }
     public function filter(Request $req){
         $query=Heberg::query()->withAvg('evaluations','nombre_etoile');
        
-
         if($req->type){
 
             $query->where('typeHeberg',$req->type);
@@ -120,21 +120,15 @@ class HebergClientController extends Controller
          
            
         }
-       
 
         if ($req->stars) {
-                $query->having('evaluations_avg_nombre_etoile', '<=', $req->stars);
-        }
-         
-           
+            $query->having('evaluations_avg_nombre_etoile', '<=', $req->stars);
+    }
      
-     
-        
         $hebs=$query->get();
-        //dd($hebs);
         $count_heb=count($hebs);
 
-        return view('client.front-end.result-filter',compact('hebs','count_heb'));
+        return view('invité.front-end.result-filter',compact('hebs','count_heb'));
 
 
 

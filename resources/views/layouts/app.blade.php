@@ -6,7 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="./output.css" rel="stylesheet">
+       
 
 
         <!-- Fonts -->
@@ -146,7 +147,8 @@
                 });
                 }
                  //role
-                 const role="{{ auth()->user()->role }}";
+                 const role = "{{ auth()->check() ? auth()->user()->role : '' }}";
+               
                 // Echo
                 document.addEventListener('DOMContentLoaded', () => {
                     if (window.Echo) {

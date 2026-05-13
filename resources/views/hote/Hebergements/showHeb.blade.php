@@ -197,15 +197,9 @@ $icons=[
                                 
                             </td>
                             <td class="px-4 py-3">
-                                <input 
-                                type="number"
-                                name="Quantite"
-                                min="1"
-                                max="{{ $chambre->nombre_chambre }}"
-                                value="1"
-                                class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                                {{ $chambre->nombre_chambre }}
                             </td>
+                           
                             <td class="px-4 py-3">{{$chambre->prix}}</td>
                             <td class="px-4 py-3 text-center flex justify-center gap-3">
         
@@ -248,7 +242,7 @@ $icons=[
             
             
             <span> {{$heb->nombre_chambre}} chambre </span> 
-            <span> {{$heb->nombre_lit}} lits </span> 
+           
 
         </div>   
 

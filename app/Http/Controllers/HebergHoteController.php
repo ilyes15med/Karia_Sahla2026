@@ -295,9 +295,9 @@ class HebergHoteController extends Controller
        }
 
    
-        //nombre chambre dans DB hebergs
+        //nombre chambre dans table hebergs
         $NbrChHeb=$heb->nombre_chambre;
-        //nombre de chambre dans DB chambres
+        //nombre de chambre dans table chambres
         $N1=$chambre->nombre_chambre;
 
         //nombre de chambre dans requete

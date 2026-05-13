@@ -14,8 +14,7 @@
                     <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">appartement</a>
                     <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">dortoire</a>
                     <a class="p-2  rounded-xl bg-slate-200 hover:bg-slate-400" href="">hotel</a>
-                 
-                 
+                
                 </div>
               -->
 
@@ -24,7 +23,7 @@
                     <p class="text-xl "> explorer notre sélection hébergement</p>
                     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       @foreach ($hebs as $heb)
-                          <a href="/client/Hebergement/{{$heb->id}}" class="bg-white rounded-2xl shadow-md overflow-hidden ">
+                          <a href="/hebergement/{{$heb->id}}" class="bg-white rounded-2xl shadow-md overflow-hidden ">
                                 <div class="space-y-0.5">
                                 @php
                                   $image= json_decode($heb->images)   
@@ -47,7 +46,7 @@
                                                            
                                                         </p> 
                                                         <p class="p-1 text-sm text-black line-clamp-3 text-bold">
-                                                            prix  {{ $heb->prix }} DZD par nuit   <i class="fa-solid fa-star"></i> 0
+                                                            prix  {{ $heb->prix }} DZD par nuit   <i class="fa-solid fa-star"></i> {{ $heb->evaluations_avg_nombre_etoile }}
                                                          
                                                         </p> 
                                                    

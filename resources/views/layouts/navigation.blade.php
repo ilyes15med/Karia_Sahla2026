@@ -1,12 +1,12 @@
 @php
 
-    if(Auth::user()->role == 'admin'){
+    if(optional(Auth::user())->role == 'admin'){
         $dashboard = route('admin.dashboard');
-    }elseif(Auth::user()->role == 'client'){
+    }elseif(optional(Auth::user())->role == 'client'){
         $dashboard = route('client.space');
-    }elseif(Auth::user()->role == 'hote'){
+    }elseif(optional(Auth::user())->role == 'hote'){
         $dashboard = route('hote.dashboard');
-    }elseif(Auth::user()->role == 'agent'){
+    }elseif(optional(Auth::user())->role == 'agent'){
         $dashboard = route('agent.dashboard');
     }
     else{
@@ -18,7 +18,7 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between items-center h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -28,9 +28,27 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <!--nav bar client -->
-               
-                @auth
+                @guest
+
+                <x-nav-link href="/">
+                    Accueil
+                </x-nav-link>
+                
+                <x-nav-link href="/hebergements">
+                    hébergements
+                </x-nav-link>
+
+                <x-nav-link href="/about-us">
+                   A propos
+                </x-nav-link>
+
+                    
+                @endguest
+
+
+ 
+       
+            @auth
                
                 
                
@@ -204,16 +222,23 @@
 
                 @endif
 
-                @endauth
+               
+            @endauth   
                 
             </div>
-         
+          
+
+            <!--Right auth -->
+       
             <!-- Settings Dropdown -->
+        @auth
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                          
+                                 <div>{{ Auth::user()->name }}</div>
+                           
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -241,7 +266,8 @@
                     </x-slot>
                 </x-dropdown>
             </div>
-
+      
+                          
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
@@ -287,4 +313,33 @@
             </div>
         </div>
     </div>
+    @endauth
+    <div class="flex justify-end space-x-4">
+        @guest
+    
+    <a
+        href="{{ route('login') }}"
+         class="p-2 rounded-xl bg-cyan-600 text-white hover:bg-cyan-700"
+
+          >
+        Log in
+    </a>
+
+    @if (Route::has('register'))
+        <a
+            href="{{ route('register') }}"
+           
+            class="font-bold"
+
+           >   
+           Register
+        </a>
+    @endif
+    @endguest
+    </div>
+    
+
+       
+    
 </nav>
+

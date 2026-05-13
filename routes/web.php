@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HebergController;
 use App\Http\Controllers\HebergHoteController;
+use App\Http\Controllers\InvitehebergController;
 use App\Http\Controllers\HebergClientController;
 use App\Http\Controllers\ChargilyPayController;
 use App\Http\Controllers\ReservationController;
@@ -15,39 +16,33 @@ use App\Livewire\Chat;
 use App\Livewire\Chatbot;
 
 
+
 //invite
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        if(Auth::user()->role='client'){  
-          return redirect('/client/espace');
-        }
-        if(Auth::user()->role='admin'){  
-            return redirect('/admin/dashboard');
-        }
-          if(Auth::user()->role='hote'){  
-            return redirect('/hote/dashboard');;
-        }
-    }
-    return view('invité.front-end.home');
-})->name('invite');
-Route::get('/Hebergement', function () {
-    return view('invité.front-end.HebShow');
-});
-Route::get('/Hebergements', function () {
-    return view('invité.front-end.hébergements');
+Route::get('/',[InvitehebergController::class,'index_Hebs_home'] )->name('invite');
+
+Route::get('/hebergements',[InvitehebergController::class,'index_Hebs']);
+Route::get('/hebergement/{id}',[InvitehebergController::class,'index_Heb']);
+
+Route::get('/about-us',function(){
+    return view('invité.front-end.about-us');
 });
 
+Route::get('/search',[InvitehebergController::class,'search']);
+Route::get('/filter-hebergement',[InvitehebergController::class,'filter']);
 
 //require __DIR__.'/invite.php';
 
 //client
 
+Route::middleware('auth')->group(function () {
+Route::get('/client/filter-heberg',[HebergClientController::class,'filter']);
+Route::get('/client/search',[HebergClientController::class,'search']);
 
-Route::get('/client/espace',[HebergClientController::class,'index_Hebs_home'])->middleware(['auth'])->name('client.space');
+Route::get('/client/espace',[HebergClientController::class,'index_Hebs_home'])->name('client.space');
 
 Route::get('/client/hebergements',[HebergClientController::class,'index_Hebs']);
-Route::get('/client/Hebergement/{id}',[HebergClientController::class,'index_Heb'])->middleware(['auth']);
+Route::get('/client/Hebergement/{id}',[HebergClientController::class,'index_Heb']);
 
 Route::get('/client/message', function () {
     return view('client.front-end.message');
@@ -72,11 +67,10 @@ Route::get('/client/reservation/{idreservation}/delete',[ReservationController::
 Route::post('chargilypay/redirect/{chambre}', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
 Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
 Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
-Route::get('/client/search', function () {
-    return view('client.front-end.search');
-});
-Route::get('/client/search',[HebergClientController::class,'search'])->middleware(['auth']);
-Route::get('/filter-heberg',[HebergClientController::class,'filter']);
+//Route::get('/client/search', function () {
+  //  return view('client.front-end.search');
+//});
+
 Route::get('/client/reservation/Heb', function () {
     return view('client.front-end.Réservation.réserver');
 });
@@ -86,7 +80,7 @@ Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTi
     ->name('reservation.ticket');
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
 //evaluation
-Route::post('/client/rating/heb/{id}',[ratingController::class,'store_rating'])->middleware(['auth'])->name('rating.added');
+Route::post('/client/rating/heb/{id}',[ratingController::class,'store_rating'])->name('rating.added');
   //edit
 Route::get('/client/rating/heb/{idh}/rating/{ideval}/edit',[ratingController::class,'show_edit_rating'])->name('update_rating.show');
 Route::put('/client/rating/heb/{idh}/rating/{ideval}/edit',[ratingController::class,'store_edit_rating'])->name('update.rating');
@@ -103,6 +97,9 @@ Route::post('/invoke-agent',[AiAgentAssistant::class,'invoke_agent']);
 */
 
 Route::livewire('/Ai/assistant','ai-assistant.chat-ai');
+
+});
+
 
 
 //hote
@@ -172,13 +169,15 @@ Route::get('/agent/dashboard/Hebergs/{id}/show',[HebergController::class,'index_
 
 //client
 //require __DIR__.'/client.php';
-
+ 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('chat/user/{idUser}', Chat::class)->name('chat');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); 
+    Route::get('chat/user/{idUser}',Chat::class);
+    Route::get('chat',Chat::class)->name('chat');
+  
 });
 
 require __DIR__.'/auth.php';

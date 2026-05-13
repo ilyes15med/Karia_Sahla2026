@@ -51,8 +51,8 @@ $icons=[
                      {{$heb->hote_name}}
                 </span>     
 
-            
-            <a href="/chat/autreuser/{{$heb->hote_id}}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+               
+            <a href="/chat/user/{{$heb->hote_id}}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
                 <i class="fa-solid fa-message"></i>
                 Chat
             </a>
@@ -61,9 +61,9 @@ $icons=[
         <!--Information sur le chambre-->
         <div class="mb-4 space-y-4 text-gray-700">
            
-            @if ($heb->nombre_chambre==0 && $heb->nombre_lit==0)
+            @if ($heb->nombre_chambre==0 )
             <span>aucun chambre</span>
-            <span>aucun lit</span>
+           
                 
             @else
                 

@@ -73,7 +73,7 @@
                 <span class="text-gray-700">
                     Hébergé par <span class="font-semibold"> {{$heb->hote_name}}</span>
                 </span>
-                @if(auth()->user()->role == 'client')   
+                @if(optional(auth()->user())->role != 'hote' && optional(auth()->user())->role != 'agent')  
                     <a href="/chat/user/{{$heb->hote_id}}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
                         <i class="fa-solid fa-message"></i>
                         Chat
@@ -152,7 +152,7 @@
                                 </td>
                                
                                 <td class="px-4 py-3 text-center flex justify-center gap-3">
-                                    @if(auth()->user()->role == 'hote')   
+                                    @if(optional(auth()->user())->role == 'hote')   
                              
                                     <!-- Edit -->
                                     <button onclick="update({{ $heb->id }},{{ $chambre->id }})"  class="text-blue-600 hover:text-blue-800">
@@ -165,8 +165,7 @@
                                     </button>
                                     @endif
 
-                                    @if(auth()->user()->role == 'client')  
-                                
+                                    @if(optional(auth()->user())->role != 'hote' && optional(auth()->user())->role != 'agent')
                                     <a class="p-1 bg-green-700 text-white m-1 rounded-lg shadow-sm " href="/client/reservation/Heb/{{ $heb->id }}/chambre/{{$chambre->id}}">
                                         réserver
                                     </a>
@@ -205,7 +204,7 @@
           
 <div class="mb-4 space-y-4 text-gray-700">
                 <!--icon add chambre-->
-     @if(auth()->user()->role == 'hote')              
+     @if(optional(auth()->user())->role == 'hote')              
     <button onclick="addchambre()" 
        class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
         <!-- Icon + Texte -->
@@ -309,7 +308,7 @@
                         <i class="fa-solid fa-star"></i> {{$evaluation->nombre_etoile}}
                         
                     </div>
-                    @if(Auth()->user()->id==$evaluation->id_client)
+                    @if(optional(Auth()->user())->id==$evaluation->id_client)
                     
                     <div class="relative inline-block text-left">
 

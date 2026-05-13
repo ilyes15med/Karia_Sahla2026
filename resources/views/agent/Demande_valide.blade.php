@@ -30,8 +30,7 @@
                             <th class="px-4 py-2 border">Type</th>
                             <th class="px-4 py-2 border">Description</th>
                             <th class="px-4 py-2 border">Service</th>
-                            <th class="px-4 py-2 border">Nombre chambre</th>
-                            <th class="px-4 py-2 border">Nombre lit</th>
+                           
                          
                             </tr>
                         </a>    
@@ -58,8 +57,8 @@
                             <td class="p-2">{{$Heberg->Description}}</td>
                             
                             <td class="p-2">{{$Heberg->service}}</td>
-                            <td class="p-2">{{$Heberg->nombre_chambre}}</td>
-                            <td class="p-2">{{$Heberg->nombre_lit}}</td>
+                          
+                         
                           
                         </tr>
                     @endforeach

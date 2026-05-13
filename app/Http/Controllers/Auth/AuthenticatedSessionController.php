@@ -31,20 +31,20 @@ class AuthenticatedSessionController extends Controller
     $user = Auth::user();
     
     if ($user->role == 'admin') {
-        return redirect()->route('admin.dashboard');
+        return redirect()->inteded(route('admin.dashboard'));
     }
     if ($user->role == 'client') {
-        return redirect()->route('client.space');
+        return redirect()->intended(route('client.space'));
     }   
     if ($user->role == 'host') {
-        return redirect()->route('host.dashboard');
+        return redirect()->intended(route('host.dashboard'));
     }
     
     if ($user->role == 'agent') {
-        return redirect()->route('agent.dashboard');
+        return redirect()->intended(route('agent.dashboard'));
     }
     if ($user->role == 'hote') {
-        return redirect()->route('hote.dashboard');
+        return redirect()->intended(route('hote.dashboard'));
     }
     return redirect()->route('dashboard');
 }

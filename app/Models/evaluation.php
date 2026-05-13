@@ -11,4 +11,9 @@ class evaluation extends Model
             'commentaire',
             'Hebergs_id',
             'users_id'];
+
+    public function hebergement(){
+
+        return $this->belongsTo(Heberg::class,'Hebergs_id');
+    }        
 }

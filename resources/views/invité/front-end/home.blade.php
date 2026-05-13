@@ -1,4 +1,8 @@
-@include('invité.front-end.header')
-@include('invité.front-end.search')
-@include('invité.front-end.hébergements')
-@include('invité.front-end.footer')
+<x-app-layout>
+
+    @include('partials.search-form')
+    @include('partials.hébergement.Hebs')
+    @include('partials.about-us')
+    
+
+</x-app-layout>

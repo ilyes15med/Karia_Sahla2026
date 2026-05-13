@@ -33,7 +33,7 @@
                          
                             <th class="px-4 py-2 border">Service</th>
                             <th class="px-4 py-2 border">Nombre chambre</th>
-                            <th class="px-4 py-2 border">Nombre lit</th>
+                           
                          
                             <th class="px-4 py-2 border text-center"></th>
                             </tr>
@@ -61,7 +61,7 @@
                             
                             <td class="p-2">{{$Heberg->service}}</td>
                             <td class="p-2">{{$Heberg->nombre_chambre}}</td>
-                            <td class="p-2">{{$Heberg->nombre_lit}}</td>
+                            
                             <td class="">
                                 <!-- Statistique -->
     <button 

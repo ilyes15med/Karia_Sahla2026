@@ -17,13 +17,7 @@ class Chat extends Component
     public $viewMode = "chats"; // chats or users
     public $idUser;
 
-    public function chatparbutton($userId){
-        $userconnecter=auth()->user();
-        $chat=chat->getOrCreateChatBetweenUsers($userconnecter,$userId);
-
-
-
-    }
+   
 
     public function getListeners()
     {
@@ -100,7 +94,12 @@ class Chat extends Component
     
 
         $this->selectChat($chat->id);
-        $this->toggleViewMode();
+       // $this->toggleViewMode();
+         // الرجوع إلى وضع الشات
+    $this->viewMode = 'chats';
+
+    // تحديث القائمة
+    $this->loadChats();
     }
 
     public function selectChat($chatId)
@@ -160,23 +159,17 @@ class Chat extends Component
         if($data['chatId'] === $this->selectedChat->id) {
             $this->loadMessages();
         }
-    }   
+    }  
+   
 
-    public function mount()
-    {
-        $user=$this->idUser;
-        
-        if($user){
+    public function mount($idUser = null)
+{
+    $this->loadChats();
 
-            $this->selectUser($user);
-
-        }
-       
-       
-        $this->loadChats();
-
-
+    if($idUser){
+        $this->selectUser($idUser);
     }
+}
 
     public function render()
     {

@@ -20,7 +20,7 @@ class Heberg extends Model
         'longitude',
         'service',
         'Description',
-      // 'nombre_chambre',
+        'nombre_chambre',
        //'nombre_lit',
         'status',
         'users_id',
@@ -31,5 +31,9 @@ class Heberg extends Model
     }
     public function hote(){
         $this->belongsTo(User::class);
+    }
+    public function evaluations(){
+
+        return $this->hasMany(evaluation::class,'Hebergs_id');
     }
 }
