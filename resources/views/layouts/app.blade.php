@@ -189,6 +189,122 @@
                     }
                 });
             </script>
+            
+          
+            <footer class="bg-zinc-900 text-white mt-10">
+                @if(optional(auth()->user())->role !='agent' && optional(auth()->user())->role !='hote')
+
+                <div class="max-w-7xl mx-auto px-6 py-10">
+                   
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                       
+            
+                        <!-- Logo / Description -->
+                        <div>
+                            <h2 class="text-2xl font-bold text-emerald-400">
+                                {{ config('app.name') }}
+                            </h2>
+            
+                            <p class="mt-3 text-zinc-400 text-sm leading-6">
+                                Plateforme de réservation d’hébergements permettant
+                                aux clients de trouver facilement des chambres,
+                                hôtels et hébergements touristiques.
+                            </p>
+                        </div>
+            
+                        <!-- Navigation -->
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">
+                                Navigation
+                            </h3>
+            
+                            <ul class="space-y-2 text-zinc-400">
+                                @if(optional(auth()->user())->role !='client')
+
+            
+                                <li>
+                                    <a href="/" class="hover:text-white transition">
+                                        Accueil
+                                    </a>
+                                </li>
+            
+                                <li>
+                                    <a href="/hebergements" class="hover:text-white transition">
+                                        Hébergements
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/about-us" class="hover:text-white transition">
+                                        about-us
+                                    </a>
+                                </li>
+            
+                                @else
+                                <li>
+                                    <a href="/client/espace" class="hover:text-white transition">
+                                        Accueil
+                                    </a>
+                                </li>
+            
+                                <li>
+                                    <a href="/client/hebergements" class="hover:text-white transition">
+                                        Hébergements
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/client/about-us" class="hover:text-white transition">
+                                        about-us
+                                    </a>
+                                </li>
+
+                                @endif
+            
+                            </ul>
+                        </div>
+                        
+                        <!-- Contact -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">
+                                Contact
+                            </h3>
+            
+                            <ul class="space-y-3 text-zinc-400 text-sm">
+            
+                                <li>
+                                    <i class="fa-solid fa-envelope mr-2"></i>
+                                    support@reservation.com
+                                </li>
+            
+                                <li>
+                                    <i class="fa-solid fa-phone mr-2"></i>
+                                    +213 000 00 00 00
+                                </li>
+            
+                                <li>
+                                    <i class="fa-solid fa-location-dot mr-2"></i>
+                                    Tlemcen, Algérie
+                                </li>
+            
+                            </ul>
+                        </div>
+            
+                    </div>
+                          
+                    @endif
+                
+                   
+            
+                </div>
+                <!-- Bottom -->
+                    <div class="border-t border-zinc-700 mt-8 pt-5 text-center text-zinc-500 text-sm">
+                        © {{ date('Y') }} {{ config('app.name') }}.
+                    </div>
+            </footer>
+             
+          
        
   @livewireScripts
     </body>

@@ -43,6 +43,9 @@ Route::get('/client/espace',[HebergClientController::class,'index_Hebs_home'])->
 
 Route::get('/client/hebergements',[HebergClientController::class,'index_Hebs']);
 Route::get('/client/Hebergement/{id}',[HebergClientController::class,'index_Heb']);
+Route::get('/client/about-us',function(){
+  return view('client.front-end.about-us');
+});
 
 Route::get('/client/message', function () {
     return view('client.front-end.message');

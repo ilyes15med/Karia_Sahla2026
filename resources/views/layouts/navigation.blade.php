@@ -66,7 +66,7 @@
                                 hébergements
                             </x-nav-link>
                             
-                            <x-nav-link href="/">
+                            <x-nav-link href="/client/about-us">
                                 A propos
                             </x-nav-link>
                             <x-nav-link href="/client/search">
