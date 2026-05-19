@@ -96,7 +96,7 @@
                             <tr>
                                 <th class="px-4 py-3">Type de chambre</th>
                                 <th class="px-4 py-3">Prix (DA)</th>
-                                <th class="px-4 py-3">Quantité</th>
+                                <th class="px-4 py-3">Quantité totale </th>
                                 
                                 <th class="px-4 py-3 text-center"></th>
                             </tr>
@@ -140,16 +140,10 @@
                                 </td>
                                 <td class="px-4 py-3">{{$chambre->prix}}</td>
                                 @if ($chambre->nombre_chambre!=0)
-                                <td class="px-4 py-3">
-                                    <input id="quantity"
-                                    type="number"
-                                    name="Quantite"
-                                    min="1"
-                                    max="{{ $chambre->nombre_chambre }}"
-                                    value="1"
-                                    class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                </td>
+                                    <td class="px-4 py-3">
+                                        {{ $chambre->nombre_chambre }}
+                                   
+                                    </td>
                                
                                 <td class="px-4 py-3 text-center flex justify-center gap-3">
                                     @if(optional(auth()->user())->role == 'hote')   
@@ -219,7 +213,7 @@
                 
                 
                 <span> {{$heb->nombre_chambre}} chambre </span> 
-                <span> {{$heb->nombre_lit}} lits </span> 
+             
     
 </div>   
     
@@ -458,7 +452,7 @@
                        
             
                       
-            
+                   
                              <!-- Services -->
                              <p class="text-lg mt-4">Sélectionnez les services :</p>
                              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">

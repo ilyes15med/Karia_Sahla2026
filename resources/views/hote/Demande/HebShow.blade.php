@@ -10,6 +10,7 @@ $icons=[
 
 
 ];
+
 @endphp
 
     <div class="flex min-h-screen">
@@ -47,10 +48,7 @@ $icons=[
                         </span>
                     </div>
     
-                    <div class="mb-4 space-y-2 text-gray-700">
-                        <span>{{$heb->nombre_chambre}} chambre</span><br>
-                        <span>{{$heb->nombre_lit}} lits</span>
-                    </div>   
+                   
                 </div>
     
                 <!-- Description -->
@@ -77,27 +75,36 @@ $icons=[
                     <img id="modalImage" class="max-w-3xl rounded-lg">
                 </div>
     
+@php
+    $services = json_decode($heb->service, true);
+            
+                if (!is_array($services)) {
+                    $services = [];
+                }
+@endphp
                 <!-- équipements -->
-                <div class="mt-4 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
-                    <span class="font-bold">équipement :</span>
-                     
-                    <div class="space-x-4">
-                        @foreach (json_decode($heb->service) as $service)
-                        <span class="mr-3">
-                            <i class="fa-solid {{ $icons[$service] }}"></i>
-                            {{ $service }}
-                        </span>
-                       
+<div class="mt-4 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
+    <span class="font-bold">équipement :</span>
 
-                            
-                        @endforeach
+    <div class="space-x-4">
 
+        @forelse ($services as $service)
 
+            <span class="mr-3">
+                <i class="fa-solid {{ $icons[$service] ?? 'fa-circle' }}"></i>
+                {{ $service }}
+            </span>
 
+        @empty
 
-                       
-                    </div>    
-                </div>
+            <span class="mr-3">
+                aucun service
+            </span>
+
+        @endforelse
+
+    </div>
+</div>
     
                 <!-- map -->
                 <div id="map" class="w-full h-96 mt-4 bg-slate-100 rounded-xl p-4"></div>

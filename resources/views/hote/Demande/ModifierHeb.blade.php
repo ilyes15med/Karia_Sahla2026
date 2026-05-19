@@ -37,7 +37,7 @@
                     <div>
                         <label class="block mb-1">Type hébergement</label>
                         <select id="type_Heb" name="type_Heb" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->typeHeberg }}" required>
-                           
+                            <option value="">-- Sélectionnez le type --</option>
                             <option value="Hotel">Hôtel</option>
                             <option value="Appartement">Appartement</option>
                             <option value="Maison">Maison</option>
@@ -52,20 +52,7 @@
                        
 
                     </div>
-                <!--
-
-                    <div id="chambre_lit_block" class="hidden grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block mb-1">Nombre des chambres</label>
-                            <input type="text" id="Nmbr_chambres" name="Nmbr_chambres" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->nombre_chambre }}" required/>
-                        </div>
-                        <div>
-                            <label class="block mb-1">Nombre des lits</label>
-                            <input type="text" id="Nmbr_lits" name="Nmbr_lits" class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->nombre_lit }}" required/>
-                        </div>
-                    </div>
-                -->
-
+               
 
                     <div>
                        <!-- Wilaya -->
@@ -151,7 +138,7 @@
                 </div>
                 <div>
                     <label class="block mb-1">Images de l'hébergement</label>
-                    <input type="file" name="images[]" multiple class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->images }}" >
+                    <input type="file" name="images[]" multiple class="w-full border rounded-lg px-3 py-2" value="{{ $Heb->images }}" required >
                 </div>
 
                     <!-- Submit Button -->

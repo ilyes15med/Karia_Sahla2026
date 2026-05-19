@@ -359,20 +359,53 @@ $icons=[
                   <!-- Prix -->
                   <div>
                     <label class="block mb-1">Prix par nuit</label>
-                    <input type="number" name="prix" class="w-full border rounded-lg px-3 py-2" min="0" required/>
+                    <input type="number" name="prix" class="w-full border rounded-lg px-3 py-2" min="0" placeholder="prix dzd" required/>
                 </div>
         
                 <div class="space-y-4">
                     <!-- Nombre de la chambre -->
                     <div>
                         <label class="block mb-1">Nombre des chambres</label>
-                        <input type="text" name="nombre_chambre" class="w-full border rounded-lg px-3 py-2" required/>
+                        <input type="text" name="nombre_chambre" class="w-full border rounded-lg px-3 py-2" placeholder="Nombre totale de chambre dans l'hébergement " required/>
                     </div>
         
                     <!-- Nombre de lits -->
                     <div>
-                        <label class="block mb-1">Nombre de lits pour chaque chambre</label>
-                        <input type="number" name="nombre_lit" class="w-full border rounded-lg px-3 py-2" min="1" required/>
+                        <label class="block mb-1">Nombre de lits </label>
+                        <input type="number" name="nombre_lit" class="w-full border rounded-lg px-3 py-2" placeholder="Nombre de lits pour chaque chambre" min="1" required/>
+                    </div>
+                    <!-- taxe -->
+                    <div>
+                        <label class="block mb-1">taxe</label>
+                        <input type="number" name="taxe" class="w-full border rounded-lg px-3 py-2" min="0" max="100" placeholder="ex: 0% est aucun taxe " required/>
+                    </div>
+                     <!-- Annulation -->
+                     <div>
+                        <div>
+                            <label class="block mb-1">annulation</label>
+                            <input type="number" name="annulation" class="w-full border rounded-lg px-3 py-2"  min="0" max="100" placeholder="ex: 100% est frais annulation "  required/>
+                        </div>
+                       
+                    
+                    </div>
+
+                     <!-- obligerpayée? -->
+                    <div>
+                        <label class="block mb-1">payée</label>
+                        <select name="payment">
+                        <option value="pending">Paiement à l'arrivée </option>
+                        <option value="paid ">payment</option>
+                        </select>
+                    </div>
+                    <!--code promo-->
+
+                    <div>
+                        <div>
+                            <label class="block mb-1">code promo</label>
+                            <input type="text" name="code_Promo" class="w-full border rounded-lg px-3 py-2"   />
+                        </div>
+                       
+                    
                     </div>
         
                    

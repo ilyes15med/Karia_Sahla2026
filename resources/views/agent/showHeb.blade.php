@@ -33,7 +33,8 @@ $icons=[
            {{$heb->nomHeberg}}
         </h1>
 
-        <div class="flex items-center gap-2 text-gray-600 mt-1">
+        <div class="flex items-center gap-2 text-gray-600 mt-1"> 
+            <span>{{$heb->typeHeberg}}</span>
             <i class="fa-solid fa-star text-yellow-500"></i>
             <span>0</span>
             <span class="text-gray-400">•</span>
@@ -69,7 +70,7 @@ $icons=[
                 
            
             <span> {{$heb->nombre_chambre}} chambre </span> 
-            <span> {{$heb->nombre_lit}} lits </span> 
+           
             @endif
         </div>   
 
@@ -107,27 +108,39 @@ $icons=[
         <img id="modalImage" class="max-w-3xl rounded-lg">
     </div>
 
-    <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
-
-        <span class="font-bold">équipement :</span>
-        <div class="space-x-4">
-            @foreach (json_decode($heb->service) as $service)
-                        <span class="mr-3">
-                            <i class="fa-solid {{ $icons[$service] }}"></i>
-                            {{ $service }}
-                        </span>
-                       
-
-                            
-            @endforeach
         
+@php
+$services = json_decode($heb->service, true);
+        
+            if (!is_array($services)) {
+                $services = [];
+            }
+@endphp
+            <!-- équipements -->
+<div class="mt-4 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
+<span class="font-bold">équipement :</span>
 
-         
-           
-      
+<div class="space-x-4">
 
-        </div>    
-    </div>
+    @forelse ($services as $service)
+
+        <span class="mr-3">
+            <i class="fa-solid {{ $icons[$service] ?? 'fa-circle' }}"></i>
+            {{ $service }}
+        </span>
+
+    @empty
+
+        <span class="mr-3">
+            aucun service
+        </span>
+
+    @endforelse
+
+</div>
+</div>
+
+ 
    <!--map-->
     <div id="map" class="w-full h-96 mt-4 text-gray-700 bg-slate-100 rounded-xl p-4"></div>
   

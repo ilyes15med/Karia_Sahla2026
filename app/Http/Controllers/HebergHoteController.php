@@ -48,8 +48,7 @@ class HebergHoteController extends Controller
             'longitude' => $request->Longitude,
             'service' => json_encode($request->services),
             'Description' => $request->description,
-            'nombre_chambre' => $request->Nmbr_chambres,
-            'nombre_lit' => $request->Nmbr_lits,
+           
             'status' => 'en cours',
             'users_id' =>$request->id,
             'images'=>json_encode($images)
@@ -229,6 +228,7 @@ class HebergHoteController extends Controller
 
 
     }
+
     public function chambre_added(Request $req,$idHeb){
         $images=[];
       
@@ -250,7 +250,12 @@ class HebergHoteController extends Controller
             'services'=>json_encode($req->services),
             'nombre_lit'=>$req->nombre_lit,
             'nombre_chambre'=>$req->nombre_chambre,
+            'code_promo'=>$req->code_Promo,
+            'taxe'=>$req->taxe,
+            'anullation'=>$req->annulation,
+            'payment'=>$req->payment,
             'images_chambres'=>json_encode($images),
+            
             'Hebergs_id'=>$idHeb
 
 
@@ -259,6 +264,7 @@ class HebergHoteController extends Controller
         $heb=Heberg::findOrFail($idHeb);
         $nombreChambre_precedent=$heb->nombre_chambre;
         $nombrech= (int)$nombreChambre_precedent+(int)$req->nombre_chambre;
+      //  dd($heb,$nombreChambre_precedent,$nombrech);
      
      
 

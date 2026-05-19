@@ -44,7 +44,7 @@ class ChargilyPayController extends Controller
         
         if($start<=$now){// 24h
                 
-            return redirect()->route('reservations.index')->with("succes","impossible modifier maintenant"); 
+            return redirect()->route('reservations.index')->with("succes","La modification n'est plus possible après le début de la réservation"); 
         
         }   
                 $newprix=(int)$request->prix_total;
@@ -137,6 +137,7 @@ class ChargilyPayController extends Controller
         //redirect
     public function redirect(Request $request,$idchambre )
     {
+       
         $user = auth()->user();
         $currency = "dzd";
         $amount =$request->prix_total;
@@ -154,7 +155,8 @@ class ChargilyPayController extends Controller
             'users_id' => $user->id, // utilisateur connecté/client
             'chambres_id' => $idchambre ,
         ]);
-    if($reservation){
+       
+   
 
        
 
@@ -165,7 +167,8 @@ class ChargilyPayController extends Controller
             "currency" => $currency,
             "amount"   => $amount,
         ]);
-    }
+        //dd("maintennat je suis en redirect et je crée la réservation et payment ");
+    
         if ($payment) {
             $checkout = $this->chargilyPayInstance()->checkouts()->create([
                 "metadata" => [
@@ -177,8 +180,11 @@ class ChargilyPayController extends Controller
                 "description" => "Payment ID={$payment->id}",
                 "success_url" => route("chargilypay.back"),
                 "failure_url" => route("chargilypay.back"),
-                "webhook_endpoint" => route("chargilypay.webhook_endpoint"),
+               // "webhook_endpoint" => route("chargilypay.webhook_endpoint"),
+                "webhook_endpoint" =>"https://seisable-prerectal-anisa.ngrok-free.dev/chargilypay/webhook",
+               // "webhook_endpoint" => env('CHARGILY_WEBHOOK_URL', 'https://example.com/webhook'),
             ]);
+        
             if ($checkout) {
                 return redirect($checkout->getUrl());
             }
@@ -209,95 +215,85 @@ class ChargilyPayController extends Controller
     /**
      * This action will be processed in the background
      */
-    public function webhook()
-    {
-        $webhook = $this->chargilyPayInstance()->webhook()->get();
-        if ($webhook) {
-            $user = auth()->user();
-            //
-            $checkout = $webhook->getData();
-            //check webhook data is set
-            //check webhook data is a checkout
-            if ($checkout and $checkout instanceof \Chargily\ChargilyPay\Elements\CheckoutElement) {
-                if ($checkout) {
-                    $metadata = $checkout->getMetadata();
-                    $payment = ChargilyPayment::find($metadata['payment_id']);
-                    $reservation = Reservation::find($payment->reservations_id);
-           
 
-                    if (($metadata['type'] ?? '') === "update") {
+     public function webhook()
+     {
+         $webhook = $this->chargilyPayInstance()->webhook()->get();
+     
+         if ($webhook) {
+             $checkout = $webhook->getData();
+     
+             if ($checkout && $checkout instanceof \Chargily\ChargilyPay\Elements\CheckoutElement) {
+     
+                 $metadata    = $checkout->getMetadata();
+                 $payment     = ChargilyPayment::find($metadata['payment_id']);
+     
+                 if (!$payment) {
+                     return response()->json(["status" => false, "message" => "Payment not found"], 404);
+                 }
+     
+                 $reservation = Reservation::find($payment->reservations_id);
+
+                 //modiifre la réservation 
+                 if (($metadata['type'] ?? '') === "update") {
 
                      
-                        $reservation->update([
-                            'date_debut' => $metadata['date_debut'],
-                            'date_fin'   => $metadata['date_fin'],
-                            'nom_complet' =>$metadata['nom_complet'],
-                            'idCarteNational' =>$metadata['idCarteNational'],
-                            'addresse' =>$metadata['addresse'],
-                            'NumTelephone' =>$metadata['NumTelephone'],
+                    $reservation->update([
+                        'date_debut' => $metadata['date_debut'],
+                        'date_fin'   => $metadata['date_fin'],
+                        'nom_complet' =>$metadata['nom_complet'],
+                        'idCarteNational' =>$metadata['idCarteNational'],
+                        'addresse' =>$metadata['addresse'],
+                        'NumTelephone' =>$metadata['NumTelephone'],
 
 
-                        ]);
-                        $payment->update([
-                            'amount'=>$metadata['prixactuelle']
-                        ]);
-                    }
-
-                    if ($payment) {
-                        if ($checkout->getStatus() === "paid") {
-                            //update payment status in database
-                            $payment->status = "paid";
-                            $payment->update();
-                            /////
-                            ///// Confirm your order
-                            /////
-                            //event
-                            $payment->status = "paid";
-                            $payment->update();
-                        
-                            $res = Reservation::findOrFail($payment->reservations_id);
-                        
-                            $chambre = Chambre::findOrFail($res->chambres_id);
-                            $chambre->decrement('nombre_chambre', 1);
-                        
-                            $heberg = Heberg::findOrFail($chambre->Hebergs_id);
-                            $heberg->decrement('nombre_chambre', 1);
-                            
-
-                            $clientname = $user->name;
-
-
-// broadcast event
-broadcast(new faitreservation($clientname," a été réserver chambre ",$chambre->typeChambres));
-//notification
-$message="$clientname est réserver une chambre $chambre->typeChambres ";
-$hote->notify(new Reservations($message));
-   
-return redirect()->back()->with("succes","la réservation a été fait maintenant"); 
-
-
-
-          
-                            return response()->json(["status" => true, "message" => "Payment has been completed"]);
-                        } else if ($checkout->getStatus() === "failed" or $checkout->getStatus() === "canceled") {
-                            //update payment status in database
-                            $payment->status = "failed";
-                            $payment->update();
-                            /////
-                            /////  Cancel your order
-                            /////
-                            return response()->json(["status" => true, "message" => "Payment has been canceled"]);
-                        }
-                    }
+                    ]);
+                    $payment->update([
+                        'amount'=>$metadata['prixactuelle']
+                    ]);
                 }
-            }
-        }
-        return response()->json([
-            "status" => false,
-            "message" => "Invalid Webhook request",
-        ], 403);
-    }
 
+     
+                 if ($checkout->getStatus() === "paid") {
+     
+                     $payment->status = "paid";
+                     $payment->save();
+     
+                     $chambre = Chambre::findOrFail($reservation->chambres_id);
+                     $chambre->decrement('nombre_chambre', 1);
+     
+                     $heberg = Heberg::findOrFail($chambre->Hebergs_id);
+                     $heberg->decrement('nombre_chambre', 1);
+     
+                     // ✅ Récupérer client et hôte depuis la BDD
+                     $client = User::findOrFail($reservation->users_id);
+     
+                     $hebergData = DB::table('chambres')
+                         ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
+                         ->where('chambres.id', $chambre->id)
+                         ->select('Hebergs.users_id')
+                         ->first();
+                     $hote = User::findOrFail($hebergData->users_id);
+     
+                     // Broadcast + notification
+                     broadcast(new faitreservation($client->name, " a été réserver chambre ", $chambre->typeChambres));
+                     $hote->notify(new Reservations("{$client->name} est réserver une chambre {$chambre->typeChambres}"));
+     
+                     return response()->json(["status" => true, "message" => "Payment completed"]);
+     
+                 } elseif (in_array($checkout->getStatus(), ["failed", "canceled"])) {
+     
+                     $payment->status = "failed";
+                     $payment->save();
+     
+                     return response()->json(["status" => true, "message" => "Payment canceled"]);
+                 }
+             }
+         }
+     
+         return response()->json(["status" => false, "message" => "Invalid Webhook"], 403);
+     }
+    
     /**
      * Just a shortcut
      */
@@ -305,8 +301,9 @@ return redirect()->back()->with("succes","la réservation a été fait maintenan
     {
         return new \Chargily\ChargilyPay\ChargilyPay(new \Chargily\ChargilyPay\Auth\Credentials([
             "mode" => "test",
-            "public" => "test_pk_Wb7912rJZiuRAzK5kNIOKAuEpO9SdWruxGK6MXmt",
-            "secret" => "test_sk_LWx0sVAWkCaOi7YWQNbQtwa9DljszwgxLW1AdcbE",
+            
+            "public" => "test_pk_DDaTN2LMDMCZPce19KZDsqXHHjoBOV8VRKnnmzNf",
+            "secret" => "test_sk_kfkckbGdhEjoYvwdu9oRGfKajsWRaLN0pbd9MiBb",
         ]));
     }
 }

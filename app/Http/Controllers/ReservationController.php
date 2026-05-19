@@ -101,6 +101,7 @@ public function Reservations_index(){
     ->where('reservations.users_id',$client->id)
     ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
     ->get();
+  
 
 //error   
 // $chambre=Chambre::findOrFail($reservations->chambre_id);

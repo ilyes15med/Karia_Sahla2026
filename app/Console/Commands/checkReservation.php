@@ -51,12 +51,10 @@ class checkReservation extends Command
             Chambre::where('id',$reservation->chambres_id)->increment('nombre_chambre',1);
             Heberg::where('id', $heberg->heberg_id)->increment('nombre_chambre',1);
 
-            $this->info('date fin '.$reservation->date_fin);
+          
          
         }
-        $this->info('Now: ' . $now);
        
-        $this->info('nombre reservations: ' . $reservations->count());
         
     }
 }

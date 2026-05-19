@@ -35,7 +35,12 @@ Route::get('/filter-hebergement',[InvitehebergController::class,'filter']);
 
 //client
 
-Route::middleware('auth')->group(function () {
+Route::post('chargilypay/redirect/{chambre}', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
+Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
+Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
+
+Route::middleware(['auth','verified'])->group(function () {
+
 Route::get('/client/filter-heberg',[HebergClientController::class,'filter']);
 Route::get('/client/search',[HebergClientController::class,'search']);
 
@@ -67,9 +72,10 @@ Route::get('/client/reservation/{idreservation}/delete',[ReservationController::
 
 //paiment
 //Route::post('chargilypay/redirect/{chambre}',[ChargilyPayController::class, "store_edit_reservation"])->name("chargilypay.redirect");
-Route::post('chargilypay/redirect/{chambre}', [ChargilyPayController::class, "redirect"])->name("chargilypay.redirect");
-Route::get('chargilypay/back', [ChargilyPayController::class, "back"])->name("chargilypay.back");
-Route::post('chargilypay/webhook', [ChargilyPayController::class, "webhook"])->name("chargilypay.webhook_endpoint");
+
+///reservation
+
+
 //Route::get('/client/search', function () {
   //  return view('client.front-end.search');
 //});
@@ -101,9 +107,8 @@ Route::post('/invoke-agent',[AiAgentAssistant::class,'invoke_agent']);
 
 Route::livewire('/Ai/assistant','ai-assistant.chat-ai');
 
+
 });
-
-
 
 //hote
 

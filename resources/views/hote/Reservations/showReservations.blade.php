@@ -72,25 +72,11 @@
                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
                                 Ticket
                             </a>
-                            <!--modifier-->
-                            <a href="/client/reservation/{{ $reservation->Rid }}/edit"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
-                                 modifier
-                             </a>
-                             <!--modifier-->
-
-
-                       
-                              <!-- Annuler -->
+                           
                             
-                            <button onclick="anuller_Reservation({{ $reservation->Rid }})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
-                                 Annuler
-                            </button>
                     
                      
-                            <div>
-                                <span>impossible fais annulation</span>
-                            </div>
+                          
                      
                           
 

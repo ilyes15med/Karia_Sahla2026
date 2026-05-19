@@ -77,9 +77,7 @@
                                 message
                             </x-nav-link>
                             
-                            <x-nav-link href="/client/notification">
-                                Notification
-                            </x-nav-link>
+                         
                             
                             <x-nav-link href="/client/mesReservations">
                                 mes réservations

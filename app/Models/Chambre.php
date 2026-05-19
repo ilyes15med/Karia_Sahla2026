@@ -18,6 +18,10 @@ class Chambre extends Model
         'nombre_lit',
         'nombre_chambre',
         'images_chambres',
+        'taxe',
+        'anullation',
+        'payment',
+        'code_promo',
         'Hebergs_id'
    ];
     public function reservations(){

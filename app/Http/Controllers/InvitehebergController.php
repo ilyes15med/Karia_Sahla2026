@@ -24,6 +24,7 @@ class InvitehebergController extends Controller
         ->get();
 
         $count_heb=count($hebs);
+      
         
         
       
@@ -37,7 +38,7 @@ class InvitehebergController extends Controller
         ->get();
 
         $count_heb=count($hebs);
-       // dd($count_heb,$hebs);
+        
         return view('invité.front-end.home',compact('hebs','count_heb'));
         
     }
@@ -49,15 +50,19 @@ class InvitehebergController extends Controller
         ->where('Hebergs.id',$idHeb)
         ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
+
         $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
         ->select('chambres.*')
         ->get();
+
         $reservations=null;
+
         $evaluations=DB::table('evaluations')
         ->join('users','evaluations.users_id','=','users.id')
         ->where('Hebergs_id',$idHeb)
         ->select('nombre_etoile','commentaire','users.name as nomclient','evaluations.id as Evaluation_id','users.id as id_client')
        ->get();
+       
         $EvalTotale = evaluation::where('Hebergs_id', $idHeb)
         ->avg('nombre_etoile');
     
@@ -67,6 +72,7 @@ class InvitehebergController extends Controller
 
         return view('invité.front-end.HebShow',compact('heb','chambres','reservations','evaluations','EvalTotale'));
     }
+        
     public function search(Request $req){
         $destination=$req->destination;
         $nombrePersonne =$req->adultes+$req->enfants;
@@ -86,13 +92,14 @@ class InvitehebergController extends Controller
         ->get();
      
         $count_heb=count($hebs);
-        
+       
         return view('invité.front-end.search',compact('hebs','count_heb'));
 
 
     }
     public function filter(Request $req){
-        $query=Heberg::query()->withAvg('evaluations','nombre_etoile');
+        $query=Heberg::query()->withAvg('evaluations','nombre_etoile')
+        ->where('status','valide');
        
         if($req->type){
 
@@ -123,7 +130,7 @@ class InvitehebergController extends Controller
 
         if ($req->stars) {
             $query->having('evaluations_avg_nombre_etoile', '<=', $req->stars);
-    }
+        }
      
         $hebs=$query->get();
         $count_heb=count($hebs);

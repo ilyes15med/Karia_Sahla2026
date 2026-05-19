@@ -45,6 +45,40 @@
                     <label class="block mb-1">Nombre de lits pour chaque chambre</label>
                     <input type="number" name="nombre_lit" class="w-full border rounded-lg px-3 py-2" min="1" value="{{ $chambre->nombre_lit }}"  required/>
                 </div>
+                <!-- taxe -->
+                <div>
+                    <label class="block mb-1">taxe</label>
+                    <input type="number" name="taxe" class="w-full border rounded-lg px-3 py-2" min="0" max="100" placeholder="ex: 0% est aucun taxe " required/>
+                </div>
+                 <!-- Annulation -->
+                 <div>
+                    <div>
+                        <label class="block mb-1">annulation</label>
+                        <input type="number" name="annulation" class="w-full border rounded-lg px-3 py-2"  min="0" max="100" placeholder="ex: 100% est frais annulation "  required/>
+                    </div>
+                   
+                
+                </div>
+
+                 <!-- obligerpayée? -->
+                <div>
+                    <label class="block mb-1">payée</label>
+                    <select>
+                    <option value="pending">Paiement à l'arrivée </option>
+                    <option value="paid ">payment</option>
+                    </select>
+                </div>
+                <!--code promo-->
+
+                <div>
+                    <div>
+                        <label class="block mb-1">code promo</label>
+                        <input type="text" name="oce_Promo" class="w-full border rounded-lg px-3 py-2"   required/>
+                    </div>
+                   
+                
+                </div>
+    
     
                
     

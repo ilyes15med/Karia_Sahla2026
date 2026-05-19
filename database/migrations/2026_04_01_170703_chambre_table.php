@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('code_promo')->nullable();
             $table->integer('nombre_lit')->default(0);
             $table->integer('nombre_chambre')->default(0);
-         
-           
+            $table->decimal('taxe',3,2);
+            $table->decimal('anullation',3,2);
+            $table->string('payment');
             $table->text('images_chambres');
             $table->foreignId('Hebergs_id')->constrained()->onDelete('cascade');
             $table->timestamps();

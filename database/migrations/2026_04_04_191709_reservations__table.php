@@ -14,8 +14,8 @@ return new class extends Migration
         //
         Schema::create('reservations', function (Blueprint $table) {    
             $table->id();
-            $table->date('date_debut');
-            $table->date('date_fin');
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin');
             $table->boolean('canEval')->default(0);
             $table->string('nom_complet');
             $table->string('idCarteNational');

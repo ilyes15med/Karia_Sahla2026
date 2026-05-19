@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
    
     public function boot()
     {
+       
     View::composer('*', function ($view) {
 
         $nombre_Heb_enCours = DB::table('Hebergs')

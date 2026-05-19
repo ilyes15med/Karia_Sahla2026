@@ -91,7 +91,8 @@ class HebergClientController extends Controller
 
     }
     public function filter(Request $req){
-        $query=Heberg::query()->withAvg('evaluations','nombre_etoile');
+        $query=Heberg::query()->withAvg('evaluations','nombre_etoile')
+        ->where('status','valide');
        
 
         if($req->type){

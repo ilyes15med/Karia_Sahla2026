@@ -37,25 +37,25 @@
     <div>
 @if( session('date_arrivee') && session('date_depart'))
     <label>Date d'arrivée</label>
-    <input type="datetime-local" id="date_arrivee" name="date_arrivee" value="{{ session('date_arrivee')  }}" required
+    <input type="datetime-local" id="date_arrivee" name="date_arrivee"   min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ session('date_arrivee')  }}" required
     class="w-full border rounded-lg px-3 py-2">
     </div>
     
     <div>
     <label>Date de départ</label>
     <input type="datetime-local" id="date_depart" name="date_depart" value="{{ session('date_depart') }}"
-    class="w-full border rounded-lg px-3 py-2" required>
+    class="w-full border rounded-lg px-3 py-2" min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"  required>
     </div>
 @else 
 <label>Date d'arrivée</label>
 <input type="datetime-local" id="date_arrivee"  name="date_arrivee" 
-class="w-full border rounded-lg px-3 py-2" required>
+class="w-full border rounded-lg px-3 py-2"  min="{{ now()->format('Y-m-d\TH:i') }}"  required>
 </div>
 
 <div>
 <label>Date de départ</label>
 <input type="datetime-local" id="date_depart" name="date_depart"
-class="w-full border rounded-lg px-3 py-2" required>
+class="w-full border rounded-lg px-3 py-2" min="{{ now()->addDay()->format('Y-m-d\TH:i') }}" required>
 </div>
 @endif  
     
@@ -83,6 +83,7 @@ class="w-full border rounded-lg px-3 py-2" required>
     <p class="text-2xl mb-6">Étape 2</p>
     
     <div class="space-y-4">
+        <p class="text-xl mb-6 text-red-600"> les coordonnées </p>
     
     <div>
     <label>Nom complet</label>
@@ -126,32 +127,48 @@ class="w-full border rounded-lg px-3 py-2" required>
     </div>
     
     
-    <!-- ETAPE 3 -->
-    <div id="etape3" class="hidden bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-    
-    <div class="flex justify-center mb-6">
-    <img src="{{asset('/assets/images/logo.png')}}" class="w-40 h-40 object-contain">
-    </div>
-    
-    <p class="text-2xl mb-6">Confirmation</p>
-    
-    <div class="space-y-2">
-    
-    <p><b>Nom complet :</b> <span id="show_name"></span></p>
-    <p><b>CIN :</b> <span id="show_cin"></span></p>
-    <p><b>Adresse :</b> <span id="show_adresse"></span></p>
-    <p><b>numéro de téléphone :</b> <span id="show_numTel"></span></p>
-    <p><b>chambre :</b> <span id="chambre"></span>{{$chambre->typeChambres}} {{$chambre->nombre_lit}}  <i class="fa-solid fa-person"></i></p>
-    <p><b>prix :</b> <span id="chambre"></span>{{$chambre->prix}}</p>
-    <p><b>Date début :</b> <span id="show_date_arrivee"></span></p>
-    <p><b>Date fin :</b> <span id="show_date_depart"></span></p>
-    <p><b>Nuit</b> <span id="nuit"></span></p>
-    <p><b>prix total  :</b> <span id="prix_totale"></span> DZD</p>
-    <input type="text" id="prix_total" name="prix_total" value="" class="hidden"/>
-    
-    </div>
-    
+   <!-- ETAPE 3 -->
+<div id="etape3" class="hidden bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-2xl">
+
+        <div class="flex justify-center mb-6">
+            <img src="{{ asset('/assets/images/logo.png') }}" class="w-40 h-40 object-contain">
+        </div>
+
+        <p class="text-2xl font-bold mb-6 text-center">Confirmation</p>
+
+        <div class="grid grid-cols-2 gap-6">
+
+            <!-- Colonne gauche : Coordonnées -->
+            <div class="bg-gray-50 p-4 rounded-xl space-y-3">
+                <p class="text-lg font-semibold text-gray-700 border-b pb-2">📋 Coordonnées</p>
+                <p><b>Nom complet :</b> <span id="show_name"></span></p>
+                <p><b>CIN :</b> <span id="show_cin"></span></p>
+                <p><b>Adresse :</b> <span id="show_adresse"></span></p>
+                <p><b>Téléphone :</b> <span id="show_numTel"></span></p>
+            </div>
+
+            <!-- Colonne droite : Tarifs -->
+            <div class="bg-gray-50 p-4 rounded-xl space-y-3">
+                <p class="text-lg font-semibold text-gray-700 border-b pb-2">💰 Tarifs</p>
+                <p><b>Chambre :</b> {{ $chambre->typeChambres }} {{ $chambre->nombre_lit }} <i class="fa-solid fa-person"></i></p>
+                <p><b>Prix / nuit :</b> {{ $chambre->prix }} DZD</p>
+                <p><b>Taxe :</b>  %</p>
+
+                <p><b>Date début :</b> <span id="show_date_arrivee"></span></p>
+                <p><b>Date fin :</b> <span id="show_date_depart"></span></p>
+                <p><b>Nuits :</b> <span id="nuit"></span></p>
+                <p class="text-lg font-bold text-green-600 border-t pt-2">
+                    <b>Total :</b> <span id="prix_totale"></span> DZD
+                </p>
+            </div>
+
+        </div>
+
+        <input type="hidden" id="prix_total" name="prix_total" value=""/>
+
+        <div class="flex gap-2 mt-6">
+            <!-- tes boutons ici -->
     <div class="flex gap-2 mt-6">
     
     <button type="button" onclick="prevStep2()"
@@ -164,6 +181,12 @@ class="w-full border rounded-lg px-3 py-2" required>
     </button>
     
     </div>
+        </div>
+
+    </div>
+</div>
+    
+    <
     
     </div>
     </div>
@@ -284,5 +307,59 @@ class="w-full border rounded-lg px-3 py-2" required>
     document.getElementById("etape2").classList.remove("hidden")
     
     }
-    
+
+   
+    const dateArrivee = document.getElementById('date_arrivee');
+    const dateDepart  = document.getElementById('date_depart');
+
+    // ✅ Fonction pour formater sans conversion UTC
+    function toLocalDateTimeString(date) {
+        const yyyy = date.getFullYear();
+        const MM   = String(date.getMonth() + 1).padStart(2, '0');
+        const dd   = String(date.getDate()).padStart(2, '0');
+        const hh   = String(date.getHours()).padStart(2, '0');
+        const mm   = String(date.getMinutes()).padStart(2, '0');
+        return `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
+    }
+
+    // Au chargement
+    dateArrivee.min = toLocalDateTimeString(new Date());
+
+    dateArrivee.addEventListener('change', function() {
+        if (!this.value) return;
+
+        const arrivee = new Date(this.value);
+
+        // ✅ +1 jour même heure locale
+        const depart = new Date(arrivee);
+        depart.setDate(depart.getDate() + 1);
+
+        const departStr = toLocalDateTimeString(depart);
+
+        // ✅ Toujours réinitialiser date fin
+        dateDepart.value = departStr;
+        dateDepart.min   = departStr;
+    });
+
+    dateDepart.addEventListener('change', function() {
+        if (!dateArrivee.value) return;
+
+        const arrivee      = new Date(dateArrivee.value);
+        const departChoisi = new Date(this.value);
+        const departMin    = new Date(arrivee);
+        departMin.setDate(departMin.getDate() + 1);
+
+        // ✅ Forcer même heure locale que l'arrivée
+        departChoisi.setHours(arrivee.getHours());
+        departChoisi.setMinutes(arrivee.getMinutes());
+
+        if (departChoisi < departMin) {
+            this.value = toLocalDateTimeString(departMin);
+        } else {
+            this.value = toLocalDateTimeString(departChoisi);
+        }
+    });
+
+
+
     </script>
