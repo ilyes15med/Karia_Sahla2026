@@ -251,10 +251,12 @@ class HebergHoteController extends Controller
             'nombre_lit'=>$req->nombre_lit,
             'nombre_chambre'=>$req->nombre_chambre,
             'code_promo'=>$req->code_Promo,
+            'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
             'taxe'=>$req->taxe,
             'anullation'=>$req->annulation,
             'payment'=>$req->payment,
             'images_chambres'=>json_encode($images),
+
             
             'Hebergs_id'=>$idHeb
 
@@ -322,6 +324,11 @@ class HebergHoteController extends Controller
             'services'=>json_encode($req->services),
             'nombre_lit'=>$req->nombre_lit,
             'nombre_chambre'=>$N1-$nbrDesaugmenter,
+            'code_promo'=>$req->code_Promo,
+            'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
+            'taxe'=>$req->taxe,
+            'anullation'=>$req->annulation,
+            'payment'=>$req->payment,
             'images_chambres'=>json_encode($images),
             'Hebergs_id'=>$idHeb
 
@@ -342,6 +349,11 @@ class HebergHoteController extends Controller
              'services'=>json_encode($req->services),
              'nombre_lit'=>$req->nombre_lit,
              'nombre_chambre'=>$N1+$nbrAugmenter,
+             'code_promo'=>$req->code_Promo,
+             'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
+             'taxe'=>$req->taxe,
+             'anullation'=>$req->annulation,
+             'payment'=>$req->payment,
              'images_chambres'=>json_encode($images),
              'Hebergs_id'=>$idHeb
  
@@ -350,6 +362,28 @@ class HebergHoteController extends Controller
                 'nombre_chambre'=>$NbrChHeb+$nbrAugmenter
     
                ]);
+         }
+         elseif($N1=$N2){
+            $chambre->update([
+            
+
+                'typeChambres'=>$req->type_chambre,
+                'prix'=>$req->prix,
+                'Description' =>$req->description,
+                'services'=>json_encode($req->services),
+                'nombre_lit'=>$req->nombre_lit,
+                'nombre_chambre'=>$req->nombre_chambre,
+                'code_promo'=>$req->code_Promo,
+                'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
+                'taxe'=>$req->taxe,
+                'anullation'=>$req->annulation,
+                'payment'=>$req->payment,
+                'images_chambres'=>json_encode($images),
+                'Hebergs_id'=>$idHeb
+    
+               ]);
+            
+
          }
 
         $chambres=Chambre::where('Hebergs_id',$idHeb)->get();

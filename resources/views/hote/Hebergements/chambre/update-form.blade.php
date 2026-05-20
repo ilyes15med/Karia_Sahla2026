@@ -12,7 +12,7 @@
                 <img src="{{ asset('/assets/images/logo.png') }}" class="w-40 h-40 object-contain">
             </div>
     
-            <p class="text-xl mb-6 text-center font-semibold">Ajouter une chambre</p>
+            <p class="text-xl mb-6 text-center font-semibold">modifier une chambre</p>
 
              <!-- Type de chambre -->
             <div>
@@ -48,13 +48,13 @@
                 <!-- taxe -->
                 <div>
                     <label class="block mb-1">taxe</label>
-                    <input type="number" name="taxe" class="w-full border rounded-lg px-3 py-2" min="0" max="100" placeholder="ex: 0% est aucun taxe " required/>
+                    <input type="number" name="taxe" class="w-full border rounded-lg px-3 py-2" min="0" max="100" placeholder="ex: 0% est aucun taxe " value="{{ $chambre->taxe }}"  required/>
                 </div>
                  <!-- Annulation -->
                  <div>
                     <div>
                         <label class="block mb-1">annulation</label>
-                        <input type="number" name="annulation" class="w-full border rounded-lg px-3 py-2"  min="0" max="100" placeholder="ex: 100% est frais annulation "  required/>
+                        <input type="number" name="annulation" class="w-full border rounded-lg px-3 py-2"  min="0" max="100" placeholder="ex: 100% est frais annulation " value="{{ $chambre->anullation }}"  required/>
                     </div>
                    
                 
@@ -63,21 +63,52 @@
                  <!-- obligerpayée? -->
                 <div>
                     <label class="block mb-1">payée</label>
-                    <select>
+                    <select name="payment">
                     <option value="pending">Paiement à l'arrivée </option>
                     <option value="paid ">payment</option>
                     </select>
                 </div>
                 <!--code promo-->
+                                   <!--code promo-->
+<div>
+    <div>
+        <label class="block mb-1">code promo</label>
+        <input type="text" name="code_Promo" id="code_Promo" class="w-full border rounded-lg px-3 py-2" value="{{ $chambre->code_promo }}"  />
+    </div>
+</div>
 
-                <div>
-                    <div>
-                        <label class="block mb-1">code promo</label>
-                        <input type="text" name="oce_Promo" class="w-full border rounded-lg px-3 py-2"   required/>
-                    </div>
+<!--pourcentage code promo-->
+<div id="pourcentage_wrapper" class="hidden">
+    <div>
+        <label class="block mb-1">pourcentage code promo</label>
+        <input type="text" name="Pourcentage_code_Promo" id="Pourcentage_code_Promo" class="w-full border rounded-lg px-3 py-2" value="{{ $chambre->pourcentage_codepromo }}"  />
+    </div>
+</div>
+
+<script>
+    const code_promo = document.getElementById("code_Promo");
+    const pourcentage_wrapper = document.getElementById("pourcentage_wrapper");
+    const pourcentage_code_promo = document.getElementById("Pourcentage_code_Promo");
+
+    code_promo.addEventListener('input', function () {
+        if (code_promo.value.trim() !== '') {
+            pourcentage_wrapper.classList.remove('hidden');
+        } else {
+            pourcentage_wrapper.classList.add('hidden');
+            pourcentage_code_promo.value = '';
+        }
+    });
+</script>
                    
+
+
+        
+                   
+        
+                  
+        
+
                 
-                </div>
     
     
                

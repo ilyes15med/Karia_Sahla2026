@@ -19,10 +19,12 @@ return new class extends Migration
             $table->longText('Description');
             $table->string('services');
             $table->string('code_promo')->nullable();
+            $table->decimal('pourcentage_codepromo',5,2)->nullable();
+
             $table->integer('nombre_lit')->default(0);
             $table->integer('nombre_chambre')->default(0);
-            $table->decimal('taxe',3,2);
-            $table->decimal('anullation',3,2);
+            $table->decimal('taxe',5,2);
+            $table->decimal('anullation',5,2);
             $table->string('payment');
             $table->text('images_chambres');
             $table->foreignId('Hebergs_id')->constrained()->onDelete('cascade');

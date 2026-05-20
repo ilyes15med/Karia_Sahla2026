@@ -22,6 +22,7 @@ class Chambre extends Model
         'anullation',
         'payment',
         'code_promo',
+        'pourcentage_codepromo',
         'Hebergs_id'
    ];
     public function reservations(){

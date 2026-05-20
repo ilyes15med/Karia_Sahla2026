@@ -398,15 +398,38 @@ $icons=[
                         </select>
                     </div>
                     <!--code promo-->
+<div>
+    <div>
+        <label class="block mb-1">code promo</label>
+        <input type="text" name="code_Promo" id="code_Promo" class="w-full border rounded-lg px-3 py-2" />
+    </div>
+</div>
 
-                    <div>
-                        <div>
-                            <label class="block mb-1">code promo</label>
-                            <input type="text" name="code_Promo" class="w-full border rounded-lg px-3 py-2"   />
-                        </div>
-                       
-                    
-                    </div>
+<!--pourcentage code promo-->
+<div id="pourcentage_wrapper" class="hidden">
+    <div>
+        <label class="block mb-1">pourcentage code promo</label>
+        <input type="text" name="Pourcentage_code_Promo" id="Pourcentage_code_Promo" class="w-full border rounded-lg px-3 py-2" />
+    </div>
+</div>
+
+<script>
+    const code_promo = document.getElementById("code_Promo");
+    const pourcentage_wrapper = document.getElementById("pourcentage_wrapper");
+    const pourcentage_code_promo = document.getElementById("Pourcentage_code_Promo");
+
+    code_promo.addEventListener('input', function () {
+        if (code_promo.value.trim() !== '') {
+            pourcentage_wrapper.classList.remove('hidden');
+        } else {
+            pourcentage_wrapper.classList.add('hidden');
+            pourcentage_code_promo.value = '';
+        }
+    });
+</script>
+                   
+
+
         
                    
         
