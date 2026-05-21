@@ -395,6 +395,7 @@ $icons=[
                         <select name="payment">
                         <option value="pending">Paiement à l'arrivée </option>
                         <option value="paid ">payment</option>
+                        <option value="choisir">choisir la méthode de payment </option>
                         </select>
                     </div>
                     <!--code promo-->

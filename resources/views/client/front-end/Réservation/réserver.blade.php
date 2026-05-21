@@ -196,17 +196,59 @@
                             Appliquer
                         </button>
                     </div>
-                    <p id="msg_promo" class="mt-2 text-sm"></p>
+                    <p id="msg_promo" class="mt-2 text-sm"></p> 
+                    <p class="text-lg font-bold text-green-600 border-t pt-2">
+                    <b><i class="fa-solid fa-receipt mr-1"></i> Total :</b> <span id="prix_totale"></span> DZD
+                    </p>
+    
+                    <p id="bloc_nouvelle_prix" class="hidden text-lg font-bold text-green-600 border-t pt-2">
+                        <b><i class="fa-solid fa-tag mr-1"></i> Nouveau prix :</b> <span id="Nouvelle_prix"></span> DZD
+                    </p>
                 </div>
     
-                <p class="text-lg font-bold text-green-600 border-t pt-2">
-                    <b><i class="fa-solid fa-receipt mr-1"></i> Total :</b> <span id="prix_totale"></span> DZD
-                </p>
-    
-                <p id="bloc_nouvelle_prix" class="hidden text-lg font-bold text-green-600 border-t pt-2">
-                    <b><i class="fa-solid fa-tag mr-1"></i> Nouveau prix :</b> <span id="Nouvelle_prix"></span> DZD
+               
+            </div>
+            <!-- conditions de réservation -->
+            <div class="bg-gray-50 p-4 rounded-xl space-y-3">
+                <p class="text-xl font-semibold text-gray-700 border-b pb-2">
+                    <input type="radio"/> j'accepte tous <button onclick="afficherConditions()" class="text-red-600 font-bold"> les conditions </button> concerne a ce hébergement et ses chambres
                 </p>
             </div>
+            <div class="hidden bg-gray-700">
+                Les conditions : 
+                
+
+            </div>
+<div class="flex flex-col gap-3 mt-4">
+
+@if ($chambre->payment =='pending')
+      <!-- Paiement à l'arrivée -->
+    <button type="submit" name="mode_paiement" value="a_larrivee"
+    class="w-full bg-orange-500 text-white p-3 rounded-lg font-semibold">
+        <i class="fa-solid fa-money-bill-wave mr-1"></i> Payer à l'arrivée
+    </button>
+@elseif ( $chambre->payment =='paid')
+     <!-- Paiement en ligne -->
+     <button type="submit" name="mode_paiement" value="en_ligne"
+     class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold">
+         <i class="fa-solid fa-credit-card mr-1"></i> Payer en ligne
+     </button>
+    
+@elseif ( $chambre->payment =='choisir')
+    <!-- Paiement en ligne -->
+    <button type="submit" name="mode_paiement" value="en_ligne"
+    class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold">
+        <i class="fa-solid fa-credit-card mr-1"></i> Payer en ligne
+    </button>
+
+    <!-- Paiement à l'arrivée -->
+    <button type="submit" name="mode_paiement" value="a_larrivee"
+    class="w-full bg-orange-500 text-white p-3 rounded-lg font-semibold">
+        <i class="fa-solid fa-money-bill-wave mr-1"></i> Payer à l'arrivée
+    </button>
+@endif  
+</div>
+           
     
         </div>
     
@@ -217,9 +259,7 @@
             class="w-full bg-red-600 text-white p-2 rounded-lg">
             Précédent
             </button>
-            <button type="submit" class="w-full bg-green-600 text-white p-2 rounded-lg">
-            <i class="fa-solid fa-credit-card mr-1"></i> Payer
-            </button>
+           
         </div>
     
     </div>

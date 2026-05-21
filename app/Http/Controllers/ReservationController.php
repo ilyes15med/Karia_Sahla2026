@@ -97,9 +97,11 @@ public function Reservations_index(){
     ->join('chargily_payments','reservations.id','=','chargily_payments.reservations_id')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
     ->where('chargily_payments.status','paid')
+    ->orWhere('chargily_payments.status','pending')
     ->where('reservations.status','active')
+    
     ->where('reservations.users_id',$client->id)
-    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
+    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres','chargily_payments.status as statusPayed')
     ->get();
   
 
@@ -118,19 +120,48 @@ public function downloadTicket($id)
     ->join('chambres','reservations.chambres_id','=','chambres.id')
     
     ->where('reservations.id',$id)
-    ->select('reservations.date_debut' ,'reservations.date_fin','reservations.nom_complet as nom_complet','chambres.typeChambres','chargily_payments.amount','reservations.idCarteNational')
+    ->select('reservations.date_debut' ,'reservations.date_fin','reservations.nom_complet as nom_complet','reservations.addresse as Raddresee','chambres.typeChambres','chargily_payments.amount','reservations.idCarteNational','chargily_payments.status as payedStatus')
     ->first();
 
     $pdf = Pdf::loadView('client.front-end.Réservation.tiket', compact('reservation'));
 
     return $pdf->download('ticket_'.$reservation->nom_complet.'.pdf');
 }
+
+
 public function edit_reservation_show($idR){
-      
-  $reservation=Reservation::findOrFail($idR);
-  $chambre=Chambre::findOrfail($reservation->chambres_id);
+    $reservation=Reservation::findOrFail($idR);
   
-return view('client.front-end.Réservation.edit_reservation',compact('reservation','chambre')); 
+    $chambre=Chambre::findOrfail($reservation->chambres_id);
+     //verifier le temps 
+     $start = Carbon::parse($reservation->date_debut);
+     $now = Carbon::now();
+     
+     
+     if($start<=$now){// 24h
+             
+         return redirect()->route('reservations.index')->with("succes","La modification n'est plus possible après le début de la réservation"); 
+     
+     }  
+      
+  
+     $chargilypay = DB::table('reservations')
+     ->join('chargily_payments', 'reservations.id', '=', 'chargily_payments.reservations_id')
+     ->where('reservations.id', $idR)
+     ->select(
+         'reservations.id as reservation_id',
+         'reservations.date_debut',
+         'reservations.date_fin',
+         'reservations.status as reservation_status',
+         'chargily_payments.id as payment_id',
+         'chargily_payments.amount',
+         'chargily_payments.status as status'
+     )
+     ->first();
+
+
+  
+return view('client.front-end.Réservation.edit_reservation',compact('reservation','chambre','chargilypay')); 
 
 }
 public function store_edit_reservation(Request $request,$idR){
@@ -252,8 +283,9 @@ public function hote_Reservations_index(){
     ->join('chargily_payments','reservations.id','=','chargily_payments.reservations_id')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
     ->where('chargily_payments.status','paid')
+    ->orwhere('chargily_payments.status','pending')
     ->where('reservations.status','active')
-    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
+    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','chargily_payments.status as status','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
     ->get();
 
 

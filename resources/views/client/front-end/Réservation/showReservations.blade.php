@@ -42,7 +42,7 @@
                             Chambre: {{ $reservation->typeChambres }}
                         </h3>
                         <p class="text-sm text-gray-500">
-                            <i class="fa-regular fa-calendar"></i> Nom client: {{ $reservation->Rnom }}
+                             Nom client: {{ $reservation->Rnom }}
                         </p>
     
                         <p class="text-sm text-gray-500">
@@ -55,6 +55,10 @@
     
                         <p class="mt-2 font-bold text-blue-600">
                             {{ $reservation->amount }} DA
+                        </p>
+                        <p class="mt-2 font-bold text-blue-600">
+                        
+                         {{ $reservation->statusPayed }} 
                         </p>
     
                         <!-- Buttons -->

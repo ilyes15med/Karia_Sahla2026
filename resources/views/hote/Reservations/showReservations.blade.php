@@ -63,6 +63,9 @@
                         <p class="mt-2 font-bold text-blue-600">
                             {{ $reservation->amount }} DA
                         </p>
+                        <p class="mt-2 font-bold text-blue-600">
+                            {{ $reservation->status }} 
+                        </p>
     
                         <!-- Buttons -->
                         <div class="mt-4 flex justify-between">

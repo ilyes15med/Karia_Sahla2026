@@ -20,6 +20,8 @@ class ChargilyPayController extends Controller
      * The client will be redirected to the ChargilyPay payment page
      *
      */
+    
+     
     public function store_edit_reservation(Request $request,$idR){
       
         $user = auth()->user();
@@ -37,19 +39,36 @@ class ChargilyPayController extends Controller
         $hote = User::findOrFail($heberg->users_id);
         $payment=ChargilyPayment::where('reservations_id',$reservation->id)->first();
         
-        //verifier le temps 
-        $start = Carbon::parse($reservation->date_debut);
-        $now = Carbon::now();
         
-        
-        if($start<=$now){// 24h
-                
-            return redirect()->route('reservations.index')->with("succes","La modification n'est plus possible après le début de la réservation"); 
-        
-        }   
                 $newprix=(int)$request->prix_total;
                 $oldprix=(int)$payment->amount;
-             
+            //mode paiment 
+            $mode_payment=$request->mode_paiement;
+          
+            //pending
+            if($mode_payment=="a_larrivee"){  
+                $reservation->update([
+                'date_debut' => $request->date_arrivee,
+                'date_fin' => $request->date_depart,
+                'nom_complet' => $request->name,
+                'idCarteNational' => $request->idCarteNationel,
+                'addresse' => $request->adresse,
+                'NumTelephone' => $request->numTel,
+                
+            ]);
+            $payment->update([
+                'amount' =>$newprix
+            ]);
+
+
+            }else{
+
+            
+          
+
+            
+            //paid 
+
                 if($newprix>$oldprix){
                     $prixcaurant=$newprix-$oldprix;
                   //  dd($newprix,$oldprix,$prixcaurant);
@@ -114,6 +133,7 @@ class ChargilyPayController extends Controller
                     "amount"   => $prixcaurant,
                 ]);
                 */
+            }
               
               
           
@@ -133,10 +153,68 @@ class ChargilyPayController extends Controller
             $hote->notify(new Reservations($message));
            
             return redirect()->route('reservations.index')->with("succes","la réservation a été modifier maintenant"); 
+        
         }
         //redirect
     public function redirect(Request $request,$idchambre )
     {
+
+        $modePaiment=$request->mode_paiement;
+        if($modePaiment=='a_larrivee'){
+
+        $user = auth()->user();
+        $currency = "dzd";
+        $amount =$request->prix_total;
+    
+        //   $amount=$request->prix_totale;
+        
+        $reservation=Reservation::create([
+            'date_debut' => $request->date_arrivee,
+            'date_fin' => $request->date_depart,
+            'nom_complet' => $request->name,
+            'canEval'=>"1",
+            'idCarteNational' => $request->idCarteNationel,
+            'addresse' => $request->adresse,
+            'NumTelephone' => $request->numTel,
+            'users_id' => $user->id, // utilisateur connecté/client
+            'chambres_id' => $idchambre ,
+        ]);
+       
+   
+
+       
+
+        $payment = ChargilyPayment::create([
+            "users_id"  => $user->id,
+            "reservations_id"=>$reservation->id,
+            "status"   => "pending",
+            "currency" => $currency,
+            "amount"   => $amount,
+        ]);
+
+        $chambre = Chambre::findOrFail($reservation->chambres_id);
+        $chambre->decrement('nombre_chambre', 1);
+
+        $heberg = Heberg::findOrFail($chambre->Hebergs_id);
+        $heberg->decrement('nombre_chambre', 1);
+
+        // ✅ Récupérer client et hôte depuis la BDD
+        $client = User::findOrFail($reservation->users_id);
+
+        $hebergData = DB::table('chambres')
+            ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
+            ->where('chambres.id', $chambre->id)
+            ->select('Hebergs.users_id')
+            ->first();
+        $hote = User::findOrFail($hebergData->users_id);
+
+        // Broadcast + notification
+        broadcast(new faitreservation($client->name, " a été réserver chambre ", $chambre->typeChambres));
+        $hote->notify(new Reservations("{$client->name} est réserver une chambre {$chambre->typeChambres}"));
+
+        return redirect('/client/mesReservations')->with('succes',"la réservation a été effectuer maintenant avec succés ");
+
+        }
        
         $user = auth()->user();
         $currency = "dzd";

@@ -58,9 +58,11 @@ Route::get('/client/message', function () {
 Route::get('/client/notification', function () {
     return view('client.front-end.Notification');
 });
+
 ///client/reservation/Heb/{{ $heb->id }}/chambre->id}}
 Route::get('/client/reservation/Heb/{idheb}/chambre/{idch}',[ReservationController::class,'added_reservation_show']);
 Route::post('/client/reservation/Heb/{idheb}/chambre/{idch}',[ReservationController::class,'store_reservation'])->name("Reservation.update");
+
 //modifier la réservation
 Route::get('/client/reservation/{idreservation}/edit',[ReservationController::class,'edit_reservation_show']);
 
@@ -85,8 +87,6 @@ Route::get('/client/reservation/Heb', function () {
 });
 //Reservation
 Route::get('/client/mesReservations',[ReservationController::class,'Reservations_index'])->name('reservations.index');
-Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])
-    ->name('reservation.ticket');
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
 //evaluation
 Route::post('/client/rating/heb/{id}',[ratingController::class,'store_rating'])->name('rating.added');

@@ -67,6 +67,11 @@
             <span class="label">id carte nationnel :</span>
             {{ $reservation->idCarteNational}}
         </div>
+        <div class="row">
+            <span class="label">addresse</span>
+            {{ $reservation->Raddresee}}
+        </div>
+        
         
 
         <div class="row">
@@ -87,6 +92,10 @@
         <div class="row">
             <span class="label">Montant:</span>
             {{ $reservation->amount }} DA
+        </div>
+        <div class="row">
+            <span class="label">status de payment :</span>
+            {{ $reservation->payedStatus }} 
         </div>
     </div>
 

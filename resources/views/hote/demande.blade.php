@@ -158,6 +158,10 @@
                     <label class="block mb-1">Images de l'hébergement</label>
                     <input type="file" name="images[]" multiple class="w-full border rounded-lg px-3 py-2">
                 </div>
+                <div>
+                    <label class="block mb-1">conditions</label>
+                    <textarea id="condition" name="condition" rows="4" class="w-full border rounded-lg px-3 py-2" ></textarea>
+                </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="mt-6 w-full px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">

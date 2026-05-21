@@ -21,6 +21,7 @@ class Heberg extends Model
         'service',
         'Description',
         'nombre_chambre',
+        'conditions',
        //'nombre_lit',
         'status',
         'users_id',

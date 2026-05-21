@@ -26,6 +26,7 @@ return new class extends Migration
         $table->decimal('latitude',20,15);
         $table->decimal('longitude',20,15);
         $table->text('images');
+        $table->text('conditions')->nullable();
         $table->foreignId('users_id')->constrained();//hote
         $table->timestamps();
     }   ); 
