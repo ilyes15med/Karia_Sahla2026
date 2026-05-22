@@ -36,7 +36,7 @@ class StatistiqueController extends Controller
      
        
        
-        //nombrede réservations par semaine
+        //nombre de réservations par semaine
         $debut_semaine=Carbon::now()->startOfWeek();
         $fin_semaine=Carbon::now()->endOfWeek();
         $reservation_par_semaine=Reservation::whereHas('chambre',function($query) use ($hebergement){

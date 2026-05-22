@@ -80,15 +80,12 @@
                        
                               <!-- Annuler -->
                             
-                            <button onclick="anuller_Reservation({{ $reservation->Rid }})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                            <a onclick="anuller_Reservation({{ $reservation->Rid }})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
                                  Annuler
-                            </button>
+                            </a>
                     
                      
-                            <div>
-                                <span>impossible fais annulation</span>
-                            </div>
-                     
+                           
                           
 
     

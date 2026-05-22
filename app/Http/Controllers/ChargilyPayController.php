@@ -124,7 +124,23 @@ class ChargilyPayController extends Controller
         
                 }elseif($newprix<$oldprix){
                     $refund=$oldprix-$newprix;
-                    dd("refund");
+                    $reservation->update([
+                        'date_debut' => $request->date_arrivee,
+                        'date_fin' => $request->date_depart,
+                        'nom_complet' => $request->name,
+                        'idCarteNational' => $request->idCarteNationel,
+                        'addresse' => $request->adresse,
+                        'NumTelephone' => $request->numTel,
+                        
+                    ]);
+                    $payment->update([
+                        'amount' =>$newprix
+                    ]);
+                    return redirect()->route('reservations.index')->with("succes","la réservation a été modifier  et remobourser $refund DZD maintenant"); 
+        
+        
+                   
+
                    
                 }
                 /*
@@ -287,6 +303,13 @@ class ChargilyPayController extends Controller
             //// Is not recomended to process payment in back page / success or fail page
             //// Doing payment processing in webhook for best practices
             ////
+
+              // paiement terminé
+            if ($checkout->getStatus() === "paid") {
+
+                return redirect()->route('reservations.index')->with("succes","la réservation a été fais maintenant"); 
+        
+            }
         }
         dd($checkout,$payment);
     }

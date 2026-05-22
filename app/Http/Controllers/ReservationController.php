@@ -120,10 +120,12 @@ public function downloadTicket($id)
     ->join('chambres','reservations.chambres_id','=','chambres.id')
     
     ->where('reservations.id',$id)
-    ->select('reservations.date_debut' ,'reservations.date_fin','reservations.nom_complet as nom_complet','reservations.addresse as Raddresee','chambres.typeChambres','chargily_payments.amount','reservations.idCarteNational','chargily_payments.status as payedStatus')
+    ->select('reservations.date_debut' ,'reservations.date_fin','reservations.nom_complet as nom_complet','reservations.addresse as Raddresee','chambres.typeChambres','chargily_payments.amount','reservations.idCarteNational','chargily_payments.status as payedStatus','chambres.Hebergs_id as idheb')
     ->first();
+    $hebergement=Heberg::find($reservation->idheb)->first();
+    
 
-    $pdf = Pdf::loadView('client.front-end.Réservation.tiket', compact('reservation'));
+    $pdf = Pdf::loadView('client.front-end.Réservation.tiket', compact('reservation','hebergement'));
 
     return $pdf->download('ticket_'.$reservation->nom_complet.'.pdf');
 }
@@ -249,30 +251,77 @@ return redirect()->route('reservations.index')->with("succes","impossible modifi
     return redirect()->route('reservations.index')->with("succes","la réservation a été modifier maintenant"); 
 }
 public function delete_reservation($idR){
-    Reservation::where('id',$idR)->delete();
+
+   // 
     $reservation=DB::table('reservations')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
-    ->select('chambres.typeChambres as typechambre','chambres.id as idCh')
+    ->where('reservations.id',$idR)
+    ->select('chambres.id as idCh','reservations.id as Rid','chambres.typeChambres as typechambre')
     ->first();
+  
+
+    
+    $chambre=Chambre::where('id',$reservation->idCh)->first();
+   
+
     $clientname=Auth()->user()->name;
+
     $heberg = DB::table('chambres')
     ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
     ->where('chambres.id', $reservation->idCh)
     ->select('Hebergs.id as heberg_id', 'Hebergs.users_id')
     ->first();
+    $chargilypay=DB::table('chargily_payments')
+    ->join('reservations','chargily_payments.reservations_id','=','reservations.id')
+    ->where('reservations.id',$idR)
+    ->select('chargily_payments.amount as prix','chargily_payments.status as status')
+    ->first();
+
+
     $hote = User::findOrFail($heberg->users_id);
+   
+if($chambre->anullation=="100.00" || $chargilypay->status=="pending" ){
+    Reservation::where('id',$idR)->delete();
     Chambre::where('id',$reservation->idCh)->increment('nombre_chambre',1);
     Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+    // broadcast event
+
+    broadcast(new faitreservation($clientname," a été annuler la réservation de chambre ",$reservation->typechambre));
+
+    //notification
+
+    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
+    $hote->notify(new Reservations($message));
+       
+
+}else{
+    $refund=$chargilypay->prix*($chambre->anullation/100);
+    Reservation::where('id',$idR)->delete();
+    Chambre::where('id',$reservation->idCh)->increment('nombre_chambre',1);
+    Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+
+    // broadcast event
+
+    broadcast(new faitreservation($clientname," a été annuler la réservation de chambre ",$reservation->typechambre));
+
+    //notification
+
+    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
+    $hote->notify(new Reservations($message));
+    return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant et remobourse $refund DZD"); 
+
+   
+}
 
    
 
    // broadcast event
 
-    broadcast(new faitreservation($clientname," a été supprimer la réservation de chambre ",$reservation->typechambre));
+    broadcast(new faitreservation($clientname," a été annuler la réservation de chambre ",$reservation->typechambre));
 
     //notification
 
-    $message="$clientname est supprimer la  réservation de chambre $reservation->typechambre ";
+    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
     $hote->notify(new Reservations($message));
     return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant"); 
 }

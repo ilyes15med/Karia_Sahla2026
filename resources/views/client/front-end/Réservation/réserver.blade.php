@@ -14,7 +14,7 @@
     @csrf   
     
     <!-- ========== PROGRESS BAR ========== -->
-    <div class="fixed top-0 left-0 w-full z-50 bg-white shadow-sm px-6 py-4">
+    <div class=" top-16 left-0 w-full z-40 bg-white shadow-sm px-6 py-4">
         <div class="flex items-center justify-between max-w-md mx-auto">
     
             <div class="flex flex-col items-center">
@@ -43,7 +43,7 @@
         </div>
     </div>
     <!-- مسافة حتى لا يغطي Progress Bar المحتوى -->
-    <div class="h-20"></div>
+    
     <!-- ========== END PROGRESS BAR ========== -->
     
     

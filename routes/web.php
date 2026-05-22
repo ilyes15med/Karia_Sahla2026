@@ -85,9 +85,11 @@ Route::get('/client/reservation/{idreservation}/delete',[ReservationController::
 Route::get('/client/reservation/Heb', function () {
     return view('client.front-end.Réservation.réserver');
 });
+
 //Reservation
 Route::get('/client/mesReservations',[ReservationController::class,'Reservations_index'])->name('reservations.index');
 Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTicket'])->name('reservation.ticket');
+
 //evaluation
 Route::post('/client/rating/heb/{id}',[ratingController::class,'store_rating'])->name('rating.added');
   //edit

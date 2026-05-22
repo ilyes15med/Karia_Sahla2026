@@ -42,7 +42,7 @@
     
         </div>
     </div>
-    <div class="h-36"></div>
+   
     <!-- ========== END PROGRESS BAR ========== -->
     
     

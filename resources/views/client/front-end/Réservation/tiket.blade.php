@@ -54,7 +54,7 @@
     <!-- Logo -->
     <div class="header">
         <img src="{{ public_path('assets/images/logo.png') }}" class="logo">
-        <div class="title"> Ticket de Réservation</div>
+        <div class="title"> Ticket Réservation de l'hébergement {{$hebergement->nomHeberg}}</div>
     </div>
 
     <!-- Content -->
