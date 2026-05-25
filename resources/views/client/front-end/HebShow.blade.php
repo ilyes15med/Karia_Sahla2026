@@ -95,100 +95,125 @@ $icons=[
                     <thead class="bg-gray-100 text-gray-700">
                         <tr>
                             <th class="px-4 py-3">Type de chambre</th>
+                            <th class="px-4 py-3">Quantité</th>
                             <th class="px-4 py-3">Prix (DA)</th>
-                            <th class="px-4 py-3">Quantité totale </th>
-                            
+                            <th class="px-4 py-3 text-center"></th>
                             <th class="px-4 py-3 text-center"></th>
                         </tr>
                     </thead>
         
                     <!-- Body -->
-                <tbody class="divide-y">
-                        
-                   @foreach ($chambres as $chambre)
-                   
-                        
+                    @foreach ($chambres as $chambre)
+
+<tr class="hover:bg-gray-50">
+
+    {{-- chambre --}}
+    <td class="px-4 py-3">
+        @php
+            $image = json_decode($chambre->images_chambres);
+        @endphp
+
+        <div class="rounded-lg">
+
+            <img src="{{ asset('storage/' . $image[0]) }}"
+                 alt="heb"
+                 class="w-10 h-10 object-cover rounded-lg shadow">
+
+            <span class="text-red-600">
+                {{ $chambre->typeChambres }}
+            </span>
+
+            <br>
+
+            <button onclick="detailChambre()"
+                    class="text-gray-700">
+                plus détails
+            </button>
+
+        </div>
+    </td>
+
+    {{-- nombre chambre --}}
+    <td class="px-4 py-3">
+
+        @if ($chambre->nombre_chambre != 0)
+
+            {{ $chambre->nombre_chambre }}
+
+        @else
+
+            <span class="p-1 bg-red-600 text-white rounded">
+                toutes les chambres sont complètes
+            </span>
+
+        @endif
+
+    </td>
+
+    {{-- prix --}}
+    <td class="px-4 py-3">
+        {{ $chambre->prix }}
+    </td>
+
+    {{-- annulation --}}
+    <td class="px-4 py-3">
+
+        @if ($chambre->anullation == "100.00")
+
+            <div class="p-1 m-1 bg-green-600 text-white text-center rounded">
+                annulation gratuite
+            </div>
+
+        @else
+
+            <div class="p-1 m-1 bg-red-600 text-white text-center rounded">
+                annulation non gratuite
+            </div>
+
+        @endif
+
+    </td>
+
+    {{-- actions --}}
+    <td class="px-4 py-3 text-center">
+
+        <div class="flex justify-center gap-3">
+
+            @if(optional(auth()->user())->role == 'hote')
+
+                {{-- edit --}}
+                <button onclick="update({{ $heb->id }},{{ $chambre->id }})"
+                        class="text-blue-600 hover:text-blue-800">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+
+                {{-- delete --}}
+                <button onclick="supprimer({{ $chambre->id }})"
+                        class="text-red-600 hover:text-red-800">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+
+            @endif
+
+            @if(optional(auth()->user())->role != 'hote'
+                && optional(auth()->user())->role != 'agent'
+                && $chambre->nombre_chambre != 0)
+
+                <a class="p-1 bg-green-700 text-white rounded-lg shadow-sm"
+                   href="/client/reservation/Heb/{{ $heb->id }}/chambre/{{ $chambre->id }}">
+                    réserver
+                </a>
+
+            @endif
+
+        </div>
+
+    </td>
+
+</tr>
+
+@endforeach
                
-                       
-                  
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">
-                                <div>
-                                    @php
-                                     $image = json_decode($chambre->images_chambres);
- 
-                                    @endphp  
-                                    <div class="rounded-ld">
-                                     
-                                        <img src="{{asset('storage/'.$image[0])}}" alt="heb"  class="w-10 h-10 object-cover rounded-lg shadow">
-                                        
-                                        <span class="text-red-600">  
-                                            {{ $chambre->typeChambres }}
-                                            
-                                        </span>
-                                        <br>
-                                        <span >  
-                                           <button onclick="detailChambre()" class="text-gray-700">plus détails </button>
-                                            
-                                        </span>
-                                       
-                                    </div>
-                                   
-
-                                </div>
-                                
-                            </td>
-                            <td class="px-4 py-3">{{$chambre->prix}}</td>
-                            @if ($chambre->nombre_chambre!=0)
-                                <td class="px-4 py-3">
-                                    {{ $chambre->nombre_chambre }}
-                               
-                                </td>
-                           
-                            <td class="px-4 py-3 text-center flex justify-center gap-3">
-                                @if(optional(auth()->user())->role == 'hote')   
-                         
-                                <!-- Edit -->
-                                <button onclick="update({{ $heb->id }},{{ $chambre->id }})"  class="text-blue-600 hover:text-blue-800">
-                                    <i class="fa-solid fa-pen"></i>
-                                </button>
-        
-                                <!-- Delete -->
-                                <button onclick="supprimer({{ $chambre->id}})" class="text-red-600 hover:text-red-800">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                                @endif
-
-                                @if(optional(auth()->user())->role != 'hote' && optional(auth()->user())->role != 'agent')
-                                <a class="p-1 bg-green-700 text-white m-1 rounded-lg shadow-sm " href="/client/reservation/Heb/{{ $heb->id }}/chambre/{{$chambre->id}}">
-                                    réserver
-                                </a>
-                             
-                              
-
-                                @endif
-
-
-        
-                            </td>
-                            @else 
-                            <td > 
-                                <span class="p-1 bg-green-700 text-white m-1">
-                                tous les chambres sont complet
-                                </span>
-                            </td>
-                            @endif
-                        </tr>
-                        
-                            
-                       
-                            
-                       
-                    @endforeach
-        
-                      
-        
-                </tbody>
                 </table>
             </div>
         </div>

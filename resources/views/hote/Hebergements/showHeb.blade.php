@@ -101,6 +101,7 @@ $icons=[
                             <th class="px-4 py-3">Type de chambre</th>
                             <th class="px-4 py-3">Quantité</th>
                             <th class="px-4 py-3">Prix (DA)</th>
+                            <th class="px-4 py-3 text-center">annulation</th>
                             <th class="px-4 py-3 text-center"></th>
                         </tr>
                     </thead>
@@ -199,8 +200,24 @@ $icons=[
                             <td class="px-4 py-3">
                                 {{ $chambre->nombre_chambre }}
                             </td>
-                           
                             <td class="px-4 py-3">{{$chambre->prix}}</td>
+                            <td class="px-4 py-3">
+                                @if ($chambre->anullation=="100.00")
+                                <div class="p-1 m-1 bg-green-600 text-center">
+                                    anullation est gratuit
+
+                                </div>
+                                    
+                                @else
+                                <div class="p-1 m-1 text-white bg-red-600 text-center">
+                                    anullation n'est pas  gratuit
+
+                                </div>
+                                    
+                                @endif 
+                            </td>
+                           
+                           
                             <td class="px-4 py-3 text-center flex justify-center gap-3">
         
                                 <!-- Edit -->

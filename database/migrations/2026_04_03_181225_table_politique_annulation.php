@@ -12,19 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create('chambres', function (Blueprint $table) {    
-            $table->id();//1
-            $table->string('typeChambres');//auto apartement
-            $table->decimal('prix',20,2);//auto
-            $table->integer('Quantite')->default(0);
-         
-            
-            $table->longText('Description')->nullable();
-            $table->string('services')->nullable(); 
-
-
-            $table->text('images_chambres')->nullable();
+        Schema::create('politiqueAnnulations', function (Blueprint $table) {    
+            $table->id();  
+            $table->string('type_anullation');
+            $table->integer('nombre_jour')->nullable();
+            $table->integer('pourcentage_recuperation')->nullable();
             $table->foreignId('Hebergs_id')->constrained()->onDelete('cascade');
+       
             $table->timestamps();
         }   ); 
     }
@@ -35,6 +29,6 @@ return new class extends Migration
     public function down(): void
     {
         //
-        Schema::dropIfExists('chambres');
+        Schema::dropIfExists('politiqueAnnulations');
     }
 };

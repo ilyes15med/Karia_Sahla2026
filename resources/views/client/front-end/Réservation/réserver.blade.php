@@ -441,3 +441,4 @@
     updateProgress(1);
     
     </script>
+</x-app-layout>

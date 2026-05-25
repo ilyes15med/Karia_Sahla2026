@@ -8,31 +8,32 @@
             <!-- Sidebar -->
              
             @include('hote.aside.aside')
-            @if(session('succes'))
-            <div id="message" class="bg-green-100 text-green-700 p-3 rounded-lg shadow-sm mb-4">
-             <span>
-               {{ session('succes')}}
-             </span>
-             <button onclick="document.getElementById('message').remove()" 
-             class="pl-1 text-green-700 font-bold hover:text-red-500">
-               <i class="fa-solid fa-trash"></i>
-             </button> 
-   
-   
-   
-            </div>
-   
-   
            
-   
-   
-           @endif
             
        
            
         
             <!-- Main content -->
             <main class="flex-1 p-4">
+                @if(session('succes'))
+                <div id="message" class="bg-green-100 text-green-700 p-3 rounded-lg shadow-sm mb-4">
+                 <span>
+                   {{ session('succes')}}
+                 </span>
+                 <button onclick="document.getElementById('message').remove()" 
+                 class="pl-1 text-green-700 font-bold hover:text-red-500">
+                   <i class="fa-solid fa-trash"></i>
+                 </button> 
+       
+       
+       
+                </div>
+       
+       
+               
+       
+       
+               @endif
         
               
         

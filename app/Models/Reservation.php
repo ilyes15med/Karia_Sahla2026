@@ -20,7 +20,8 @@ class Reservation extends Model
         'users_id' ,
         'chambres_id',
         'canEval',
-        'status'
+        'status',
+        'politiqueAnnulations_id'
     ];
     public function user(){
 

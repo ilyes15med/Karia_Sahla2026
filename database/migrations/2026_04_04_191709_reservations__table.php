@@ -23,8 +23,14 @@ return new class extends Migration
             $table->string('addresse');
             $table->string('NumTelephone');
             $table->string('status')->default("active");
+            
+
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
             $table->foreignId('chambres_id')->constrained()->onDelete('cascade');
+            $table->foreignId('politiqueAnnulations_id')
+            ->constrained()
+            ->onDelete('cascade');
+    
          //   $table->foreignId('paiment_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         } 

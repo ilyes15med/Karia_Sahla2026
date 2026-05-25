@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Heberg;
 use App\Models\Chambre;
 use App\Models\evaluation;
+use App\Models\politique_annulation;
+
 use App\Models\User;
 use App\Events\HebRequest;
 use App\Notifications\ReqHebNotification;
+use Illuminate\Support\Facades\Auth;
 
 
 class HebergHoteController extends Controller
@@ -39,20 +42,53 @@ class HebergHoteController extends Controller
       $count_agent=User::where('role','agent')->count();   
     if($count_agent>0){
      
-        Heberg::create([
+        $hebergement=Heberg::create([
             'nomHeberg' => $request->nom_Heb,
             'typeHeberg' => $request->type_Heb,
             'addresse' => $adresseheb,
             'prix' => $request->prix,
             'latitude' => $request->Latitude,
+            'nombre_chambre'=>$request->Nmbr_chambres ?? 0,
+            'nombre_lit'=>$request->Nmbr_lits ?? 0,
             'longitude' => $request->Longitude,
             'service' => json_encode($request->services),
             'Description' => $request->description,
-           
+            'politiqueHeb'=>$request->condition,
+            'payment_method'=>$request->payment,
+            'montant_taxe_sejour'=>$request->taxe,
+            'code_promo'=>$request->code_Promo,
+            'pourcentage_codepromo'=>$request->Pourcentage_code_Promo,
             'status' => 'en cours',
-            'users_id' =>$request->id,
+            'users_id' =>$request->id_hote,
             'images'=>json_encode($images)
         ]);
+
+        if($hebergement->typeHeberg=="Appartement" || $hebergement->typeHeberg=="Maison" || $hebergement->typeHeberg=="Villa" || $hebergement->typeHeberg=="Chambre_hotes"){
+            Chambre::create([
+
+                'typeChambres'=>$hebergement->typeHeberg,
+                'prix'=>$hebergement->prix,
+                'Quantite'=>1,
+                'Hebergs_id'=>$hebergement->id,
+               
+            ]);
+
+
+        }
+
+        if($hebergement){
+            politique_annulation::create([
+            
+        'type_anullation' =>$request->type_annulation,
+        'nombre_jour'=>$request->nb_jours_annulation,
+        'pourcentage_recuperation'=>$request->pourcentage_remboursement,
+        'Hebergs_id'=>$hebergement->id,
+        
+        ]);
+        }
+
+        
+
           /* 
           $HebergCours=DB::table('Hebergs')
           ->join('users','Hebergs.users_id','=','users.id')
@@ -85,8 +121,11 @@ class HebergHoteController extends Controller
          
        
 
-        return $this->indexHote();
+      //  return $this->indexHote();
       // return back();
+      return redirect()
+        ->route('hote.dashboard')
+        ->with('succes', 'Hébergement demande avec succès');
     }else{
       
         return redirect()->with('succes',"votre demande est refuser car aucun agent maintent pour accepter");
@@ -129,8 +168,12 @@ class HebergHoteController extends Controller
         ->where('Hebergs.id',$idHeb)
         ->select('Hebergs.*','users.name as hote_name')
         ->first();
+        $politique_annulation=DB::table('politiqueAnnulations')
+        ->where('Hebergs_id',$Heb->id)
+        ->select('*')
+        ->first();
 
-        return view ('hote.Demande.ModifierHeb',compact('Heb'));
+        return view ('hote.Demande.ModifierHeb',compact('Heb','politique_annulation'));
     }
    
     public function update_demande(Request $request,$idHeb){
@@ -155,22 +198,41 @@ class HebergHoteController extends Controller
             'addresse' => $adresseheb,
             'prix' => $request->prix,
             'latitude' => $request->Latitude,
+            'nombre_chambre'=>$request->Nmbr_chambres ?? 0,
+            'nombre_lit'=>$request->Nmbr_lits ?? 0,
             'longitude' => $request->Longitude,
             'service' => json_encode($request->services),
             'Description' => $request->description,
-         //   'nombre_chambre' => $request->nb_chambres,
-          //  'nombre_lit' => $request->nb_lits,
+            'politiqueHeb'=>$request->condition,
+            'payment_method'=>$request->payment,
+            'montant_taxe_sejour'=>$request->taxe,
+            'code_promo'=>$request->code_Promo,
+            'pourcentage_codepromo'=>$request->Pourcentage_code_Promo,
             'status' => 'en cours',
-            'users_id' =>$request->id,
+            'users_id' =>Auth::id(),
             'images'=>json_encode($images)
         ]);
+        $politique_annulation=politique_annulation::where('Hebergs_id',$hebergement->id)
+        ->select('*')
+        ->first();
+        
+        $politique_annulation->update([
+            
+            'type_anullation' =>$request->type_annulation,
+            'nombre_jour'=>$request->nb_jours_annulation,
+            'pourcentage_recuperation'=>$request->pourcentage_remboursement,
+            'Hebergs_id'=>$hebergement->id,
+        ])   ;
 
        
       
        
        
 
-        return $this->indexHote();
+     //   return $this->indexHote();
+     return redirect()
+     ->route('hote.dashboard')
+     ->with('succes', 'Hébergement est modifier  avec succès');
 
 
         
