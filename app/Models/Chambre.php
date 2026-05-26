@@ -17,7 +17,9 @@ class Chambre extends Model
         'services',
        
         'images_chambres',
-        'Quantite',
+        'nombre_lit',   
+        'nombre_chambre',
+          'Quantite',
         
         'Hebergs_id'
    ];

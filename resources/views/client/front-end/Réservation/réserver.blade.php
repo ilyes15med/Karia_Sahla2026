@@ -1,14 +1,6 @@
 <x-app-layout>
 
-    @if(session('succes'))
-      <div id="message" class="bg-green-100 text-green-700 p-3 rounded-lg shadow-sm mb-4">
-       <span>{{ session('succes')}}</span>
-       <button onclick="document.getElementById('message').remove()" 
-       class="pl-1 text-green-700 font-bold hover:text-red-500">
-         <i class="fa-solid fa-trash"></i>
-       </button>
-      </div>
-    @endif
+   
     
     <form method="post" action="{{route("chargilypay.redirect",$chambre->id)}}">   
     @csrf   
@@ -84,7 +76,7 @@
     </div>
     @endif
     
-    <button type="button" onclick="nextStep1({{ $chambre->prix }},{{ $chambre->nombre_lit }},{{ $chambre->taxe }})"
+    <button type="button" onclick="nextStep1({{ $chambre->prix }},{{ $chambre->nombre_lit }},{{ $heb->montant_taxe_sejour }})"
     class="w-full bg-blue-600 text-white p-2 rounded-lg">
         Suivant
     </button>
@@ -180,7 +172,7 @@
                 </p>
                 <p><b><i class="fa-solid fa-bed mr-1"></i> Chambre :</b> {{ $chambre->typeChambres }} {{ $chambre->nombre_lit }} <i class="fa-solid fa-person"></i></p>
                 <p><b><i class="fa-solid fa-money-bill mr-1"></i> Prix / nuit :</b> {{ $chambre->prix }} DZD</p>
-                <p><b><i class="fa-solid fa-percent mr-1"></i> Taxe :</b> {{ $chambre->taxe }} %</p>
+                <p><b><i class="fa-solid fa-percent mr-1"></i> Taxe :</b> {{ $heb->montant_taxe_sejour }} DZD par nuit et par personne </p>
                 <p><b><i class="fa-solid fa-calendar-day mr-1"></i> Date début :</b> <span id="show_date_arrivee"></span></p>
                 <p><b><i class="fa-solid fa-calendar-check mr-1"></i> Date fin :</b> <span id="show_date_depart"></span></p>
                 <p><b><i class="fa-solid fa-moon mr-1"></i> Nuits :</b> <span id="nuit"></span></p>
@@ -191,7 +183,7 @@
                     <div class="flex gap-2">
                         <input type="text" id="input_code_promo" placeholder="Entrez votre code promo"
                             class="flex-1 border rounded-lg px-3 py-2 text-sm" />
-                        <button type="button" onclick="appliquerCode('{{ $chambre->code_promo }}',{{ $chambre->pourcentage_codepromo }})"
+                        <button type="button" onclick="appliquerCode('{{ $heb->code_promo }}',{{ $heb->pourcentage_codepromo }})"
                             class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-semibold">
                             Appliquer
                         </button>
@@ -221,20 +213,20 @@
             </div>
 <div class="flex flex-col gap-3 mt-4">
 
-@if ($chambre->payment =='pending')
+@if ($heb->payment_method =='pending')
       <!-- Paiement à l'arrivée -->
     <button type="submit" name="mode_paiement" value="a_larrivee"
     class="w-full bg-orange-500 text-white p-3 rounded-lg font-semibold">
         <i class="fa-solid fa-money-bill-wave mr-1"></i> Payer à l'arrivée
     </button>
-@elseif ( $chambre->payment =='paid')
+@elseif ( $heb->payment_method =='online')
      <!-- Paiement en ligne -->
      <button type="submit" name="mode_paiement" value="en_ligne"
      class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold">
          <i class="fa-solid fa-credit-card mr-1"></i> Payer en ligne
      </button>
     
-@elseif ( $chambre->payment =='choisir')
+@elseif ( $heb->payment_method =='choisir')
     <!-- Paiement en ligne -->
     <button type="submit" name="mode_paiement" value="en_ligne"
     class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold">
@@ -298,7 +290,7 @@
     }
     
     /* ========== ETAPES ========== */
-    function nextStep1(prix_chambre, nombreP, Taxe) {
+    function nextStep1(prix_chambre, nombreP, Montant_Taxe) {
         event.preventDefault();
     
         let date_arrivee = document.getElementById("date_arrivee").value;
@@ -307,8 +299,8 @@
         localStorage.setItem("date_arrivee", date_arrivee);
         localStorage.setItem("date_depart",  date_depart);
         localStorage.setItem("prix_chambre", prix_chambre);
-        localStorage.setItem("nombre_persoone", nombreP);
-        localStorage.setItem("taxe", Taxe);
+        localStorage.setItem("nombre_personne", nombreP);
+        localStorage.setItem("taxe", Montant_Taxe);
     
         updateProgress(2);
         document.getElementById("etape1").classList.add("hidden");
@@ -331,12 +323,13 @@
         let date_arrivee = new Date(localStorage.getItem("date_arrivee"));
         let date_depart  = new Date(localStorage.getItem("date_depart"));
         let diff  = date_depart - date_arrivee;
+        let Nombre_voyageur=localStorage.getItem("nombre_personne");
         let nuit  = diff / (1000 * 60 * 60 * 24);
         localStorage.setItem("nuit", nuit);
     
         let taxe        = localStorage.getItem("taxe");
         let prix_chambre = Number(localStorage.getItem("prix_chambre"));
-        let prix_totale  = (nuit * prix_chambre) + ((nuit * prix_chambre) * (taxe / 100));
+        let prix_totale  = (nuit * prix_chambre) + (nuit * Nombre_voyageur * taxe );
         localStorage.setItem("prix_totale", prix_totale);
     
         updateProgress(3);
@@ -441,4 +434,3 @@
     updateProgress(1);
     
     </script>
-</x-app-layout>

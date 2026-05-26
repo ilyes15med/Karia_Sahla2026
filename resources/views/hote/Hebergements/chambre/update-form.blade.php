@@ -45,75 +45,7 @@
                     <label class="block mb-1">Nombre de lits pour chaque chambre</label>
                     <input type="number" name="nombre_lit" class="w-full border rounded-lg px-3 py-2" min="1" value="{{ $chambre->nombre_lit }}"  required/>
                 </div>
-                <!-- taxe -->
-                <div>
-                    <label class="block mb-1">taxe</label>
-                    <input type="number" name="taxe" class="w-full border rounded-lg px-3 py-2" min="0" max="100" placeholder="ex: 0% est aucun taxe " value="{{ $chambre->taxe }}"  required/>
-                </div>
-                 <!-- Annulation -->
-                 <div>
-                    <div>
-                        <label class="block mb-1">annulation</label>
-                        <input type="number" name="annulation" class="w-full border rounded-lg px-3 py-2"  min="0" max="100" placeholder="ex: 100% est frais annulation " value="{{ $chambre->anullation }}"  required/>
-                    </div>
-                   
-                
-                </div>
-
-                 <!-- obligerpayée? -->
-                <div>
-                    <label class="block mb-1">payée</label>
-                    <select name="payment">
-                    <option value="pending">Paiement à l'arrivée </option>
-                    <option value="paid ">payment</option>
-                    <option value="choisir">choisir la méthode de payment </option>
-                    </select>
-                </div>
-                <!--code promo-->
-                                   <!--code promo-->
-<div>
-    <div>
-        <label class="block mb-1">code promo</label>
-        <input type="text" name="code_Promo" id="code_Promo" class="w-full border rounded-lg px-3 py-2" value="{{ $chambre->code_promo }}"  />
-    </div>
-</div>
-
-<!--pourcentage code promo-->
-<div id="pourcentage_wrapper" class="hidden">
-    <div>
-        <label class="block mb-1">pourcentage code promo</label>
-        <input type="text" name="Pourcentage_code_Promo" id="Pourcentage_code_Promo" class="w-full border rounded-lg px-3 py-2" value="{{ $chambre->pourcentage_codepromo }}"  />
-    </div>
-</div>
-
-<script>
-    const code_promo = document.getElementById("code_Promo");
-    const pourcentage_wrapper = document.getElementById("pourcentage_wrapper");
-    const pourcentage_code_promo = document.getElementById("Pourcentage_code_Promo");
-
-    code_promo.addEventListener('input', function () {
-        if (code_promo.value.trim() !== '') {
-            pourcentage_wrapper.classList.remove('hidden');
-        } else {
-            pourcentage_wrapper.classList.add('hidden');
-            pourcentage_code_promo.value = '';
-        }
-    });
-</script>
-                   
-
-
-        
-                   
-        
-                  
-        
-
-                
-    
-    
                
-    
               
     
                      <!-- Services -->

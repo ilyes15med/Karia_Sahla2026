@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('typeChambres');//auto apartement
             $table->decimal('prix',20,2);//auto
             $table->integer('Quantite')->default(0);
+            $table->integer('nombre_lit')->default(0);
+            $table->integer('nombre_chambre')->default(0);
          
             
             $table->longText('Description')->nullable();

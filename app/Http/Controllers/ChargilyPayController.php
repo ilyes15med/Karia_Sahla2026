@@ -8,6 +8,7 @@ use \App\Models\ChargilyPayment;
 use \App\Models\Chambre;
 use App\Models\Heberg;
 use App\Models\User;
+use App\Models\politique_annulation;
 use App\Events\faitreservation;
 use App\Notifications\ReqHebNotification;
 use App\Notifications\Reservations;
@@ -28,13 +29,14 @@ class ChargilyPayController extends Controller
         $clientname = $user->name;
         $reservation=Reservation::findOrFail($idR);
         $chambre=Chambre::findOrFail($reservation->chambres_id);
+       
         
         $heberg = DB::table('chambres')
         ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
         ->where('chambres.id', $chambre->id)
         ->select('Hebergs.id as heberg_id', 'Hebergs.users_id')
         ->first();
-        
+      
         
         $hote = User::findOrFail($heberg->users_id);
         $payment=ChargilyPayment::where('reservations_id',$reservation->id)->first();
@@ -61,7 +63,7 @@ class ChargilyPayController extends Controller
             ]);
 
 
-            }else{
+            }elseif($mode_payment=="en_ligne"){
 
             
           
@@ -174,13 +176,17 @@ class ChargilyPayController extends Controller
         //redirect
     public function redirect(Request $request,$idchambre )
     {
+        $chambre = Chambre::findOrFail($idchambre); 
+        $heberg = Heberg::findOrFail($chambre->Hebergs_id);
+        $politique_annulation=politique_annulation::where('Hebergs_id',$heberg->id)->first();
 
         $modePaiment=$request->mode_paiement;
-        if($modePaiment=='a_larrivee'){
+    if($modePaiment=='a_larrivee'){
 
         $user = auth()->user();
         $currency = "dzd";
         $amount =$request->prix_total;
+        
     
         //   $amount=$request->prix_totale;
         
@@ -194,6 +200,7 @@ class ChargilyPayController extends Controller
             'NumTelephone' => $request->numTel,
             'users_id' => $user->id, // utilisateur connecté/client
             'chambres_id' => $idchambre ,
+            'politiqueAnnulations_id'=>$politique_annulation->id,
         ]);
        
    
@@ -208,11 +215,12 @@ class ChargilyPayController extends Controller
             "amount"   => $amount,
         ]);
 
-        $chambre = Chambre::findOrFail($reservation->chambres_id);
-        $chambre->decrement('nombre_chambre', 1);
+        $chambre->decrement('Quantite', 1);
 
-        $heberg = Heberg::findOrFail($chambre->Hebergs_id);
-        $heberg->decrement('nombre_chambre', 1);
+           
+       
+        
+        //$heberg->decrement('nombre_chambre', 1);
 
         // ✅ Récupérer client et hôte depuis la BDD
         $client = User::findOrFail($reservation->users_id);
@@ -228,9 +236,19 @@ class ChargilyPayController extends Controller
         broadcast(new faitreservation($client->name, " a été réserver chambre ", $chambre->typeChambres));
         $hote->notify(new Reservations("{$client->name} est réserver une chambre {$chambre->typeChambres}"));
 
+
+       
+
+       
+       
+
+           
         return redirect('/client/mesReservations')->with('succes',"la réservation a été effectuer maintenant avec succés ");
 
-        }
+    }else{
+
+
+   
        
         $user = auth()->user();
         $currency = "dzd";
@@ -248,6 +266,7 @@ class ChargilyPayController extends Controller
             'NumTelephone' => $request->numTel,
             'users_id' => $user->id, // utilisateur connecté/client
             'chambres_id' => $idchambre ,
+            'politiqueAnnulations_id'=>$politique_annulation->id,
         ]);
        
    
@@ -261,8 +280,30 @@ class ChargilyPayController extends Controller
             "currency" => $currency,
             "amount"   => $amount,
         ]);
-        //dd("maintennat je suis en redirect et je crée la réservation et payment ");
     
+        //dd("maintennat je suis en redirect et je crée la réservation et payment ");
+     
+        $chambre->decrement('Quantite', 1);
+
+           
+       
+        
+        //$heberg->decrement('nombre_chambre', 1);
+
+        // ✅ Récupérer client et hôte depuis la BDD
+        $client = User::findOrFail($reservation->users_id);
+
+        $hebergData = DB::table('chambres')
+            ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
+            ->where('chambres.id', $chambre->id)
+            ->select('Hebergs.users_id')
+            ->first();
+        $hote = User::findOrFail($hebergData->users_id);
+
+        // Broadcast + notification
+        broadcast(new faitreservation($client->name, " a été réserver chambre ", $chambre->typeChambres));
+        $hote->notify(new Reservations("{$client->name} est réserver une chambre {$chambre->typeChambres}"));
+
         if ($payment) {
             $checkout = $this->chargilyPayInstance()->checkouts()->create([
                 "metadata" => [
@@ -283,6 +324,7 @@ class ChargilyPayController extends Controller
                 return redirect($checkout->getUrl());
             }
         }
+    }
         return dd("Redirection failed");
     }
     /**
@@ -361,10 +403,9 @@ class ChargilyPayController extends Controller
                      $payment->save();
      
                      $chambre = Chambre::findOrFail($reservation->chambres_id);
-                     $chambre->decrement('nombre_chambre', 1);
+                     $chambre->decrement('Quantite', 1);
      
-                     $heberg = Heberg::findOrFail($chambre->Hebergs_id);
-                     $heberg->decrement('nombre_chambre', 1);
+                     
      
                      // ✅ Récupérer client et hôte depuis la BDD
                      $client = User::findOrFail($reservation->users_id);

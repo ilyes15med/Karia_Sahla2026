@@ -63,12 +63,18 @@ class HebergClientController extends Controller
        ->get();
         $EvalTotale = evaluation::where('Hebergs_id', $idHeb)
         ->avg('nombre_etoile');
+        $pollitique_Annulation=DB::table('politiqueAnnulations')
+        ->where('Hebergs_id',$heb->id)
+        ->select('*')
+        ->first();
+
+       
     
       
 
       
 
-        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client','evaluations','EvalTotale'));
+        return view('client.front-end.HebShow',compact('heb','chambres','reservations','client','evaluations','EvalTotale','pollitique_Annulation'));
     }
     public function search(Request $req){
         $destination=$req->destination;

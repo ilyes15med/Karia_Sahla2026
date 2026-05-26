@@ -86,7 +86,6 @@ $icons=[
         <!--Information sur le chambre-->
         <div class="max-w-4xl mx-auto mt-6">
     
-            <h2 class="text-xl font-semibold mb-4">chambres</h2>
         
             <div class="overflow-x-auto bg-white shadow rounded-xl">
                 <table class="min-w-full text-sm text-left">
@@ -94,7 +93,7 @@ $icons=[
                     <!-- Header -->
                     <thead class="bg-gray-100 text-gray-700">
                         <tr>
-                            <th class="px-4 py-3">Type de chambre</th>
+                            <th class="px-4 py-3"></th>
                             <th class="px-4 py-3">Quantité</th>
                             <th class="px-4 py-3">Prix (DA)</th>
                             <th class="px-4 py-3 text-center"></th>
@@ -103,11 +102,14 @@ $icons=[
                     </thead>
         
                     <!-- Body -->
-                    @foreach ($chambres as $chambre)
+@foreach ($chambres as $chambre)
+
+
 
 <tr class="hover:bg-gray-50">
 
     {{-- chambre --}}
+    @if($chambre->typeChambres=="Hotel" || $chambre->typeChambres=="Auberge")
     <td class="px-4 py-3">
         @php
             $image = json_decode($chambre->images_chambres);
@@ -132,13 +134,27 @@ $icons=[
 
         </div>
     </td>
+    @else
+
+    <td class="px-4 py-3">
+
+                                   
+                                
+        {{-- contenu appartement --}}
+        <span>{{ $chambre->typeChambres }}</span>
+
+    
+
+   </td>
+
+    @endif
 
     {{-- nombre chambre --}}
     <td class="px-4 py-3">
 
-        @if ($chambre->nombre_chambre != 0)
+        @if ($chambre->Quantite != 0)
 
-            {{ $chambre->nombre_chambre }}
+            {{ $chambre->Quantite }}
 
         @else
 
@@ -158,8 +174,7 @@ $icons=[
     {{-- annulation --}}
     <td class="px-4 py-3">
 
-        @if ($chambre->anullation == "100.00")
-
+        @if ($pollitique_Annulation->type_anullation=="gratuit")
             <div class="p-1 m-1 bg-green-600 text-white text-center rounded">
                 annulation gratuite
             </div>
@@ -179,7 +194,7 @@ $icons=[
 
         <div class="flex justify-center gap-3">
 
-            @if(optional(auth()->user())->role == 'hote')
+            @if(optional(auth()->user())->role == 'hote' && ($heb->typeHeberg =='Auberge' || $heb->typeHeberg =='Hotel') )
 
                 {{-- edit --}}
                 <button onclick="update({{ $heb->id }},{{ $chambre->id }})"
@@ -197,7 +212,7 @@ $icons=[
 
             @if(optional(auth()->user())->role != 'hote'
                 && optional(auth()->user())->role != 'agent'
-                && $chambre->nombre_chambre != 0)
+                && $chambre->Quantite != 0)
 
                 <a class="p-1 bg-green-700 text-white rounded-lg shadow-sm"
                    href="/client/reservation/Heb/{{ $heb->id }}/chambre/{{ $chambre->id }}">
@@ -223,7 +238,7 @@ $icons=[
       
 <div class="mb-4 space-y-4 text-gray-700">
             <!--icon add chambre-->
- @if(optional(auth()->user())->role == 'hote')              
+ @if(optional(auth()->user())->role == 'hote' && ( $heb->typeHeberg =='Auberge' || $heb->typeHeberg =='Hotel'))              
 <button onclick="addchambre()" 
    class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
     <!-- Icon + Texte -->
@@ -577,7 +592,11 @@ Vous ne pouvez pas évaluer pour le moment.
 
                     </div>
                     <div class="">
-                       @foreach (json_decode($chambre->images_chambres) as $image )
+                        @php
+                            $images=json_decode($chambre->images_chambres) ;
+                        @endphp
+                        @if (is_array($images))
+                            @foreach ($images as $image )
                        <div>
                         <img 
                         src="{{ asset('storage/'.$image) }}"
@@ -587,6 +606,8 @@ Vous ne pouvez pas évaluer pour le moment.
                        </div>
                            
                        @endforeach
+                        @endif
+                       
 
 
                     </div>

@@ -86,7 +86,7 @@
             <!--Information sur le chambre-->
             <div class="max-w-4xl mx-auto mt-6">
         
-                <h2 class="text-xl font-semibold mb-4">chambres</h2>
+               
             
                 <div class="overflow-x-auto bg-white shadow rounded-xl">
                     <table class="min-w-full text-sm text-left">
@@ -94,11 +94,16 @@
                         <!-- Header -->
                         <thead class="bg-gray-100 text-gray-700">
                             <tr>
-                                <th class="px-4 py-3">Type de chambre</th>
+                                
+                               
+                                <th class="px-4 py-3"></th>
+                                
                                 <th class="px-4 py-3">Prix (DA)</th>
                                 <th class="px-4 py-3">Quantité totale </th>
                                 
                                 <th class="px-4 py-3 text-center"></th>
+                                <th class="px-4 py-3 text-center"></th>
+
                             </tr>
                         </thead>
             
@@ -112,6 +117,7 @@
                            
                       
                             <tr class="hover:bg-gray-50">
+                                @if($chambre->typeChambres=="Hotel" || $chambre->typeChambres=="Auberge")
                                 <td class="px-4 py-3">
                                     <div>
                                         @php
@@ -138,26 +144,43 @@
                                     </div>
                                     
                                 </td>
+                                @else
+                                <td class="px-4 py-3">
+
+                                   
+                                
+                                        {{-- contenu appartement --}}
+                                        <span>{{ $chambre->typeChambres }}</span>
+                                
+                                    
+                                
+                                </td>
+                                @endif
                                 <td class="px-4 py-3">{{$chambre->prix}}</td>
-                                @if ($chambre->nombre_chambre!=0)
+                                @if ($chambre->Quantite!=0)
                                     <td class="px-4 py-3">
-                                        {{ $chambre->nombre_chambre }}
+                                        {{ $chambre->Quantite }}
                                    
                                     </td>
+                                    <td class="px-4 py-3">
+                                        @if ($pollitique_Annulation->type_anullation=="gratuit")
+                                        <div class="p-1 m-1 bg-green-600 text-center">
+                                            anullation est gratuit
+        
+                                        </div>
+                                            
+                                        @else
+                                        <div class="p-1 m-1 text-white bg-red-600 text-center">
+                                            anullation n'est pas  gratuit
+        
+                                        </div>
+                                            
+                                        @endif 
+                                    </td>
+                                
                                
                                 <td class="px-4 py-3 text-center flex justify-center gap-3">
-                                    @if(optional(auth()->user())->role == 'hote')   
-                             
-                                    <!-- Edit -->
-                                    <button onclick="update({{ $heb->id }},{{ $chambre->id }})"  class="text-blue-600 hover:text-blue-800">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-            
-                                    <!-- Delete -->
-                                    <button onclick="supprimer({{ $chambre->id}})" class="text-red-600 hover:text-red-800">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                    @endif
+                                    
 
                                     @if(optional(auth()->user())->role != 'hote' && optional(auth()->user())->role != 'agent')
                                     <a class="p-1 bg-green-700 text-white m-1 rounded-lg shadow-sm " href="/client/reservation/Heb/{{ $heb->id }}/chambre/{{$chambre->id}}">
@@ -212,7 +235,8 @@
     
                 
                 
-                <span> {{$heb->nombre_chambre}} chambre </span> 
+                <span> {{$heb->nombre_chambre}} chambre </span> <br>
+               
              
     
 </div>   
@@ -552,7 +576,13 @@
     
                         </div>
                         <div class="">
-                           @foreach (json_decode($chambre->images_chambres) as $image )
+                            @php
+                            $images=json_decode($chambre->images_chambres);
+                                
+                            @endphp
+                        @if(is_array($images))
+                           @foreach ($images as $image )
+                           
                            <div>
                             <img 
                             src="{{ asset('storage/'.$image) }}"
@@ -562,6 +592,7 @@
                            </div>
                                
                            @endforeach
+                        @endif
     
     
                         </div>

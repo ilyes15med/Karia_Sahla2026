@@ -90,7 +90,7 @@ $icons=[
         <!--Information sur le chambre-->
         <div class="max-w-4xl mx-auto mt-6">
     
-            <h2 class="text-xl font-semibold mb-4">chambres</h2>
+            
         
             <div class="overflow-x-auto bg-white shadow rounded-xl">
                 <table class="min-w-full text-sm text-left">
@@ -98,7 +98,7 @@ $icons=[
                     <!-- Header -->
                     <thead class="bg-gray-100 text-gray-700">
                         <tr>
-                            <th class="px-4 py-3">Type de chambre</th>
+                            <th class="px-4 py-3"></th>
                             <th class="px-4 py-3">Quantité</th>
                             <th class="px-4 py-3">Prix (DA)</th>
                             <th class="px-4 py-3 text-center">annulation</th>
@@ -108,11 +108,14 @@ $icons=[
         
                     <!-- Body -->
                 <tbody class="divide-y">
+                  
                         
                    @foreach ($chambres as $chambre)
+                   
                        
                   
                         <tr class="hover:bg-gray-50">
+                            @if($chambre->typeChambres=="Hotel" || $chambre->typeChambres=="Auberge")
                             <td class="px-4 py-3">
                                 <div>
                                     @php
@@ -120,6 +123,8 @@ $icons=[
  
                                     @endphp  
                                     <div class="rounded-ld">
+                                      
+                            
                                      
                                         <img src="{{asset('storage/'.$image[0])}}" alt="heb"  class="w-10 h-10 object-cover rounded-lg shadow">
                                         
@@ -197,12 +202,27 @@ $icons=[
                                 </div>
                                 
                             </td>
+                            @else
+
+
+                            <td class="px-4 py-3">
+
+                                   
+                                
+                                {{-- contenu appartement --}}
+                                <span>{{ $chambre->typeChambres }}</span>
+                        
+                            
+                        
+                            </td>
+
+                            @endif
                             <td class="px-4 py-3">
                                 {{ $chambre->nombre_chambre }}
                             </td>
                             <td class="px-4 py-3">{{$chambre->prix}}</td>
                             <td class="px-4 py-3">
-                                @if ($chambre->anullation=="100.00")
+                                @if ($pollitique_Annulation->type_anullation=="gratuit")
                                 <div class="p-1 m-1 bg-green-600 text-center">
                                     anullation est gratuit
 
@@ -217,7 +237,9 @@ $icons=[
                                 @endif 
                             </td>
                            
-                           
+                            @if ( ( $heb->typeHeberg =='Auberge' || $heb->typeHeberg =='Hotel'))
+                                
+                            
                             <td class="px-4 py-3 text-center flex justify-center gap-3">
         
                                 <!-- Edit -->
@@ -231,8 +253,11 @@ $icons=[
                                 </button>
         
                             </td>
+                            @endif
                         </tr>
+                        
                     @endforeach
+                  
         
                       
         
@@ -246,6 +271,9 @@ $icons=[
       
 <div class="mb-4 space-y-4 text-gray-700">
 <!--icon add chambre-->
+@if ( $heb->typeHeberg =='Auberge' || $heb->typeHeberg =='Hotel')
+    
+
 <button onclick="addchambre()" 
    class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
     <!-- Icon + Texte -->
@@ -256,7 +284,7 @@ $icons=[
     Ajouter une chambre
 </button>
 
-            
+@endif            
             
             <span> {{$heb->nombre_chambre}} chambre </span> 
            
@@ -391,61 +419,7 @@ $icons=[
                         <label class="block mb-1">Nombre de lits </label>
                         <input type="number" name="nombre_lit" class="w-full border rounded-lg px-3 py-2" placeholder="Nombre de lits pour chaque chambre" min="1" required/>
                     </div>
-                    <!-- taxe -->
-                    <div>
-                        <label class="block mb-1">taxe</label>
-                        <input type="number" name="taxe" class="w-full border rounded-lg px-3 py-2" min="0" max="100" placeholder="ex: 0% est aucun taxe " required/>
-                    </div>
-                     <!-- Annulation -->
-                     <div>
-                        <div>
-                            <label class="block mb-1">annulation</label>
-                            <input type="number" name="annulation" class="w-full border rounded-lg px-3 py-2"  min="0" max="100" placeholder="ex: 100% est frais annulation "  required/>
-                        </div>
-                       
-                    
-                    </div>
-
-                     <!-- obligerpayée? -->
-                    <div>
-                        <label class="block mb-1">payée</label>
-                        <select name="payment">
-                        <option value="pending">Paiement à l'arrivée </option>
-                        <option value="paid ">payment</option>
-                        <option value="choisir">choisir la méthode de payment </option>
-                        </select>
-                    </div>
-                    <!--code promo-->
-<div>
-    <div>
-        <label class="block mb-1">code promo</label>
-        <input type="text" name="code_Promo" id="code_Promo" class="w-full border rounded-lg px-3 py-2" />
-    </div>
-</div>
-
-<!--pourcentage code promo-->
-<div id="pourcentage_wrapper" class="hidden">
-    <div>
-        <label class="block mb-1">pourcentage code promo</label>
-        <input type="text" name="Pourcentage_code_Promo" id="Pourcentage_code_Promo" class="w-full border rounded-lg px-3 py-2" />
-    </div>
-</div>
-
-<script>
-    const code_promo = document.getElementById("code_Promo");
-    const pourcentage_wrapper = document.getElementById("pourcentage_wrapper");
-    const pourcentage_code_promo = document.getElementById("Pourcentage_code_Promo");
-
-    code_promo.addEventListener('input', function () {
-        if (code_promo.value.trim() !== '') {
-            pourcentage_wrapper.classList.remove('hidden');
-        } else {
-            pourcentage_wrapper.classList.add('hidden');
-            pourcentage_code_promo.value = '';
-        }
-    });
-</script>
-                   
+                         
 
 
         

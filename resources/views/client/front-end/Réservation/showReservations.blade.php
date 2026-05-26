@@ -39,7 +39,7 @@
     
                         <!-- Info -->
                         <h3 class="text-lg font-semibold mb-2">
-                            Chambre: {{ $reservation->typeChambres }}
+                         {{ $reservation->typeChambres }}
                         </h3>
                         <p class="text-sm text-gray-500">
                              Nom client: {{ $reservation->Rnom }}

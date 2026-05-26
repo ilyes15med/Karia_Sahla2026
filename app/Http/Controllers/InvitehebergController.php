@@ -65,12 +65,17 @@ class InvitehebergController extends Controller
        
         $EvalTotale = evaluation::where('Hebergs_id', $idHeb)
         ->avg('nombre_etoile');
+
+        $pollitique_Annulation=DB::table('politiqueAnnulations')
+        ->where('Hebergs_id',$heb->id)
+        ->select('*')
+        ->first();
     
       
 
-      
+     
 
-        return view('invité.front-end.HebShow',compact('heb','chambres','reservations','evaluations','EvalTotale'));
+        return view('invité.front-end.HebShow',compact('heb','chambres','reservations','evaluations','EvalTotale','pollitique_Annulation'));
     }
         
     public function search(Request $req){

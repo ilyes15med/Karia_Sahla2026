@@ -111,6 +111,7 @@ public function Reservations_index(){
     return view('client.front-end.Réservation.showReservations',compact('reservations'));
 }
 
+
 public function downloadTicket($id)
 {
 
@@ -135,6 +136,7 @@ public function edit_reservation_show($idR){
     $reservation=Reservation::findOrFail($idR);
   
     $chambre=Chambre::findOrfail($reservation->chambres_id);
+    $heb=Heberg::findOrfail($chambre->Hebergs_id);
      //verifier le temps 
      $start = Carbon::parse($reservation->date_debut);
      $now = Carbon::now();
@@ -163,7 +165,7 @@ public function edit_reservation_show($idR){
 
 
   
-return view('client.front-end.Réservation.edit_reservation',compact('reservation','chambre','chargilypay')); 
+return view('client.front-end.Réservation.edit_reservation',compact('reservation','chambre','chargilypay','heb')); 
 
 }
 public function store_edit_reservation(Request $request,$idR){

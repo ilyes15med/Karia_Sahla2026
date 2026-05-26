@@ -69,15 +69,18 @@ class HebergHoteController extends Controller
                 'typeChambres'=>$hebergement->typeHeberg,
                 'prix'=>$hebergement->prix,
                 'Quantite'=>1,
+                'nombre_chambre'=>$request->Nmbr_chambres ?? 0,
+                'nombre_lit'=>$request->Nmbr_lits ?? 0,
                 'Hebergs_id'=>$hebergement->id,
                
             ]);
 
 
         }
+        
 
-        if($hebergement){
-            politique_annulation::create([
+if($hebergement){
+        politique_annulation::create([
             
         'type_anullation' =>$request->type_annulation,
         'nombre_jour'=>$request->nb_jours_annulation,
@@ -85,7 +88,7 @@ class HebergHoteController extends Controller
         'Hebergs_id'=>$hebergement->id,
         
         ]);
-        }
+}
 
         
 
@@ -125,7 +128,7 @@ class HebergHoteController extends Controller
       // return back();
       return redirect()
         ->route('hote.dashboard')
-        ->with('succes', 'Hébergement demande avec succès');
+        ->with('succes', 'votre demande est en cours validation ');
     }else{
       
         return redirect()->with('succes',"votre demande est refuser car aucun agent maintent pour accepter");
@@ -240,7 +243,9 @@ class HebergHoteController extends Controller
     public function destroy_demande($idHeb){
         $delete_Heb=Heberg::where('id',$idHeb)->delete();
 
-        return $this->indexHote();
+        return redirect()
+        ->route('hote.dashboard')
+        ->with('succes', 'le demande ajouter hébergement est supprimer  avec succès');
 
 
     }
@@ -270,6 +275,8 @@ class HebergHoteController extends Controller
         $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
         ->select('chambres.*')
         ->get();
+
+        $pollitique_Annulation=politique_annulation::where('Hebergs_id',$heb->id)->first();
        
         $evaluations=DB::table('evaluations')
         ->join('users','evaluations.users_id','=','users.id')
@@ -283,7 +290,7 @@ class HebergHoteController extends Controller
 
       
 
-        return view('hote.Hebergements.showHeb',compact('heb','chambres','evaluations','EvalTotale'));
+        return view('hote.Hebergements.showHeb',compact('heb','chambres','evaluations','EvalTotale','pollitique_Annulation'));
       
 
       
@@ -312,11 +319,8 @@ class HebergHoteController extends Controller
             'services'=>json_encode($req->services),
             'nombre_lit'=>$req->nombre_lit,
             'nombre_chambre'=>$req->nombre_chambre,
-            'code_promo'=>$req->code_Promo,
-            'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
-            'taxe'=>$req->taxe,
-            'anullation'=>$req->annulation,
-            'payment'=>$req->payment,
+            'Quantite'=>$req->nombre_chambre,
+           
             'images_chambres'=>json_encode($images),
 
             
@@ -386,11 +390,7 @@ class HebergHoteController extends Controller
             'services'=>json_encode($req->services),
             'nombre_lit'=>$req->nombre_lit,
             'nombre_chambre'=>$N1-$nbrDesaugmenter,
-            'code_promo'=>$req->code_Promo,
-            'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
-            'taxe'=>$req->taxe,
-            'anullation'=>$req->annulation,
-            'payment'=>$req->payment,
+            'Quantite'=>$N1-$nbrDesaugmenter,
             'images_chambres'=>json_encode($images),
             'Hebergs_id'=>$idHeb
 
@@ -411,11 +411,7 @@ class HebergHoteController extends Controller
              'services'=>json_encode($req->services),
              'nombre_lit'=>$req->nombre_lit,
              'nombre_chambre'=>$N1+$nbrAugmenter,
-             'code_promo'=>$req->code_Promo,
-             'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
-             'taxe'=>$req->taxe,
-             'anullation'=>$req->annulation,
-             'payment'=>$req->payment,
+             'Quantite'=>$N1+$nbrAugmenter,
              'images_chambres'=>json_encode($images),
              'Hebergs_id'=>$idHeb
  
@@ -425,7 +421,7 @@ class HebergHoteController extends Controller
     
                ]);
          }
-         elseif($N1=$N2){
+         elseif($N1==$N2){
             $chambre->update([
             
 
@@ -435,11 +431,7 @@ class HebergHoteController extends Controller
                 'services'=>json_encode($req->services),
                 'nombre_lit'=>$req->nombre_lit,
                 'nombre_chambre'=>$req->nombre_chambre,
-                'code_promo'=>$req->code_Promo,
-                'pourcentage_codepromo'=>$req->Pourcentage_code_Promo,
-                'taxe'=>$req->taxe,
-                'anullation'=>$req->annulation,
-                'payment'=>$req->payment,
+                'Quantite'=>$req->nombre_chambre,
                 'images_chambres'=>json_encode($images),
                 'Hebergs_id'=>$idHeb
     
