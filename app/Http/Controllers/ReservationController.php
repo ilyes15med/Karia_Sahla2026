@@ -7,6 +7,7 @@ use App\Models\Heberg;
 use App\Models\Chambre;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Models\politique_annulation;
 use Illuminate\Support\Facades\DB;
 use \App\Models\ChargilyPayment;
 use App\Events\faitreservation;
@@ -278,39 +279,109 @@ public function delete_reservation($idR){
     ->where('reservations.id',$idR)
     ->select('chargily_payments.amount as prix','chargily_payments.status as status')
     ->first();
+    $politique_annulation=politique_annulation::where('Hebergs_id',$heberg->heberg_id)->first();
+
 
 
     $hote = User::findOrFail($heberg->users_id);
    
-if($chambre->anullation=="100.00" || $chargilypay->status=="pending" ){
+if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="pending" ){
     Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->idCh)->increment('nombre_chambre',1);
-    Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+   // Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
     // broadcast event
 
-    broadcast(new faitreservation($clientname," a été annuler la réservation de chambre ",$reservation->typechambre));
+    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre));
 
     //notification
 
-    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
+    $message="$clientname est annuler la réservation de  $reservation->typechambre ";
     $hote->notify(new Reservations($message));
        
 
-}else{
-    $refund=$chargilypay->prix*($chambre->anullation/100);
-    Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->idCh)->increment('nombre_chambre',1);
-    Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+}elseif($politique_annulation->type_anullation=="flexible" ){
+    $reservation=Reservation::where('id',$idR)->first();
+  //  dd($reservation->date_debut);
+    $nombrejour = Carbon::parse($reservation->date_debut)
+    ->startOfDay()
+    ->diffInDays(now()->startOfDay());
+
+    if($nombrejour > $politique_annulation->nombre_jour ){
+        
+        $reservation->delete();
+        Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+         // broadcast event
+
+        broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser juste la taxe"));
+
+    //notification
+
+        $message="$clientname est annuler la réservation de  $reservation->typechambre ";
+        $hote->notify(new Reservations($message));
+        return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant gratuitement"); 
+
+
+
+    }
+
+    $reservation->delete();
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+    
+    
+    //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
 
     // broadcast event
 
-    broadcast(new faitreservation($clientname," a été annuler la réservation de chambre ",$reservation->typechambre));
+    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser juste la taxe"));
 
     //notification
 
     $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
     $hote->notify(new Reservations($message));
-    return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant et remobourse $refund DZD"); 
+    return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant et remobourse taxe"); 
+
+   
+}elseif($politique_annulation->type_anullation=="strict" ){
+    $reservation=Reservation::where('id',$idR)->first();
+    //  dd($reservation->date_debut);
+    $nombrejour = Carbon::parse($reservation->date_debut)
+    ->startOfDay()
+    ->diffInDays(now()->startOfDay());
+
+
+    if($nombrejour < $politique_annulation->nombre_jour ){
+        
+        Reservation::where('id',$idR)->delete();
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+    //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+
+    // broadcast event
+
+    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser 50% "));
+
+    //notification
+
+    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
+    $hote->notify(new Reservations($message));
+        return redirect()->route('reservations.index')->with("succes"," annuler la réservation avec un remboursement de 50% !"); 
+
+
+
+    }
+  
+    Reservation::where('id',$idR)->delete();
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+    //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+
+    // broadcast event
+
+    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et impossible récuprer votre  argent"));
+
+    //notification
+
+    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
+    $hote->notify(new Reservations($message));
+    return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant mais aucun  remoboursement ! "); 
 
    
 }

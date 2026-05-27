@@ -36,5 +36,12 @@
                 Message
             </a>
         </li>
+        <li>
+            <a href="/Ai/assistant" class="hover:text-blue-400 flex items-center gap-2">
+                <i class="fa-solid fa-comments"></i>
+                Ai Assistant
+            </a>
+        </li>
+    
     </ul>
 </aside>

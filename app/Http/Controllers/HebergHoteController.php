@@ -211,10 +211,11 @@ if($hebergement){
             'montant_taxe_sejour'=>$request->taxe,
             'code_promo'=>$request->code_Promo,
             'pourcentage_codepromo'=>$request->Pourcentage_code_Promo,
-            'status' => 'en cours',
+           
             'users_id' =>Auth::id(),
             'images'=>json_encode($images)
         ]);
+        
         $politique_annulation=politique_annulation::where('Hebergs_id',$hebergement->id)
         ->select('*')
         ->first();
@@ -225,7 +226,7 @@ if($hebergement){
             'nombre_jour'=>$request->nb_jours_annulation,
             'pourcentage_recuperation'=>$request->pourcentage_remboursement,
             'Hebergs_id'=>$hebergement->id,
-        ])   ;
+        ]);
 
        
       

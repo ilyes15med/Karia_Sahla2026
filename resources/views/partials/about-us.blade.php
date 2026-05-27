@@ -23,7 +23,7 @@
                 </p>
                 <p class="text-gray-600">
                     Grâce à l’intégration de technologies modernes et de l’intelligence artificielle,
-                    nous proposons une expérience personnalisée adaptée aux besoins des clients .
+                    nous proposons une expérience personnalisée adaptée aux besoins des clients et des hotes .
                 </p>
             </div>
 

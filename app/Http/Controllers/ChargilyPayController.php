@@ -48,7 +48,9 @@ class ChargilyPayController extends Controller
             $mode_payment=$request->mode_paiement;
           
             //pending
-            if($mode_payment=="a_larrivee"){  
+          
+        if($mode_payment=="a_larrivee"){  
+            
                 $reservation->update([
                 'date_debut' => $request->date_arrivee,
                 'date_fin' => $request->date_depart,
@@ -64,6 +66,7 @@ class ChargilyPayController extends Controller
 
 
             }elseif($mode_payment=="en_ligne"){
+               
 
             
           
@@ -76,7 +79,7 @@ class ChargilyPayController extends Controller
                   //  dd($newprix,$oldprix,$prixcaurant);
 
                     if ($payment) {
-                       
+                      //  dd("tu es en enligne et je lance le paiement en ligne  ");
                         $checkout = $this->chargilyPayInstance()->checkouts()->create([
                             "metadata" => [
                                 "payment_id" => $payment->id,

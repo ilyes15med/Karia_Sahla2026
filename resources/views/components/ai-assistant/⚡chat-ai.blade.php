@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Ai\Agents\AssistantKariasahla;
+use App\Ai\Agents\HoteAiAssistant;
 use App\Models\User;
 use App\Models\conversation_ia;
 use Livewire\Attributes\On;
@@ -60,9 +61,16 @@ public function Aiprocess($message){
         'content' => $message,
         'user_id' => $user->id
     ]);
-
-    $agent = new AssistantKariasahla($user);
-    $reponse = $agent->prompt($message);
+    if($user->role=='hote'){ 
+        $agent = new HoteAiAssistant($user);
+        $reponse = $agent->prompt($message);
+ 
+     }
+     else{
+        $agent = new AssistantKariasahla($user);
+        $reponse = $agent->prompt($message);
+     }
+   
 
     $reponseString = data_get($reponse, 'text')
         ?? data_get($reponse, 'output')

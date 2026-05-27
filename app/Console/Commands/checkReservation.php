@@ -48,8 +48,8 @@ class checkReservation extends Command
                 
                 'status'=>"finished"
             ]);
-            Chambre::where('id',$reservation->chambres_id)->increment('nombre_chambre',1);
-            Heberg::where('id', $heberg->heberg_id)->increment('nombre_chambre',1);
+            Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
+           // Heberg::where('id', $heberg->heberg_id)->increment('nombre_chambre',1);
 
           
          
