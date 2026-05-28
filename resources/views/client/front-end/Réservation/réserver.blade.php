@@ -200,17 +200,47 @@
     
                
             </div>
-            <!-- conditions de réservation -->
-            <div class="bg-gray-50 p-4 rounded-xl space-y-3">
-                <p class="text-xl font-semibold text-gray-700 border-b pb-2">
-                    <input type="radio"/> j'accepte tous <button onclick="afficherConditions()" class="text-red-600 font-bold"> les conditions </button> concerne a ce hébergement et ses chambres
-                </p>
-            </div>
-            <div class="hidden bg-gray-700">
-                Les conditions : 
-                
+            <!-- Conditions de réservation -->
+            <!-- Conditions de réservation -->
+<div class="bg-gray-50 p-4 rounded-xl space-y-3">
+    <p class="text-xl font-semibold text-gray-700 border-b pb-2">
+        <input type="radio" class="mr-2">
 
-            </div>
+        J'accepte toutes les 
+        <button type="button"
+                class="text-red-600 font-bold"
+                onclick="afficherConditions()">
+            conditions
+        </button>
+        concernant cet hébergement et ses chambres.
+    </p>
+</div>
+
+<!-- Popup Conditions -->
+<div id="afficherShow"
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+    <div class="bg-white w-[90%] max-w-2xl p-6 rounded-2xl shadow-xl relative">
+
+        <!-- Bouton fermer -->
+        <button type="button"
+                onclick="afficherConditions()"
+                class="absolute top-3 right-4 text-2xl font-bold text-gray-600">
+            ×
+        </button>
+
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">
+            Les conditions
+        </h2>
+
+        <div class="text-gray-700 leading-7">
+            {{ $heb->politiqueHeb }}
+        </div>
+    </div>
+</div>
+
+
+
 <div class="flex flex-col gap-3 mt-4">
 
 @if ($heb->payment_method =='pending')
@@ -429,6 +459,10 @@
             this.value = toLocalDateTimeString(departChoisi);
         }
     });
+
+    function afficherConditions(){
+        document.getElementById('afficherShow').classList.toggle('hidden');
+    }
     
     /* ========== INIT ========== */
     updateProgress(1);

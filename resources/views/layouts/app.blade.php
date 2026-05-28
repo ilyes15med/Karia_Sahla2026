@@ -192,7 +192,7 @@
             
           
             <footer class="bg-zinc-900 text-white mt-10">
-                @if(optional(auth()->user())->role !='agent' && optional(auth()->user())->role !='hote')
+                @if(optional(auth()->user())->role !='agent' && optional(auth()->user())->role !='hote' && optional(auth()->user())->role !='admin')
 
                 <div class="max-w-7xl mx-auto px-6 py-10">
                    

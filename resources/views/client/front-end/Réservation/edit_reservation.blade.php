@@ -195,19 +195,44 @@
             </div>
     
             <!-- Conditions -->
-            <div class="col-span-2 bg-gray-50 p-4 rounded-xl">
-                <label class="flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" id="acceptConditions" class="mt-1 accent-blue-600" required>
-                    <span>
-                        J'accepte toutes
-                        
-                        concernant cet hébergement et ses chambres
-                    </span>
-                </label>
-                <div id="conditionsBox" class="hidden mt-3 bg-white border rounded-lg p-3 text-sm text-gray-600">
-                   
-                </div>
-            </div>
+             <!-- Conditions de réservation -->
+<div class="bg-gray-50 p-4 rounded-xl space-y-3">
+    <p class="text-xl font-semibold text-gray-700 border-b pb-2">
+        <input type="radio" class="mr-2">
+
+        J'accepte toutes les 
+        <button type="button"
+                class="text-red-600 font-bold"
+                onclick="afficherConditions()">
+            conditions
+        </button>
+        concernant cet hébergement et ses chambres.
+    </p>
+</div>
+
+<!-- Popup Conditions -->
+<div id="afficherShow"
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+    <div class="bg-white w-[90%] max-w-2xl p-6 rounded-2xl shadow-xl relative">
+
+        <!-- Bouton fermer -->
+        <button type="button"
+                onclick="afficherConditions()"
+                class="absolute top-3 right-4 text-2xl font-bold text-gray-600">
+            ×
+        </button>
+
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">
+            Les conditions
+        </h2>
+
+        <div class="text-gray-700 leading-7">
+            {{ $heb->politiqueHeb }}
+        </div>
+    </div>
+</div>
+            
     
         </div>
     
@@ -413,6 +438,10 @@
             this.value = toLocalDateTimeString(departChoisi);
         }
     });
+    //condition heb
+    function afficherConditions(){
+        document.getElementById('afficherShow').classList.toggle('hidden');
+    }
     
     /* ========== INIT ========== */
     updateProgress(1);

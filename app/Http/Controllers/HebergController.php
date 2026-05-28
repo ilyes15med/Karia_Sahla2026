@@ -135,7 +135,11 @@ class HebergController extends Controller
         ->where('Hebergs.id',$idheb)
         ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
-        return view('agent.showHeb',compact('heb'));
+        $pollitique_Annulation=DB::table('politiqueAnnulations')
+        ->where('Hebergs_id',$heb->id)
+        ->select('*')
+        ->first();
+        return view('agent.showHeb',compact('heb','pollitique_Annulation'));
 
     }
   

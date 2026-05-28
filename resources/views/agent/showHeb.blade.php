@@ -85,6 +85,42 @@ $icons=[
 
  
     </div>  
+
+    <div class="mb-4 text-gray-700 bg-slate-100 rounded-xl p-4">
+        <span class="font-bold">politique de l'hébergement </span>
+        <br>
+        <span class="p-4"> {{$heb->politiqueHeb}}</span>
+      
+ 
+  
+     </div> 
+
+     <div class="mb-4 text-gray-700 bg-red-200 rounded-xl p-4">
+        <span class="font-bold">politique annulation de réservation </span>
+        <br>
+        @if ($pollitique_Annulation->type_anullation=="gratuite")
+            <span class="p-4">
+                politique {{$pollitique_Annulation->type_anullation}} :Annulation est gratuit
+        
+            </span>
+        @elseif ($pollitique_Annulation->type_anullation=="flexible")
+        <span class="p-4">
+            politique {{$pollitique_Annulation->type_anullation}} : annulation gratuit jusqu’à {{$pollitique_Annulation->nombre_jour}} jour ,après {{$pollitique_Annulation->nombre_jour}} jour remboursement partiel de taxe,mais le hôte peut recuperer les nuits
+    
+        </span>
+
+        @elseif ($pollitique_Annulation->type_anullation=="strict")
+        <span class="p-4">
+            politique {{$pollitique_Annulation->type_anullation}} :Annulation n'est pas gratuit ,le client récupere {{$pollitique_Annulation->pourcentage_recuperation}}% avant {{$pollitique_Annulation->nombre_jour}} jours ,mais après {{$pollitique_Annulation->nombre_jour}} jours  impossible récupéré
+    
+        </span>
+
+        @endif
+        
+      
+ 
+  
+     </div> 
     <!--les photos -->
     <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
    

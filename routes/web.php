@@ -11,6 +11,8 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ratingController;
 use App\Http\Controllers\AiAgentAssistant;
 use App\Http\Controllers\StatistiqueController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\adminRegisterController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Livewire\Chat;
 use App\Livewire\Chatbot;
@@ -145,9 +147,9 @@ Route::get('/reservation/{id}/ticket', [ReservationController::class,'downloadTi
 Route::get('/hote/heb/{id}/statistique',[StatistiqueController::class,'statistique_heb']);
 
 //admin
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth','verified'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminController::class,'statistique'])->middleware(['auth','verified'])->name('admin.dashboard');
+Route::get('/admin/dashboard/register/agent', [AdminController::class,'registre_agent'])->middleware(['auth','verified']);
+Route::post('/admin/dashboard/register/agent', [AdminController::class,'store'])->middleware(['auth','verified'])->name('register.Agent');
 
 
 
@@ -179,7 +181,10 @@ Route::get('/agent/dashboard/Hebergs/{id}/show',[HebergController::class,'index_
 
 //client
 //require __DIR__.'/client.php';
- 
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

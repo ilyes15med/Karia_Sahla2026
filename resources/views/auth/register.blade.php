@@ -13,9 +13,14 @@
             <option value="client">client</option>
           <!--  <option value="agent">Agent</option>-->
             <option value="hote">hote</option>
+            @if(Auth::check() && Auth::user()->role=='admin')
+             
+            <option value="agent">agent</option>
+                 
+            @endif
         </select>
 
-        <!-- Email Address -->
+             <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
