@@ -306,13 +306,13 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     ->startOfDay()
     ->diffInDays(now()->startOfDay());
 
-    if($nombrejour > $politique_annulation->nombre_jour ){
+    if($nombrejour >= $politique_annulation->nombre_jour ){
         
         $reservation->delete();
         Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
          // broadcast event
 
-        broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser juste la taxe"));
+        broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ));
 
     //notification
 
@@ -323,8 +323,8 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
 
 
     }
-
-    $reservation->delete();
+    else{
+         $reservation->delete();
     Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
     
     
@@ -340,6 +340,9 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     $hote->notify(new Reservations($message));
     return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant et remobourse taxe"); 
 
+    }
+
+   
    
 }elseif($politique_annulation->type_anullation=="strict" ){
     $reservation=Reservation::where('id',$idR)->first();
@@ -349,10 +352,10 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     ->diffInDays(now()->startOfDay());
 
 
-    if($nombrejour < $politique_annulation->nombre_jour ){
+    if($nombrejour >= $politique_annulation->nombre_jour ){
         
         Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+        Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
     //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
 
     // broadcast event

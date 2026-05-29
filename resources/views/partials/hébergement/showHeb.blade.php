@@ -2,17 +2,35 @@
     
 
 @php
-    $icons=[
-        'wifi' => 'fa-wifi',
-        'parking' => 'fa-car',
-        'climatisation' => 'fa-snowflake',
-        'tv' => 'fa-tv',
-        'restaurant' => 'fa-utensils',
-        'piscine' => 'fa-water-ladder',
-        'elevator'=>'fa-elevator'
+$icons = [
+    'wifi'             => 'fa-wifi',
     
-    
-    ];
+    // parking
+    'parking_gratuit'  => 'fa-square-parking',
+    'parking_payant'   => 'fa-square-parking',
+
+    // équipements
+    'climatisation'    => 'fa-snowflake',
+    'chauffage'        => 'fa-fire',
+    'cuisiniere'       => 'fa-kitchen-set',
+    'tv'               => 'fa-tv',
+    'salle_bain'       => 'fa-bath',
+    'douche'           => 'fa-shower',
+
+    // loisirs & services
+    'restaurant'       => 'fa-utensils',
+    'piscine'          => 'fa-person-swimming',
+    'salle_sport'      => 'fa-dumbbell',
+    'petit_dejeuner'   => 'fa-mug-hot',
+    'blanchisserie'    => 'fa-shirt',
+
+    // sécurité & accès
+    'securite'         => 'fa-shield-halved',
+    'ascenseur'        => 'fa-elevator',
+    'animaux'          => 'fa-paw',
+    'plage'            => 'fa-umbrella-beach',
+    'event' =>'fa-calendar-days',
+];
 @endphp
     <div class="flex min-h-screen">
         
@@ -117,34 +135,85 @@
                            
                       
                             <tr class="hover:bg-gray-50">
-                                @if($chambre->typeChambres=="Hotel" || $chambre->typeChambres=="Auberge")
-                                <td class="px-4 py-3">
+                                <td>
+                                @if($heb->typeHeberg == 'Hotel' || $heb->typeHeberg == 'Auberge')
+
+                                @php
+                                    $images = json_decode($chambre->images_chambres, true);
+                                @endphp
+                            
+                                <div class="flex items-center gap-3">
+                            
+                                    @if(!empty($images))
+                                        <img
+                                            src="{{ asset('storage/' . $images[0]) }}"
+                                            alt="chambre"
+                                            class="w-12 h-12 object-cover rounded-lg shadow"
+                                        >
+                                    @endif
+                            
                                     <div>
-                                        @php
-                                         $image = json_decode($chambre->images_chambres);
-     
-                                        @endphp  
-                                        <div class="rounded-ld">
-                                         
-                                            <img src="{{asset('storage/'.$image[0])}}" alt="heb"  class="w-10 h-10 object-cover rounded-lg shadow">
-                                            
-                                            <span class="text-red-600">  
-                                                {{ $chambre->typeChambres }}
-                                                
-                                            </span>
-                                            <br>
-                                            <span >  
-                                               <button onclick="detailChambre()" class="text-gray-700">plus détails </button>
-                                                
-                                            </span>
-                                           
-                                        </div>
-                                       
-    
+                                        <span class="text-red-600 font-semibold">
+                                            {{ $chambre->typeChambres }}
+                                        </span>
+                                        <br>
+                                        <button
+                                            type="button"
+                                            onclick="openChambreModal({{ $chambre->id }})"
+                                            class="text-gray-700 hover:text-blue-600 text-sm"
+                                        >
+                                            plus détails
+                                        </button>
                                     </div>
-                                    
-                                </td>
-                                @else
+                            
+                                </div>
+                            
+                                {{-- Modal détails chambre --}}
+                                <div
+                                    id="chambreShow{{ $chambre->id }}"
+                                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                                >
+                                    <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-3xl relative max-h-[90vh] overflow-y-auto">
+                            
+                                        <button
+                                            type="button"
+                                            onclick="closeChambreModal({{ $chambre->id }})"
+                                            class="absolute top-3 right-3 text-2xl text-gray-500 hover:text-red-600"
+                                        >
+                                            ✖
+                                        </button>
+                            
+                                        <h2 class="text-xl font-bold mb-4">Détails de la chambre</h2>
+                            
+                                        <div class="space-y-2 text-gray-700">
+                                            <p><strong>Type :</strong> {{ $chambre->typeChambres }}</p>
+                                            <p><strong>Nombre de lits :</strong> {{ $chambre->nombre_lit }}</p>
+                                            <p><strong>Nombre de chambres :</strong> {{ $chambre->nombre_chambre }}</p>
+                                           
+                                            <p><strong>Prix :</strong> {{ $chambre->prix }} DA</p>
+                                            @if($chambre->Description)
+                                                <p><strong>Description :</strong> {{ $chambre->Description }}</p>
+                                            @endif
+                                        </div>
+                            
+                                        <div class="flex flex-wrap gap-3 mt-5">
+                                            @if(!empty($images))
+                                                @foreach ($images as $image)
+                                                    <img
+                                                        src="{{ asset('storage/' . $image) }}"
+                                                        onclick="showImage(this.src)"
+                                                        class="w-32 h-24 object-cover rounded-lg shadow cursor-pointer"
+                                                    >
+                                                @endforeach
+                                            @endif
+                                        </div>
+                            
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            @else
+                                
                                 <td class="px-4 py-3">
 
                                    
@@ -311,27 +380,36 @@
             <img id="modalImage" class="max-w-3xl rounded-lg">
         </div>
     
-        <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
-    
-            <span class="font-bold">équipement :</span>
-            <div class="space-x-4">
-                @foreach (json_decode($heb->service) as $service)
-                            <span class="mr-3">
-                                <i class="fa-solid {{ $icons[$service] }}"></i>
-                                {{ $service }}
-                            </span>
-                           
-    
-                                
-                @endforeach
-            
-    
-             
-               
-          
-    
-            </div>    
-        </div>
+        @php
+$services = json_decode($heb->service, true);
+        
+            if (!is_array($services)) {
+                $services = [];
+            }
+@endphp
+            <!-- équipements -->
+<div class="mt-4 bg-slate-100 rounded-xl p-4 flex flex-wrap gap-3">
+<span class="font-bold">équipement :</span>
+
+<div class="space-x-4">
+
+    @forelse ($services as $service)
+
+        <span class="mr-3">
+            <i class="fa-solid {{ $icons[$service] ?? 'fa-circle' }}"></i>
+            {{ $service }}
+        </span>
+
+    @empty
+
+        <span class="mr-3">
+            aucun service
+        </span>
+
+    @endforelse
+
+</div>
+</div>
        <!--map-->
         <div id="map" class="w-full h-96 mt-4 text-gray-700 bg-slate-100 rounded-xl p-4"></div>
          <!--Avis-->
@@ -679,6 +757,12 @@
     </div>
     
     <script>
+          function openChambreModal(id) {
+            document.getElementById('chambreShow' + id).classList.remove('hidden');
+        }
+        function closeChambreModal(id) {
+            document.getElementById('chambreShow' + id).classList.add('hidden');
+        }
         function addchambre(){
     
             document.getElementById("addchambreform").classList.remove("hidden");

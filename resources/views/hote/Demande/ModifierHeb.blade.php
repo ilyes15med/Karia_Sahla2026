@@ -228,29 +228,127 @@
 
                     <label class="flex items-center gap-2">
                         <input type="checkbox" name="services[]" value="wifi">
+                        <i class="fa-solid fa-wifi text-blue-500"></i>
                         WiFi
                     </label>
-
+                
                     <label class="flex items-center gap-2">
-                        <input type="checkbox" name="services[]" value="parking">
-                        Parking
+                        <input type="checkbox" name="services[]" value="parking_gratuit">
+                        <i class="fa-solid fa-square-parking text-gray-600"></i>
+                        Parking gratuit
                     </label>
-
+                    
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="parking_payant">
+                        <i class="fa-solid fa-square-parking text-gray-600"></i>
+                        Parking payant
+                    </label>
+                    
+                
                     <label class="flex items-center gap-2">
                         <input type="checkbox" name="services[]" value="tv">
+                        <i class="fa-solid fa-tv text-indigo-500"></i>
                         TV
                     </label>
-
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="event">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        evenement
+                    </label>
+                
                     <label class="flex items-center gap-2">
                         <input type="checkbox" name="services[]" value="piscine">
+                        <i class="fa-solid fa-person-swimming text-cyan-500"></i>
                         Piscine
                     </label>
-
+                
                     <label class="flex items-center gap-2">
                         <input type="checkbox" name="services[]" value="restaurant">
+                        <i class="fa-solid fa-utensils text-orange-500"></i>
                         Restaurant
                     </label>
+                
+                    <!-- nouveaux services -->
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="climatisation">
+                        <i class="fa-solid fa-snowflake text-sky-500"></i>
+                        Climatisation
+                    </label>
+                    <!-- Chauffage -->
+<label class="flex items-center gap-2">
+    <input type="checkbox" name="services[]" value="chauffage">
+    <i class="fa-solid fa-fire text-red-500"></i>
+    Chauffage
+</label>
 
+<!-- Cuisinière -->
+<label class="flex items-center gap-2">
+    <input type="checkbox" name="services[]" value="cuisiniere">
+    <i class="fa-solid fa-kitchen-set text-orange-500"></i>
+    Cuisinière
+</label>
+
+<!-- Salle de bain -->
+<label class="flex items-center gap-2">
+    <input type="checkbox" name="services[]" value="salle_bain">
+    <i class="fa-solid fa-bath text-cyan-500"></i>
+    Salle de bain
+</label>
+
+<!-- Douche -->
+<label class="flex items-center gap-2">
+    <input type="checkbox" name="services[]" value="douche">
+    <i class="fa-solid fa-shower text-blue-500"></i>
+    Douche
+</label>
+                
+                    
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="salle_sport">
+                        <i class="fa-solid fa-dumbbell text-red-500"></i>
+                        Salle de sport
+                    </label>
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="petit_dejeuner">
+                        <i class="fa-solid fa-mug-hot text-yellow-500"></i>
+                        Petit déjeuner
+                    </label>
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="securite">
+                        <i class="fa-solid fa-shield-halved text-green-500"></i>
+                        Sécurité 24h/24
+                    </label>
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="ascenseur">
+                        <i class="fa-solid fa-elevator text-gray-500"></i>
+                        Ascenseur
+                    </label>
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="animaux">
+                        <i class="fa-solid fa-paw text-amber-500"></i>
+                        Animaux acceptés
+                    </label>
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="plage">
+                        <i class="fa-solid fa-umbrella-beach text-yellow-400"></i>
+                        Accès plage
+                    </label>
+                
+                  
+                
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="services[]" value="blanchisserie">
+                        <i class="fa-solid fa-shirt text-blue-400"></i>
+                        Blanchisserie
+                    </label>
+                
                 </div>
 
                 <button type="button"

@@ -57,7 +57,10 @@
                             <td class="p-2">{{$Heberg->nomHeberg}}</td>
                             <td class="p-2">{{$Heberg->hote_name}}</td>
                             <td class="p-2">{{$Heberg->typeHeberg}}</td>
-                            <td class="p-2">{{$Heberg->Description}}</td>
+                            <td class="p-2">
+                                {{ \Illuminate\Support\Str::limit($Heberg->Description, 50, '...') }}
+                            </td>
+                           
                             
                             <td class="p-2">{{$Heberg->service}}</td>
                             

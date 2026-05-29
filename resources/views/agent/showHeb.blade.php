@@ -1,19 +1,37 @@
 
     
 <x-app-layout>
-@php
-$icons=[
-    'wifi' => 'fa-wifi',
-    'parking' => 'fa-car',
-    'climatisation' => 'fa-snowflake',
-    'tv' => 'fa-tv',
-    'restaurant' => 'fa-utensils',
-    'piscine' => 'fa-water-ladder',
-    'elevator'=>'fa-solid fa-elevator'
-
-
-];
-@endphp
+    @php
+    $icons = [
+        'wifi'             => 'fa-wifi',
+        
+        // parking
+        'parking_gratuit'  => 'fa-square-parking',
+        'parking_payant'   => 'fa-square-parking',
+    
+        // équipements
+        'climatisation'    => 'fa-snowflake',
+        'chauffage'        => 'fa-fire',
+        'cuisiniere'       => 'fa-kitchen-set',
+        'tv'               => 'fa-tv',
+        'salle_bain'       => 'fa-bath',
+        'douche'           => 'fa-shower',
+    
+        // loisirs & services
+        'restaurant'       => 'fa-utensils',
+        'piscine'          => 'fa-person-swimming',
+        'salle_sport'      => 'fa-dumbbell',
+        'petit_dejeuner'   => 'fa-mug-hot',
+        'blanchisserie'    => 'fa-shirt',
+    
+        // sécurité & accès
+        'securite'         => 'fa-shield-halved',
+        'ascenseur'        => 'fa-elevator',
+        'animaux'          => 'fa-paw',
+        'plage'            => 'fa-umbrella-beach',
+        'event' =>'fa-calendar-days',
+    ];
+    @endphp
 <div class="flex min-h-screen">
     
     <!-- Sidebar -->

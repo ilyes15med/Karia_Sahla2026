@@ -48,53 +48,7 @@
                
               
     
-                     <!-- Services -->
-                     <p class="text-lg mt-4">Sélectionnez les services :</p>
-                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
-             
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                             <input type="checkbox" name="services[]" value="wifi" class="form-checkbox h-5 w-5 text-blue-500">
-                             <i class="fa-solid fa-wifi text-blue-500"></i>
-                             <span>Wi-Fi</span>
-                         </label>
- 
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                             <input type="checkbox" name="services[]" value="parking" class="form-checkbox h-5 w-5 text-blue-500">
-                             <i class="fa-solid fa-car text-blue-500"></i>
-                             <span>Parking</span>
-                         </label>
- 
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                             <input type="checkbox" name="services[]" value="climatisation" class="form-checkbox h-5 w-5 text-blue-500">
-                             <i class="fa-solid fa-snowflake text-blue-500"></i>
-                             <span>Climatisation</span>
-                         </label>
- 
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                             <input type="checkbox" name="services[]" value="tv" class="form-checkbox h-5 w-5 text-blue-500">
-                             <i class="fa-solid fa-tv text-blue-500"></i>
-                             <span>Télévision</span>
-                         </label>
- 
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                             <input type="checkbox" name="services[]" value="restaurant" class="form-checkbox h-5 w-5 text-blue-500">
-                             <i class="fa-solid fa-utensils text-blue-500"></i>
-                             <span>Restaurant</span>
-                         </label>
- 
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                             <input type="checkbox" name="services[]" value="piscine" class="form-checkbox h-5 w-5 text-blue-500">
-                             <i class="fa-solid fa-water-ladder text-blue-500"></i>
-                             <span>Piscine</span>
-                         </label>
-
-                         <label class="flex items-center gap-2  p-3 rounded-lg cursor-pointer ">
-                            <input type="checkbox" name="services[]" value="elevator" class="form-checkbox h-5 w-5 text-blue-500">
-                            <i class="fa-solid fa-elevator"></i>
-                            <span>acenseur</span>
-                        </label>
- 
-                     </div>
+                   
     
                 <!-- Description -->
                 <div>

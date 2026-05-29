@@ -246,7 +246,7 @@ if($hebergement){
 
         return redirect()
         ->route('hote.dashboard')
-        ->with('succes', 'le demande ajouter hébergement est supprimer  avec succès');
+        ->with('succes', 'hébergement est supprimer  avec succès');
 
 
     }
