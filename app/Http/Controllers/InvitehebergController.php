@@ -14,6 +14,7 @@ use App\Events\faitreservation;
 use App\Notifications\Reservations;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class InvitehebergController extends Controller
 {
@@ -44,18 +45,37 @@ class InvitehebergController extends Controller
     }
     public function index_Heb($idHeb){
       
+      
         $heb=DB::table('Hebergs')
         ->join('users','Hebergs.users_id','=','users.id')
         ->where('Hebergs.status','valide')
         ->where('Hebergs.id',$idHeb)
         ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
+        ->first(); 
+    if(Auth::check()){
+        $client=auth()->user();
+      /*  $reservations=DB::table('reservations')
+        ->where('users_id',$client->id)
+        ->select('reservations.canEval as canEvalue')
+        ->first();*/
+        $reservations = DB::table('reservations')
+        ->join('chambres','reservations.chambres_id','=','chambres.id')
+        ->where('reservations.users_id',$client->id)
+        ->where('chambres.Hebergs_id',$idHeb)
+        ->where('reservations.canEval',1)
         ->first();
+
+    }else{
+            $reservations=null;
+
+    }
 
         $chambres= DB::table('chambres')->where('Hebergs_id',$idHeb)
         ->select('chambres.*')
         ->get();
 
-        $reservations=null;
+      
+        
 
         $evaluations=DB::table('evaluations')
         ->join('users','evaluations.users_id','=','users.id')

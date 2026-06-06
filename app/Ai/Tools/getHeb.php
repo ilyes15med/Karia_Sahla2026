@@ -45,7 +45,8 @@ class getHeb implements Tool
         }
 
         $result=$query->get();
-        return $result;
+       // dd($result);
+        return  $result ;
     }
 
     /**

@@ -83,7 +83,7 @@
                             <thead class="bg-gray-100 text-gray-700">
                                 <tr>
                                     <th class="px-4 py-3"></th>
-                                    <th class="px-4 py-3">Quantité</th>
+                                    <th class="px-4 py-3">Quantité disponible</th>
                                     <th class="px-4 py-3">Prix (DA)</th>
                                     <th class="px-4 py-3 text-center">Annulation</th>
                                     @if($heb->typeHeberg == 'Auberge' || $heb->typeHeberg == 'Hotel')
@@ -183,7 +183,7 @@
                                     </td>
 
                                     {{-- Quantité --}}
-                                    <td class="px-4 py-3">{{ $chambre->nombre_chambre }}</td>
+                                    <td class="px-4 py-3">{{ $chambre->Quantite }}</td>
 
                                     {{-- Prix --}}
                                     <td class="px-4 py-3">{{ $chambre->prix }}</td>
@@ -335,7 +335,7 @@
                         @foreach($evaluations as $evaluation)
                         <div class="mt-3 flex items-start gap-3">
 
-                            <img src="{{ asset('/assets/images/images.jpeg') }}"
+                            <img src="{{ asset('/assets/images/photo_profile.jpg') }}"
                                 class="w-10 h-10 rounded-full object-cover">
 
                             <div>

@@ -284,29 +284,6 @@ class ChargilyPayController extends Controller
             "amount"   => $amount,
         ]);
     
-        //dd("maintennat je suis en redirect et je crée la réservation et payment ");
-     
-        $chambre->decrement('Quantite', 1);
-
-           
-       
-        
-        //$heberg->decrement('nombre_chambre', 1);
-
-        // ✅ Récupérer client et hôte depuis la BDD
-        $client = User::findOrFail($reservation->users_id);
-
-        $hebergData = DB::table('chambres')
-            ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
-            ->where('chambres.id', $chambre->id)
-            ->select('Hebergs.users_id')
-            ->first();
-        $hote = User::findOrFail($hebergData->users_id);
-
-        // Broadcast + notification
-        broadcast(new faitreservation($client->name, " a été réserver chambre ", $chambre->typeChambres));
-        $hote->notify(new Reservations("{$client->name} est réserver une chambre {$chambre->typeChambres}"));
-
         if ($payment) {
             $checkout = $this->chargilyPayInstance()->checkouts()->create([
                 "metadata" => [
@@ -397,6 +374,28 @@ class ChargilyPayController extends Controller
                     $payment->update([
                         'amount'=>$metadata['prixactuelle']
                     ]);
+
+                    $chambre = Chambre::findOrFail($reservation->chambres_id);
+                  
+    
+                    
+    
+                    // ✅ Récupérer client et hôte depuis la BDD
+                    $client = User::findOrFail($reservation->users_id);
+    
+                    $hebergData = DB::table('chambres')
+                        ->join('Hebergs', 'chambres.Hebergs_id', '=', 'Hebergs.id')
+                        ->where('chambres.id', $chambre->id)
+                        ->select('Hebergs.users_id')
+                        ->first();
+                    $hote = User::findOrFail($hebergData->users_id);
+    
+                    // Broadcast + notification
+                    broadcast(new faitreservation($client->name, " est modifier la réservation chambre ", $chambre->typeChambres));
+                    $hote->notify(new Reservations("{$client->name} est modifier la réservation chambre {$chambre->typeChambres}"));
+    
+                    return redirect()->route('reservations.index')->with("succes","la réservation a été modifier avec succes maintenant"); 
+        
                 }
 
      

@@ -29,6 +29,7 @@ class StatistiqueController extends Controller
         $Reservation_par_jour = Reservation::whereHas('chambre', function ($query) use ($hebergement) {
             $query->where('Hebergs_id', $hebergement->id);
         })->join('chambres', 'reservations.chambres_id', '=', 'chambres.id')
+        ->where('reservations.status', 'active')
         ->whereDate('reservations.updated_at', Carbon::today())
         ->selectRaw('chambres.typeChambres as type, COUNT(reservations.id) as total')
         ->groupBy('type')
@@ -42,6 +43,7 @@ class StatistiqueController extends Controller
         $reservation_par_semaine=Reservation::whereHas('chambre',function($query) use ($hebergement){
             $query->where('Hebergs_id', $hebergement->id);
         })
+        ->where('reservations.status', 'active')
         ->whereBetween('updated_at',[$debut_semaine, $fin_semaine])
         ->selectRaw('DAYOFWEEK(updated_at) as day, COUNT(*) as total')
         ->groupBy('day')

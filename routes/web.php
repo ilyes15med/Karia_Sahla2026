@@ -24,7 +24,7 @@ use App\Livewire\Chatbot;
 Route::get('/',[InvitehebergController::class,'index_Hebs_home'] )->name('invite');
 
 Route::get('/hebergements',[InvitehebergController::class,'index_Hebs']);
-Route::get('/hebergement/{id}',[InvitehebergController::class,'index_Heb']);
+Route::get('/hebergement/{id}',[InvitehebergController::class,'index_Heb'])->name('hebergement.index');
 
 Route::get('/about-us',function(){
     return view('invité.front-end.about-us');

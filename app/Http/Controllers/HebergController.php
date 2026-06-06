@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Heberg;
+use App\Models\politique_annulation;
 use Illuminate\Support\Facades\DB;
 use App\Events\HeberegRquest;
 use App\Events\ReponseReqHote;
@@ -124,8 +125,9 @@ class HebergController extends Controller
         ->where('Hebergs.id',$idHeb)
         ->select('Hebergs.*','users.name as hote_name','users.id as hote_id')
         ->first();
+        $pollitique_Annulation=politique_annulation::where('Hebergs_id',$heb->id)->first();
 
-        return view('agent.showHeb',compact('heb'));
+        return view('agent.showHeb',compact('heb','pollitique_Annulation'));
 
     }
     public function index_Heb_Valide($idheb){

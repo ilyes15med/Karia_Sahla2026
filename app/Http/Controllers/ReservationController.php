@@ -97,13 +97,16 @@ public function Reservations_index(){
     $reservations=DB::table('reservations')
     ->join('chargily_payments','reservations.id','=','chargily_payments.reservations_id')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
-    ->where('chargily_payments.status','paid')
-    ->orWhere('chargily_payments.status','pending')
+    ->where(function ($query) {
+        $query->where('chargily_payments.status', 'paid')
+              ->orWhere('chargily_payments.status', 'pending');
+    })
     ->where('reservations.status','active')
     
     ->where('reservations.users_id',$client->id)
-    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres','chargily_payments.status as statusPayed')
+    ->select('reservations.id as Rid','reservations.nom_complet as Rnom','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres','chargily_payments.status as statusPayed','chambres.Hebergs_id as HebId')
     ->get();
+    
   
 
 //error   
@@ -124,8 +127,9 @@ public function downloadTicket($id)
     ->where('reservations.id',$id)
     ->select('reservations.date_debut' ,'reservations.date_fin','reservations.nom_complet as nom_complet','reservations.addresse as Raddresee','chambres.typeChambres','chargily_payments.amount','reservations.idCarteNational','chargily_payments.status as payedStatus','chambres.Hebergs_id as idheb')
     ->first();
-    $hebergement=Heberg::find($reservation->idheb)->first();
-    
+  
+    $hebergement=Heberg::find($reservation->idheb);
+   
 
     $pdf = Pdf::loadView('client.front-end.Réservation.tiket', compact('reservation','hebergement'));
 
@@ -287,7 +291,7 @@ public function delete_reservation($idR){
    
 if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="pending" ){
     Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
+    Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
    // Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
     // broadcast event
 
@@ -306,38 +310,27 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     ->startOfDay()
     ->diffInDays(now()->startOfDay());
 
-    if($nombrejour >= $politique_annulation->nombre_jour ){
-        
-        $reservation->delete();
-        Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
-         // broadcast event
+    $reservation->delete();
+    Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
+     // broadcast event
 
-        broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ));
+    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ));
 
     //notification
 
-        $message="$clientname est annuler la réservation de  $reservation->typechambre ";
-        $hote->notify(new Reservations($message));
+    $message="$clientname est annuler la réservation de  $reservation->typechambre ";
+    $hote->notify(new Reservations($message));
+
+    if($nombrejour >= $politique_annulation->nombre_jour ){
+        
+       
         return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant gratuitement"); 
 
 
 
     }
     else{
-         $reservation->delete();
-    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
-    
-    
-    //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
-
-    // broadcast event
-
-    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser juste la taxe"));
-
-    //notification
-
-    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
-    $hote->notify(new Reservations($message));
+         
     return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant et remobourse taxe"); 
 
     }
@@ -351,39 +344,29 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     ->startOfDay()
     ->diffInDays(now()->startOfDay());
 
+    Reservation::where('id',$idR)->delete();
+    Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
+//Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
+
+// broadcast event
+
+broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser 50% "));
+
+//notification
+
+$message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
+$hote->notify(new Reservations($message));
+
 
     if($nombrejour >= $politique_annulation->nombre_jour ){
         
-        Reservation::where('id',$idR)->delete();
-        Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
-    //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
-
-    // broadcast event
-
-    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et rembourser 50% "));
-
-    //notification
-
-    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
-    $hote->notify(new Reservations($message));
+      
         return redirect()->route('reservations.index')->with("succes"," annuler la réservation avec un remboursement de 50% !"); 
 
 
 
     }
   
-    Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
-    //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
-
-    // broadcast event
-
-    broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ," et impossible récuprer votre  argent"));
-
-    //notification
-
-    $message="$clientname est annuler la réservation de chambre $reservation->typechambre ";
-    $hote->notify(new Reservations($message));
     return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant mais aucun  remoboursement ! "); 
 
    
@@ -404,14 +387,21 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
 public function hote_Reservations_index(){
 
     $hote=Auth()->user();
+   
+    $heb=Heberg::where('users_id',$hote->id)->first();
     $reservations=DB::table('reservations')
     ->join('chargily_payments','reservations.id','=','chargily_payments.reservations_id')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
-    ->where('chargily_payments.status','paid')
-    ->orwhere('chargily_payments.status','pending')
+    ->where('chambres.Hebergs_id',$heb->id)
+    
+    ->where(function ($query) {
+        $query->where('chargily_payments.status', 'paid')
+              ->orWhere('chargily_payments.status', 'pending');
+    })
     ->where('reservations.status','active')
     ->select('reservations.id as Rid','reservations.nom_complet as Rnom','chargily_payments.status as status','reservations.date_debut as Rdate_debut','reservations.date_fin as Rdate_fin','chargily_payments.amount as amount','chambres.typeChambres as typeChambres')
     ->get();
+    
 
 
     return view('hote.Reservations.showReservations',compact('reservations'));

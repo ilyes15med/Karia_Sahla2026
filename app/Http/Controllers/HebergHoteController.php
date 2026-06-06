@@ -314,7 +314,7 @@ if($hebergement){
         }
      
         Chambre::create([
-            'typeChambres'=>$req->type_chambre,
+            'typeChambres'=>$req->type_custom,
             'prix'=>$req->prix,
             'Description' =>$req->description,
             'services'=>json_encode($req->services),

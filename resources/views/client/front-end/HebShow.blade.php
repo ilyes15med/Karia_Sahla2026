@@ -180,6 +180,7 @@
                 <p><strong>Type :</strong> {{ $chambre->typeChambres }}</p>
                 <p><strong>Nombre de lits :</strong> {{ $chambre->nombre_lit }}</p>
                 <p><strong>Nombre de chambres :</strong> {{ $chambre->nombre_chambre }}</p>
+               
                 <p><strong>Prix :</strong> {{ $chambre->prix }} DA</p>
                 @if($chambre->Description)
                     <p><strong>Description :</strong> {{ $chambre->Description }}</p>
@@ -200,6 +201,7 @@
 
         </div>
     </div>
+</td>
 
 @else
     

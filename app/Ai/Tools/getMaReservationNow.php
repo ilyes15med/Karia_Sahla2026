@@ -38,8 +38,11 @@ ses réservations en cours ou finished et les détails de ses réservations.";
      
        
         if($ReservationStatus){
+           
             $User=auth()->user();
-            $result=$User->reservations->where('status',$ReservationStatus)->get();
+            $result = $User->reservations()
+               ->where('status', $ReservationStatus)
+               ->get();
 
 
         }

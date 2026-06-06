@@ -62,7 +62,7 @@
                                 accueil
                             </x-nav-link>
                             
-                            <x-nav-link href="/client/hebergements">
+                            <x-nav-link href="/hebergements">
                                 hébergements
                             </x-nav-link>
                             

@@ -23,7 +23,8 @@
                   <p class="text-xl "> explorer notre sélection hébergement</p>
                   <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($hebs as $heb)
-                        <a href="/client/Hebergement/{{$heb->id}}" class="bg-white rounded-2xl shadow-md overflow-hidden ">
+                   
+                        <a href="/hebergement/{{$heb->id}}" class="bg-white rounded-2xl shadow-md overflow-hidden ">
                               <div class="space-y-0.5">
                               @php
                                 $image= json_decode($heb->images)   

@@ -51,17 +51,7 @@
     <div class="space-y-4">
     
     <div>
-    @if(session('date_arrivee') && session('date_depart'))
-        <label>Date d'arrivée</label>
-        <input type="datetime-local" id="date_arrivee" name="date_arrivee" min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ session('date_arrivee') }}" required
-        class="w-full border rounded-lg px-3 py-2">
-        </div>
-        <div>
-        <label>Date de départ</label>
-        <input type="datetime-local" id="date_depart" name="date_depart" min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"  value="{{ session('date_depart') }}" required
-        class="w-full border rounded-lg px-3 py-2">
-        </div>
-    @else
+   
     <label>Date d'arrivée</label>
     <input type="datetime-local" id="date_arrivee" name="date_arrivee" min="{{ now()->format('Y-m-d\TH:i') }}" value="{{ $reservation->date_debut }}" required
     class="w-full border rounded-lg px-3 py-2">
@@ -71,7 +61,7 @@
     <input type="datetime-local" id="date_depart" name="date_depart" min="{{ now()->addDay()->format('Y-m-d\TH:i') }}"  value="{{ $reservation->date_fin }}" required
     class="w-full border rounded-lg px-3 py-2">
     </div>
-    @endif
+    
     
     <button type="button"  onclick="nextStep1({{ $chambre->prix }},{{ $chambre->nombre_lit }},{{ $heb->montant_taxe_sejour }})"
     class="w-full bg-blue-600 text-white p-2 rounded-lg">

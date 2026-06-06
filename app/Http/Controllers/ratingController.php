@@ -69,7 +69,7 @@ class ratingController extends Controller
         $clientname=Auth()->user()->name;
         $heb=DB::table('Hebergs')
         ->where('id',$idheb)
-        ->select('Hebergs.nomHeberg as nomHeb','Hebergs.users_id as hote_id')
+        ->select('Hebergs.nomHeberg as nomHeb','Hebergs.users_id as hote_id','Hebergs.id as hebId')
         ->first();
         //name heb
         $nomheb=$heb->nomHeb;
@@ -87,7 +87,9 @@ class ratingController extends Controller
         $message_Notification="$clientname $message $nomheb ";
         $hote->notify(new ratingNotification($message_Notification) );
 
-        return redirect()->back()->with("succes","l'avis a été ajouter"); 
+       // return redirect()->back()->with("succes","l'avis a été ajouter"); 
+       return redirect()->route('hebergement.index',$heb->hebId)->with("succes","l'avis a été ajouter"); 
+
 
     }
     public function destroy_rating($idheb,$ideval){

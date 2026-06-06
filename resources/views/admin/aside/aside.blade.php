@@ -1,5 +1,5 @@
 <aside class="w-64 bg-gray-900 text-white p-6">
-    <h2 class="text-2xl font-bold mb-6">hote Panel</h2>
+    <h2 class="text-2xl font-bold mb-6">Admin Panel</h2>
 
     <ul class="space-y-4">
         <li>

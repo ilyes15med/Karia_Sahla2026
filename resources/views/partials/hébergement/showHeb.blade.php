@@ -112,15 +112,28 @@ $icons = [
                         <!-- Header -->
                         <thead class="bg-gray-100 text-gray-700">
                             <tr>
-                                
+                                @if($heb->typeHeberg == 'Hotel' || $heb->typeHeberg == 'Auberge')
                                
-                                <th class="px-4 py-3"></th>
+                                <th class="px-4 py-3">type</th>
                                 
                                 <th class="px-4 py-3">Prix (DA)</th>
-                                <th class="px-4 py-3">Quantité totale </th>
+                                <th class="px-4 py-3"> Quantité disponible </th>
                                 
                                 <th class="px-4 py-3 text-center"></th>
+                               
                                 <th class="px-4 py-3 text-center"></th>
+                                @else
+                                <th class="px-4 py-3"></th>
+                                
+                                <th class="px-4 py-3"></th>
+                                <th class="px-4 py-3">prix(DA)</th>
+                                <th class="px-4 py-3"> Quantité disponible </th>
+                                
+                                <th class="px-4 py-3 text-center"></th>
+                               
+                                <th class="px-4 py-3 text-center"></th>
+                               
+                                @endif
 
                             </tr>
                         </thead>
@@ -224,13 +237,14 @@ $icons = [
                                     
                                 
                                 </td>
-                                @endif
-                                <td class="px-4 py-3">{{$chambre->prix}}</td>
+                            @endif
+                            <td class="px-4 py-3">{{$chambre->prix}}</td>
                                 @if ($chambre->Quantite!=0)
                                     <td class="px-4 py-3">
                                         {{ $chambre->Quantite }}
                                    
                                     </td>
+                                
                                     <td class="px-4 py-3">
                                         @if ($pollitique_Annulation->type_anullation=="gratuit")
                                         <div class="p-1 m-1 bg-green-600 text-center">
@@ -428,7 +442,7 @@ $services = json_decode($heb->service, true);
         <div class="mt-3 flex items-start gap-3">
         
             <!-- photo profile -->
-            <img src="{{asset('/assets/images/images.jpeg')}}"
+            <img src="{{asset('/assets/images/photo_profile.jpg')}}"
                  class="w-10 h-10 rounded-full object-cover">
     
             <!-- nom + evaluation -->
@@ -483,9 +497,9 @@ $services = json_decode($heb->service, true);
             
         @endforeach
         @endif
-           
-@if( optional($reservations)->canEvalue==1)
-   
+
+              
+@if($reservations)
 
 <div class="mt-4 text-gray-700 bg-slate-100 rounded-xl p-4">
 
@@ -494,7 +508,7 @@ $services = json_decode($heb->service, true);
     <form action="{{ route('rating.added',$heb->id) }}" method="post" class="mt-3">
         @csrf
 
-        <input type="hidden" name="client_id" value="{{ $client->id }}" >
+        <input type="hidden" name="client_id" value="{{ auth()->id()}}" >
        
 
         <!-- Rating -->
