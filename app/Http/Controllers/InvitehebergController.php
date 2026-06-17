@@ -155,7 +155,7 @@ class InvitehebergController extends Controller
         }
 
         if ($req->stars) {
-            $query->having('evaluations_avg_nombre_etoile', '<=', $req->stars);
+            $query->having('evaluations_avg_nombre_etoile', '>=', $req->stars);
         }
      
         $hebs=$query->get();

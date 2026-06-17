@@ -385,7 +385,7 @@ if($hebergement){
            $chambre->update([
             
 
-            'typeChambres'=>$req->type_chambre,
+            'typeChambres'=>$req->type_custom,
             'prix'=>$req->prix,
             'Description' =>$req->description,
             'services'=>json_encode($req->services),
@@ -406,7 +406,7 @@ if($hebergement){
             $nbrAugmenter=$N2-$N1;
             $chambre->update([
              
-             'typeChambres'=>$req->type_chambre,
+             'typeChambres'=>$req->type_custom,
              'prix'=>$req->prix,
              'Description' =>$req->description,
              'services'=>json_encode($req->services),
@@ -426,7 +426,7 @@ if($hebergement){
             $chambre->update([
             
 
-                'typeChambres'=>$req->type_chambre,
+                'typeChambres'=>$req->type_custom,
                 'prix'=>$req->prix,
                 'Description' =>$req->description,
                 'services'=>json_encode($req->services),
