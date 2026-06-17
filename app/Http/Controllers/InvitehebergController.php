@@ -126,6 +126,7 @@ class InvitehebergController extends Controller
     public function filter(Request $req){
         $query=Heberg::query()->withAvg('evaluations','nombre_etoile')
         ->where('status','valide');
+
        
         if($req->type){
 
@@ -155,11 +156,16 @@ class InvitehebergController extends Controller
         }
 
         if ($req->stars) {
-            $query->having('evaluations_avg_nombre_etoile', '<=', $req->stars);
+            $query->having('evaluations_avg_nombre_etoile', '>=', $req->stars);
         }
      
         $hebs=$query->get();
         $count_heb=count($hebs);
+
+       
+
+    
+
 
         return view('invité.front-end.result-filter',compact('hebs','count_heb'));
 
