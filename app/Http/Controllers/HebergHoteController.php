@@ -312,9 +312,14 @@ if($hebergement){
               
             }
         }
+        $type = $req->type_chambre;
+
+        if ($type === 'autre') {
+            $type = $req->autreType;
+        }
      
         Chambre::create([
-            'typeChambres'=>$req->type_custom,
+            'typeChambres'=>$type,
             'prix'=>$req->prix,
             'Description' =>$req->description,
             'services'=>json_encode($req->services),
@@ -368,6 +373,11 @@ if($hebergement){
              
            }
        }
+       $type = $req->type_chambre;
+
+       if ($type === 'autre') {
+           $type = $req->autreType;
+       }
 
    
         //nombre chambre dans table hebergs
@@ -385,7 +395,7 @@ if($hebergement){
            $chambre->update([
             
 
-            'typeChambres'=>$req->type_custom,
+            'typeChambres'=> $type,
             'prix'=>$req->prix,
             'Description' =>$req->description,
             'services'=>json_encode($req->services),
@@ -406,7 +416,7 @@ if($hebergement){
             $nbrAugmenter=$N2-$N1;
             $chambre->update([
              
-             'typeChambres'=>$req->type_custom,
+             'typeChambres'=>$type,
              'prix'=>$req->prix,
              'Description' =>$req->description,
              'services'=>json_encode($req->services),
@@ -426,7 +436,7 @@ if($hebergement){
             $chambre->update([
             
 
-                'typeChambres'=>$req->type_custom,
+                'typeChambres'=>$type,
                 'prix'=>$req->prix,
                 'Description' =>$req->description,
                 'services'=>json_encode($req->services),

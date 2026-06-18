@@ -291,7 +291,7 @@ public function delete_reservation($idR){
    
 if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="pending" ){
     Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
    // Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
     // broadcast event
 
@@ -311,7 +311,7 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     ->diffInDays(now()->startOfDay());
 
     $reservation->delete();
-    Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
      // broadcast event
 
     broadcast(new faitreservation($clientname," a été annuler la réservation de  ",$reservation->typechambre ));
@@ -345,7 +345,7 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
     ->diffInDays(now()->startOfDay());
 
     Reservation::where('id',$idR)->delete();
-    Chambre::where('id',$reservation->chambres_id)->increment('Quantite',1);
+    Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
 //Heberg::where('id',$heberg->heberg_id)->increment('nombre_chambre',1);
 
 // broadcast event

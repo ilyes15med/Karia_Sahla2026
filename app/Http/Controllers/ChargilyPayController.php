@@ -184,7 +184,7 @@ class ChargilyPayController extends Controller
         $politique_annulation=politique_annulation::where('Hebergs_id',$heberg->id)->first();
 
         $modePaiment=$request->mode_paiement;
-    if($modePaiment=='a_larrivee'){
+     if($modePaiment=='a_larrivee'){
 
         $user = auth()->user();
         $currency = "dzd";
@@ -327,11 +327,14 @@ class ChargilyPayController extends Controller
             ////
 
               // paiement terminé
-            if ($checkout->getStatus() === "paid") {
+              if ($checkout && $checkout->getStatus() === 'paid') {
 
-                return redirect()->route('reservations.index')->with("succes","la réservation a été fais maintenant"); 
+                return redirect('/client/mesReservations')
+                    ->with('succes','Paiement effectué avec succès');
+              }
         
-            }
+                return redirect('/client/mesReservations')
+                ->with('succes','Paiement échoué');
         }
         dd($checkout,$payment);
     }
@@ -422,7 +425,9 @@ class ChargilyPayController extends Controller
                      // Broadcast + notification
                      broadcast(new faitreservation($client->name, " a été réserver chambre ", $chambre->typeChambres));
                      $hote->notify(new Reservations("{$client->name} est réserver une chambre {$chambre->typeChambres}"));
-     
+                    
+                     //return redirect()->route('reservations.index')->with("succes","la réservation a été faire avec succes maintenant"); 
+        
                      return response()->json(["status" => true, "message" => "Payment completed"]);
      
                  } elseif (in_array($checkout->getStatus(), ["failed", "canceled"])) {

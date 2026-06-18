@@ -17,7 +17,7 @@
              <!-- Type de chambre -->
             <div>
                 <label class="block mb-1">Type de chambre</label>
-                <select id="typeSelect" name="type_chambre"
+                <select id="type_chambre" name="type_chambre"
         class="w-full border rounded-lg px-3 py-2" required>
                     
                     <option value="">-- Sélectionner --</option>
@@ -32,7 +32,7 @@
              
 
                 </select>
-                <input type="text" id="autreType" name="type_custom"
+                <input type="text" id="autreType" name="autreType"
                            placeholder="Entrer un nouveau type"
                            class="border rounded-lg px-3 py-2 mt-2 w-full hidden">
                
@@ -88,7 +88,7 @@
 
 <script>
    // Type chambre "Autre"
-        const typeSelect = document.getElementById('typeSelect');
+        const typeSelect = document.getElementById('type_chambre');
         const autreInput = document.getElementById('autreType');
         if (typeSelect) {
             typeSelect.addEventListener('change', function () {
