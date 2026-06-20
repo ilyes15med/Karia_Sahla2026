@@ -263,8 +263,9 @@ public function delete_reservation($idR){
     $reservation=DB::table('reservations')
     ->join('chambres','reservations.chambres_id','=','chambres.id')
     ->where('reservations.id',$idR)
-    ->select('chambres.id as idCh','reservations.id as Rid','chambres.typeChambres as typechambre')
+    ->select('chambres.id as idCh','reservations.id as Rid','chambres.typeChambres as typechambre','reservations.date_debut as date_debut')
     ->first();
+    
   
 
     
@@ -304,13 +305,13 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
        
 
 }elseif($politique_annulation->type_anullation=="flexible" ){
-    $reservation=Reservation::where('id',$idR)->first();
+  
   //  dd($reservation->date_debut);
     $nombrejour = Carbon::parse($reservation->date_debut)
     ->startOfDay()
     ->diffInDays(now()->startOfDay());
 
-    $reservation->delete();
+    Reservation::where('id',$idR)->delete();
     Chambre::where('id',$reservation->idCh)->increment('Quantite',1);
      // broadcast event
 
@@ -338,7 +339,7 @@ if($politique_annulation->type_anullation=="gratuite" || $chargilypay->status=="
    
    
 }elseif($politique_annulation->type_anullation=="strict" ){
-    $reservation=Reservation::where('id',$idR)->first();
+    
     //  dd($reservation->date_debut);
     $nombrejour = Carbon::parse($reservation->date_debut)
     ->startOfDay()
@@ -365,10 +366,12 @@ $hote->notify(new Reservations($message));
 
 
 
+    }else{
+         return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant mais aucun  remoboursement ! "); 
+
     }
   
-    return redirect()->route('reservations.index')->with("succes","la réservation a été annuller maintenant mais aucun  remoboursement ! "); 
-
+   
    
 }
 
